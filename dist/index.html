@@ -326,7 +326,8 @@ function toLatin(s) {
 // za pretragu: latinica, mala slova, bez dijakritika
 function fold(s) {
   return toLatin(String(s || '')).toLowerCase()
-    .replace(/đ/g, 'dj').normalize('NFD').replace(/[̀-ͯ]/g, '');
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/đ|dj/g, 'd'); // đ = dj = d (č/ć -> c, š -> s, ž -> z, dž -> dz preko NFD)
 }
 
 const MONTHS = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'avg', 'sep', 'okt', 'nov', 'dec'];
