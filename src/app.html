@@ -572,63 +572,258 @@ label.btn { cursor: pointer; }
 .mcell.sel, .mcell.sel:hover { background: var(--brand); color: var(--on-brand); }
 #friendsBody > .btn.ghost { align-self: flex-start; }
 @media (max-width: 600px) { #friendsBtn { padding: 8px 12px; } #friendsBtn { font-size: 0; gap: 0; } #friendsBtn .badge { font-size: 12px; } }
+
+/* ================= Poruke ================= */
+body.noscroll { overflow: hidden; }
+.onc { font-family: var(--f-body); font-size: 12px; font-weight: 600; color: var(--ok); margin-left: 2px; }
+.onc::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); margin-right: 4px; vertical-align: 1px; }
+.avwrap { position: relative; display: inline-flex; flex: none; }
+.avwrap .onl, .chead .onl { position: absolute; right: -1px; bottom: -1px; width: 11px; height: 11px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 2px var(--surface); }
+.ondot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); margin-right: 3px; }
+.av.grp { color: hsl(var(--h, 220) 60% var(--av-fg)); }
+.av.fak { background: var(--brand-soft); color: var(--brand-fg); }
+.minichat { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); width: min(380px, calc(100vw - 32px)); height: min(540px, calc(100vh - 100px)); z-index: 40; background: var(--surface); border-radius: var(--rad-xl); box-shadow: var(--shadow-pop); display: flex; flex-direction: column; overflow: hidden; }
+.cfull { height: 100%; display: grid; grid-template-columns: 330px minmax(0, 1fr) auto; gap: 12px; }
+.cside, .cconv, .cinfo { background: var(--surface); border-radius: var(--rad-xl); box-shadow: var(--shadow-card); min-height: 0; display: flex; flex-direction: column; }
+.cside { padding: 14px; gap: 10px; }
+.csh { display: flex; align-items: center; gap: 8px; }
+.csh h2 { margin: 0 auto 0 4px; font-size: 22px; }
+.clist { overflow: auto; display: flex; flex-direction: column; gap: 2px; margin: 0 -6px; padding: 0 6px; }
+.crow { display: flex; align-items: center; gap: 12px; text-align: left; border: 0; background: transparent; color: var(--ink); padding: 8px; border-radius: var(--rad-md); width: 100%; }
+.crow:hover { background: var(--tile); }
+.crow.on { background: var(--brand-soft); }
+.crow .ci { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.crow .ci b { font-weight: 600; font-size: 14.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.crow .ci > span { font-size: 12.5px; color: var(--ink-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.crow.unread .ci b { font-weight: 700; }
+.crow .cm { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; font-size: 12px; color: var(--ink-3); }
+.udot { width: 10px; height: 10px; border-radius: 50%; background: var(--brand); }
+.crow.sug { background: var(--tile); }
+.sugh { font-size: 11.5px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); padding: 14px 8px 6px; }
+.cconv { position: relative; overflow: hidden; }
+.cconv.drag, .minichat.drag { box-shadow: inset 0 0 0 3px var(--brand), var(--shadow-card); }
+.chead { display: flex; align-items: center; gap: 10px; padding: 12px 12px 10px 14px; border-bottom: 1px solid var(--line); position: relative; }
+.chead .ct { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.chead .ct b { font-family: var(--f-head); font-weight: 500; font-size: 17px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chead .cs { font-size: 12.5px; color: var(--ink-3); }
+.chead .back { display: none; }
+.msgs { flex: 1; overflow-y: auto; padding: 12px 12px 6px; display: flex; flex-direction: column; gap: 2px; overscroll-behavior: contain; }
+.typing { min-height: 18px; padding: 0 16px; font-size: 12.5px; color: var(--ink-3); font-style: italic; }
+.mday { text-align: center; margin: 12px 0 6px; }
+.mday span { font-size: 12px; font-weight: 600; color: var(--ink-3); background: var(--tile); border-radius: 8px; padding: 3px 10px; }
+.msys { text-align: center; font-size: 12.5px; color: var(--ink-3); margin: 6px 0; }
+.msg { display: flex; gap: 8px; align-items: flex-end; margin-top: 8px; }
+.msg.grp { margin-top: 1px; }
+.msg.me { flex-direction: row-reverse; }
+.mav { width: 30px; flex: none; }
+.mbody { max-width: min(78%, 560px); display: flex; flex-direction: column; min-width: 0; }
+.msg.me .mbody { align-items: flex-end; }
+.mname { font-size: 12px; font-weight: 600; color: var(--ink-2); margin: 0 0 3px 10px; }
+.adm { font-size: 10.5px; color: var(--brand-fg); background: var(--brand-soft); border-radius: 6px; padding: 0 5px; margin-left: 3px; }
+.mrow { display: flex; align-items: center; gap: 4px; max-width: 100%; }
+.msg.me .mrow { flex-direction: row-reverse; }
+.bubble { background: var(--tile); color: var(--ink); border-radius: 18px; padding: 8px 12px; font-size: 14.5px; line-height: 1.4; overflow-wrap: anywhere; min-width: 0; }
+.msg.me .bubble { background: var(--brand); color: var(--on-brand); }
+.msg.me .bubble a { color: inherit; }
+.bubble a { color: var(--brand-fg); text-decoration: underline; }
+.bubble.media { padding: 4px; background: transparent; }
+.msg.me .bubble.media { background: transparent; }
+.bubble.card { background: var(--tile); color: var(--ink); padding: 10px; min-width: min(280px, 60vw); }
+.msg.me .bubble.card { background: var(--brand-soft); color: var(--ink); }
+.bubble.deleted, .bubble.locked { background: transparent; box-shadow: inset 0 0 0 1px var(--line-strong); color: var(--ink-3); font-style: italic; }
+.msg.me .bubble.deleted { background: transparent; color: var(--ink-3); }
+.bubble.locked { display: inline-flex; gap: 6px; align-items: center; }
+.rq { font-size: 12.5px; border-left: 3px solid currentColor; padding: 2px 8px; margin-bottom: 6px; opacity: .8; border-radius: 2px; }
+.mmeta { font-size: 11px; color: var(--ink-3); margin: 3px 8px 0; }
+.msg.grp .mmeta { display: none; }
+.msg:hover .mmeta { display: block; }
+.mact { display: flex; gap: 2px; opacity: 0; transition: opacity .12s; }
+.msg:hover .mact, .msg:focus-within .mact { opacity: 1; }
+.mact button { border: 0; background: var(--surface); color: var(--ink-2); width: 28px; height: 28px; border-radius: 9px; display: grid; place-items: center; box-shadow: var(--shadow-btn-2); }
+.mact button:hover { color: var(--ink); background: var(--tile); }
+.mact button.warn-btn { background: var(--bad); color: #fff; }
+@media (hover: none) { .mact { opacity: 1; } }
+.rpick { display: flex; gap: 2px; background: var(--surface); border-radius: 14px; padding: 4px; box-shadow: var(--shadow-pop); margin-top: 4px; }
+.rpick button { border: 0; background: none; font-size: 20px; width: 34px; height: 34px; border-radius: 10px; }
+.rpick button:hover { background: var(--tile); }
+.rx { display: flex; gap: 4px; margin-top: 3px; flex-wrap: wrap; }
+.rxb { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 1px 7px; font-size: 13px; color: var(--ink-2); }
+.rxb.on { border-color: var(--brand-line); background: var(--brand-soft); color: var(--brand-fg); }
+.att.img { border: 0; padding: 0; background: none; border-radius: 14px; overflow: hidden; display: block; max-width: 100%; }
+.att.img img { display: block; max-width: min(320px, 100%); max-height: 320px; border-radius: 14px; object-fit: cover; }
+.att.vid { display: block; max-width: min(340px, 100%); max-height: 320px; border-radius: 14px; background: #000; }
+.att.file { display: flex; align-items: center; gap: 10px; background: var(--surface); color: var(--ink); border-radius: 12px; padding: 8px; margin-bottom: 4px; min-width: 220px; }
+.att.file .fic { width: 40px; height: 40px; border-radius: 10px; background: var(--bad-soft); color: var(--bad); font-weight: 700; font-size: 11px; display: grid; place-items: center; flex: none; }
+.att.file .fi { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.att.file .fi b { font-size: 13.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.att.file .fi span { font-size: 12px; color: var(--ink-3); }
+.poll { display: flex; flex-direction: column; gap: 6px; }
+.pq { font-weight: 600; display: flex; gap: 6px; align-items: center; }
+.popt { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: space-between; gap: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 12px; padding: 8px 10px; text-align: left; font-size: 14px; }
+.popt .bar { position: absolute; inset: 0 auto 0 0; background: var(--brand-soft); transition: width .25s; }
+.popt.on { border-color: var(--brand-line); }
+.popt .pt, .popt .pc { position: relative; display: flex; align-items: center; gap: 6px; }
+.popt .pc { font-weight: 600; font-variant-numeric: tabular-nums; }
+.popt .rb { width: 16px; height: 16px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--line-strong); display: inline-block; }
+.popt.on .pt svg { color: var(--brand-fg); }
+.pf { font-size: 12px; color: var(--ink-3); }
+.callc { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.callc > svg { color: var(--brand-fg); }
+.callc span { flex: 1; min-width: 150px; font-size: 13.5px; }
+.cwrap { border-top: 1px solid var(--line); padding: 8px 10px 10px; display: flex; flex-direction: column; gap: 8px; }
+.composer { display: flex; align-items: flex-end; gap: 4px; }
+.cin { flex: 1; min-width: 0; resize: none; border: 1px solid transparent; background: var(--tile); border-radius: 18px; padding: 10px 14px; font: inherit; font-size: 14.5px; line-height: 1.35; max-height: 140px; color: var(--ink); }
+.cin:focus { outline: none; border-color: var(--brand-line); background: var(--surface); }
+.cbtn { border: 0; background: transparent; color: var(--ink-2); width: 40px; height: 40px; border-radius: 13px; display: grid; place-items: center; cursor: pointer; flex: none; }
+.cbtn:hover { background: var(--tile); color: var(--ink); }
+.cbtn.send { background: var(--brand); color: var(--on-brand); box-shadow: var(--shadow-btn); }
+.cbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; color: var(--ink-2); background: var(--tile); border-radius: 12px; padding: 6px 6px 6px 12px; }
+.cbar span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cbar button { border: 0; background: none; color: var(--ink-2); width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; }
+.ro { display: flex; gap: 8px; align-items: center; justify-content: center; font-size: 13.5px; color: var(--ink-3); padding: 8px; }
+.pdraft { display: flex; flex-direction: column; gap: 6px; background: var(--tile); border-radius: 14px; padding: 10px; }
+.pdraft input:not([type]) { border: 1px solid transparent; background: var(--surface); border-radius: 10px; padding: 8px 10px; font: inherit; font-size: 14px; color: var(--ink); }
+.pdraft .pdq { font-weight: 600; }
+.pdrow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.pdrow .grow { flex: 1; }
+.cempty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; padding: 30px 20px; color: var(--ink-2); }
+.cempty b { font-family: var(--f-head); font-weight: 500; font-size: 18px; color: var(--ink); }
+.cempty .muted { display: inline-flex; gap: 6px; align-items: center; font-size: 13px; }
+.cempty.big > svg { color: var(--brand-fg); }
+.cinfo { width: 330px; padding: 14px; gap: 14px; overflow: auto; }
+.cinfo .ih { display: flex; align-items: center; justify-content: space-between; }
+.cinfo .ib { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+.cinfo .ib h3 { margin: 4px 0 0; font-size: 20px; }
+.row2 { display: flex; gap: 6px; }
+.field-in { flex: 1; min-width: 0; height: 40px; border: 1px solid transparent; background: var(--tile); border-radius: var(--rad-sm); padding: 0 12px; font: inherit; color: var(--ink); }
+.field-in:focus { outline: none; border-color: var(--brand-line); background: var(--surface); }
+.ncbody { padding: 14px; overflow: auto; display: flex; flex-direction: column; gap: 14px; }
+.ncbody .plist .sopt { align-items: center; width: 100%; }
+#previewDlg { width: min(1000px, calc(100vw - 24px)); }
+#previewDlg header .grow { flex: 1; }
+.pimg { display: block; max-width: 100%; max-height: 75vh; margin: 0 auto; border-radius: var(--rad-md); }
+.pdfpages { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+.pdfpages canvas { max-width: 100%; height: auto !important; border-radius: 8px; box-shadow: var(--shadow-card); background: #fff; }
+.ptext { white-space: pre-wrap; word-break: break-word; background: var(--tile); border-radius: var(--rad-md); padding: 14px; font-size: 13px; max-height: 70vh; overflow: auto; margin: 0; }
+@media (max-width: 1100px) { .cinfo { position: absolute; right: 12px; top: 12px; bottom: 12px; z-index: 2; box-shadow: var(--shadow-pop); } .cfull { grid-template-columns: 290px minmax(0, 1fr); } }
+@media (max-width: 760px) {
+  .cfull { grid-template-columns: minmax(0, 1fr); }
+  .cfull[data-pane="list"] .cconv { display: none; }
+  .cfull[data-pane="conv"] .cside { display: none; }
+  .chead .back { display: inline-grid; }
+  .cinfo { left: 12px; width: auto; }
+  .minichat { right: 8px; left: 8px; width: auto; bottom: 8px; height: min(560px, calc(100vh - 80px)); }
+  #chatBtn { font-size: 0; gap: 0; padding: 8px 12px; } #chatBtn .badge { font-size: 12px; }
+}
+
+/* ================= Navigacija (traka levo / tabovi dole) ================= */
+.app { display: grid; grid-template-columns: 92px minmax(0, 1fr); min-height: 100vh; }
+.rail { position: sticky; top: env(safe-area-inset-top, 0px); height: calc(100vh - env(safe-area-inset-top, 0px)); display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 18px 8px 16px; padding-left: max(8px, env(safe-area-inset-left, 0px)); background: var(--surface); box-shadow: 1px 0 0 var(--line); z-index: 30; }
+.rlogo { width: 46px; height: 46px; border-radius: var(--rad-sm); background: var(--brand); color: var(--on-brand); display: grid; place-items: center; box-shadow: var(--shadow-btn); margin-bottom: 8px; }
+.rnav { display: flex; flex-direction: column; gap: 4px; width: 100%; }
+.ritem { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 9px 4px 8px; border-radius: var(--rad-md); color: var(--ink-3); text-decoration: none; font-size: 12px; font-weight: 600; transition: background-color .15s, color .15s; }
+.ritem svg { width: 24px; height: 24px; }
+.ritem:hover { background: var(--tile); color: var(--ink); }
+.ritem[aria-current="page"] { background: var(--brand-soft); color: var(--brand-fg); }
+.ritem[aria-current="page"]::before { content: ""; position: absolute; left: -8px; top: 12px; bottom: 12px; width: 4px; border-radius: 0 4px 4px 0; background: var(--brand); }
+.nbadge { position: absolute; top: 4px; right: 12px; min-width: 18px; height: 18px; border-radius: 7px; background: var(--bad); color: #fff; font-size: 11px; font-weight: 700; display: grid; place-items: center; padding: 0 4px; box-shadow: 0 0 0 2px var(--surface); }
+.nonl { position: absolute; top: 4px; left: 12px; min-width: 18px; height: 18px; border-radius: 7px; background: var(--ok); color: #fff; font-size: 11px; font-weight: 700; font-style: normal; display: grid; place-items: center; padding: 0 4px; box-shadow: 0 0 0 2px var(--surface); }
+.rfoot { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.iconbtn.flat { box-shadow: none; border-color: transparent; background: transparent; color: var(--ink-2); }
+.iconbtn.flat:hover { background: var(--tile); color: var(--ink); }
+.wrap { max-width: 1640px; width: 100%; }
+header.top .ptitle h1 { font-size: 30px; }
+.page[hidden] { display: none !important; }
+.page.narrow { max-width: 860px; }
+.pagecard { padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+.chatfull { height: calc(100vh - 140px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); min-height: 460px; }
+.chatfull .cfull { height: 100%; position: relative; }
+.chatfull .csh h2 { display: none; }
+.chatfull .csh .btn { flex: 1; }
+@media (max-width: 860px) {
+  .app { display: block; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 72px); }
+  .rail { display: contents; }
+  .rlogo { display: none; }
+  .rnav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 35; flex-direction: row; gap: 0; background: var(--surface); box-shadow: 0 -1px 0 var(--line), 0 -8px 24px -12px rgb(0 0 0 / .2); padding: 6px max(8px, env(safe-area-inset-left, 0px)) calc(env(safe-area-inset-bottom, 0px) + 6px) max(8px, env(safe-area-inset-right, 0px)); }
+  .ritem { flex: 1; padding: 6px 2px; font-size: 11px; }
+  .ritem[aria-current="page"]::before { display: none; }
+  .nbadge { right: calc(50% - 22px); top: 1px; }
+  .nonl { left: calc(50% - 22px); top: 1px; }
+  .rfoot { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 18px); right: max(12px, env(safe-area-inset-right, 0px)); flex-direction: row; z-index: 31; }
+  header.top { padding-right: 150px; }
+  header.top .ptitle h1 { font-size: 24px; }
+  .minichat { bottom: calc(env(safe-area-inset-bottom, 0px) + 78px); }
+  .toast { bottom: calc(env(safe-area-inset-bottom, 0px) + 84px); }
+  .chatfull { height: calc(100vh - 190px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); }
+}
 </style>
 
-<div class="wrap">
-  <header class="top">
-    <div class="brand">
-      <div class="logo" aria-hidden="true">{{i:calendar-mark:24}}</div>
-      <div>
-        <h1>Planer ispita</h1>
-        <div class="sub" id="storeInfo">Učitavanje…</div>
-      </div>
+<div class="app">
+  <nav class="rail" aria-label="Glavna navigacija">
+    <a class="rlogo" href="#plan" aria-label="Planer ispita, početna">{{i:calendar-mark:24}}</a>
+    <div class="rnav">
+      <a href="#plan" data-route="plan" class="ritem">{{i:home-smile:22}}<span>Plan</span></a>
+      <a href="#kalendar" data-route="kalendar" class="ritem">{{i:calendar:22}}<span>Kalendar</span></a>
+      <a href="#poruke" data-route="poruke" class="ritem">{{i:chat-round-dots:22}}<span>Poruke</span><b class="nbadge" id="chatBadge" hidden></b></a>
+      <a href="#prijatelji" data-route="prijatelji" class="ritem">{{i:users-group-rounded:22}}<span>Prijatelji</span><b class="nbadge" id="friendsBadge" hidden></b><i class="nonl" id="onlineCount" hidden></i></a>
+      <a href="#rokovi" data-route="rokovi" class="ritem">{{i:document-text:22}}<span>Rokovi</span></a>
     </div>
-    <div class="grow"></div>
-    <button class="btn filters-toggle" id="filtersToggle" aria-expanded="false">Moji ispiti <span id="fcount" class="mono"></span></button>
-    <button class="btn" id="friendsBtn" title="Prijatelji">{{i:users-group-rounded:18}} Prijatelji<span class="badge" id="friendsBadge" hidden></span></button>
-    <button class="iconbtn" id="themeBtn" aria-label="Tema" title="Tema"></button>
-    <button class="iconbtn" id="settingsBtn" aria-label="Podešavanja" title="Podešavanja">{{i:tuning-2:20}}</button>
-    <button class="btn" id="manageBtn">
-      {{i:document-text:18}}
-      Rokovi
-    </button>
-    <button class="mebtn" id="meBtn" aria-label="Moj profil" title="Profil"></button>
-  </header>
+    <div class="rfoot">
+      <button class="iconbtn flat" id="themeBtn" aria-label="Tema" title="Tema"></button>
+      <button class="iconbtn flat" id="settingsBtn" aria-label="Podešavanja" title="Podešavanja">{{i:tuning-2:20}}</button>
+      <button class="mebtn" id="meBtn" aria-label="Moj profil" title="Profil"></button>
+    </div>
+  </nav>
 
-  <div id="bannerArea"></div>
+  <div class="wrap">
+    <header class="top">
+      <div class="ptitle"><h1 id="pageTitle">Moj plan</h1><div class="sub" id="storeInfo">Učitavanje…</div></div>
+      <div class="grow"></div>
+      <button class="btn filters-toggle" id="filtersToggle" aria-expanded="false">Moji ispiti <span id="fcount" class="mono"></span></button>
+    </header>
 
-  <div class="layout">
-    <aside class="card filters side collapsed" id="filters" aria-label="Moji ispiti"></aside>
+    <div id="bannerArea"></div>
 
-    <section class="main">
-      <div id="pickArea"></div>
-      <div class="toolbar">
-        <div class="seg" role="group" aria-label="Prikaz">
-          <button data-view="plan" aria-pressed="true">Plan</button>
-          <button data-view="mesec" aria-pressed="false">Mesec</button>
-          <button data-view="godina" aria-pressed="false">Godina</button>
-          <button data-view="lista" aria-pressed="false">Lista</button>
-        </div>
-        <div class="navbtns" id="navbtns">
-          <button class="iconbtn" id="prev" aria-label="Prethodni">{{i:alt-arrow-left:20}}</button>
-          <button class="iconbtn" id="next" aria-label="Sledeći">{{i:alt-arrow-right:20}}</button>
-        </div>
-        <button class="btn" id="todayBtn">Danas</button>
-        <div class="period" id="period"></div>
+    <section class="page" id="sec-planer">
+      <div class="layout">
+        <aside class="card filters side collapsed" id="filters" aria-label="Moji ispiti"></aside>
+
+        <section class="main">
+          <div id="pickArea"></div>
+          <div class="toolbar">
+            <div class="seg" role="group" aria-label="Prikaz" id="calSeg">
+              <button data-view="mesec" aria-pressed="false">Mesec</button>
+              <button data-view="godina" aria-pressed="false">Godina</button>
+              <button data-view="lista" aria-pressed="false">Lista</button>
+            </div>
+            <div class="navbtns" id="navbtns">
+              <button class="iconbtn" id="prev" aria-label="Prethodni">{{i:alt-arrow-left:20}}</button>
+              <button class="iconbtn" id="next" aria-label="Sledeći">{{i:alt-arrow-right:20}}</button>
+            </div>
+            <button class="btn" id="todayBtn">Danas</button>
+            <div class="period" id="period"></div>
+          </div>
+          <div class="card" id="viewArea"></div>
+        </section>
+
+        <aside class="card day-panel" id="dayPanel" aria-live="polite"></aside>
       </div>
-      <div class="card" id="viewArea"></div>
     </section>
 
-    <aside class="card day-panel" id="dayPanel" aria-live="polite"></aside>
+    <section class="page" id="sec-poruke" hidden><div id="chatFull" class="chatfull"></div></section>
+    <section class="page narrow" id="sec-prijatelji" hidden><div class="card pagecard" id="friendsBody"></div></section>
+    <section class="page narrow" id="sec-rokovi" hidden><div class="card pagecard" id="manageBody"></div></section>
   </div>
 </div>
 
 <dialog id="setupDlg" aria-labelledby="wizTitle"><div class="wiz" id="wiz"></div></dialog>
 
-<dialog id="friendsDlg" aria-labelledby="friendsTitle">
+
+<div id="miniChat" class="minichat" hidden></div>
+<dialog id="previewDlg" aria-labelledby="previewTitle">
   <div class="dlg">
-    <header><h2 id="friendsTitle">Prijatelji</h2><button class="iconbtn" data-close aria-label="Zatvori">{{i:close:20}}</button></header>
-    <div class="body" id="friendsBody"></div>
+    <header><h2 id="previewTitle">Pregled</h2><span class="grow"></span><a class="btn sm" id="previewOpen" target="_blank" rel="noopener">{{i:square-share-line:16}} Otvori</a><button class="iconbtn" data-close aria-label="Zatvori">{{i:close:20}}</button></header>
+    <div class="body" id="previewBody"></div>
   </div>
 </dialog>
 
@@ -641,12 +836,6 @@ label.btn { cursor: pointer; }
   </div>
 </dialog>
 
-<dialog id="manageDlg" aria-labelledby="manageTitle">
-  <div class="dlg">
-    <header><h2 id="manageTitle">Ispitni rokovi</h2><button class="iconbtn" data-close aria-label="Zatvori">{{i:close:20}}</button></header>
-    <div class="body" id="manageBody"></div>
-  </div>
-</dialog>
 
 <script>
 /*CORE*/
@@ -1420,7 +1609,12 @@ function renderDay() {
 }
 
 function renderView() {
+  if (S.view !== 'plan') S.calView = S.view;
+  if (route === 'plan' && S.view !== 'plan') { location.hash = 'kalendar'; route = 'kalendar'; setRouteUi(); }
+  else if (route === 'kalendar' && S.view === 'plan') { location.hash = 'plan'; route = 'plan'; setRouteUi(); }
   document.querySelectorAll('[data-view]').forEach(b => b.setAttribute('aria-pressed', b.dataset.view === S.view));
+  $('#calSeg').hidden = S.view === 'plan';
+  document.querySelector('#sec-planer .toolbar').hidden = S.view === 'plan';
   $('#navbtns').hidden = $('#todayBtn').hidden = S.view === 'lista' || S.view === 'plan';
   if (!S.loaded) { $('#viewArea').innerHTML = `<div class="empty"><span class="spinner"></span><div style="margin-top:8px">Učitavanje rasporeda…</div></div>`; $('#period').textContent = ''; return; }
   if (!S.exams.length) {
@@ -1430,9 +1624,12 @@ function renderView() {
   if (S.view === 'plan') renderPlan(); else if (S.view === 'mesec') renderMonth(); else if (S.view === 'godina') renderYear(); else renderList();
 }
 function storeInfo() {
+  if (route !== 'plan' && route !== 'kalendar') { $('#storeInfo').textContent = ROUTES[route].sub(); return; }
   const n = S.rokovi.length;
+  const planned = MY.filter(s => s.plan).length;
+  const lead = route === 'plan' && prof() ? `${planned} od ${ispita(MY.length)} zakazano · ` : '';
   const where = Store.mode === 'db' ? (Me.mode === 'db' ? 'plan sačuvan na tvom nalogu' : 'plan sačuvan u ovom pregledaču') : Store.mode === 'local' ? 'sačuvano u ovom pregledaču' : 'nije sačuvano (privatni prozor)';
-  $('#storeInfo').textContent = `${num(n, 'rok', 'roka', 'rokova')} · ${where}`;
+  $('#storeInfo').textContent = `${lead}${num(n, 'rok', 'roka', 'rokova')} · ${where}`;
 }
 function refresh() {
   applyFilters();
@@ -1443,6 +1640,7 @@ function refresh() {
   storeInfo();
   renderMeBtn();
   renderFriendsUi();
+  if (typeof renderChatBadges === 'function') renderChatBadges();
 }
 
 document.querySelector('.toolbar .seg').addEventListener('click', e => {
@@ -1486,7 +1684,7 @@ document.addEventListener('click', e => {
   const mo = t.closest('[data-month]');
   if (mo) { const [y, m] = mo.dataset.month.split('-').map(Number); S.y = y; S.m = m; S.view = 'mesec'; renderView(); return; }
   if (t.closest('#moreBtn')) { S.listLimit += 500; renderList(); return; }
-  if (t.closest('[data-open-upload]')) { if ($('#manageDlg').open) $('#manageDlg').close(); openUpload(); return; }
+  if (t.closest('[data-open-upload]')) { openUpload(); return; }
   const close = t.closest('[data-close]'); if (close) close.closest('dialog').close();
 });
 document.addEventListener('keydown', e => {
@@ -1792,6 +1990,7 @@ function finishWizard() {
   S.pick = null; S.scope = 'moji';
   if (wasFirst) { S.view = 'plan'; S.tab = 'todo'; }
   saveUi(); derive(); deriveFriends(); refresh();
+  if (wasFirst) initChat();
   toast(wasFirst ? `Zdravo, ${Me.data.ime}! ${ispita(Object.keys(remaining).length)} čeka planiranje.` : 'Podešavanja su sačuvana.');
 }
 
@@ -1830,8 +2029,27 @@ function sanitizePerson(uid, v) {
     foto: FOTO_RE.test(v.foto || '') && v.foto.length < 120000 ? v.foto : '',
     nivo: str(v.nivo, 4), akred: +v.akred || null, godina: +v.godina || null, modul: str(v.modul, 6),
     friends: Array.isArray(v.friends) ? v.friends.filter(x => typeof x === 'string').slice(0, 500) : [],
-    share: v.share !== false, plan, remaining
+    share: v.share !== false, plan, remaining,
+    pub: v.pub && typeof v.pub.x === 'string' && typeof v.pub.y === 'string' && v.pub.x.length < 64 && v.pub.y.length < 64 ? { x: v.pub.x, y: v.pub.y } : null,
+    chats: sanitizeChats(v.chats),
+    groups: Array.isArray(v.groups) ? v.groups.filter(g => typeof g === 'string' && /^fak-[a-z0-9-]{1,40}$/.test(g)).slice(0, 20) : [],
+    leftChats: Array.isArray(v.leftChats) ? v.leftChats.filter(g => typeof g === 'string').slice(0, 500) : [],
+    act: v.act && typeof v.act === 'object' ? Object.fromEntries(Object.entries(v.act).filter(([k, t]) => typeof t === 'number' && k.length < 200).slice(0, 500)) : {}
   };
+}
+function sanitizeChats(chats) {
+  const out = {}; if (!chats || typeof chats !== 'object') return out;
+  const ids = a => Array.isArray(a) ? a.filter(x => typeof x === 'string' && x.length < 80).slice(0, 500) : [];
+  for (const [cid, m] of Object.entries(chats).slice(0, 200)) {
+    if (!/^(dm|g)-[A-Za-z0-9_-]{1,160}$/.test(cid) || !m || typeof m !== 'object') continue;
+    const keys = {};
+    if (m.keys && typeof m.keys === 'object') for (const [kv, ks] of Object.entries(m.keys).slice(0, 8)) {
+      if (!ks || typeof ks !== 'object') continue; keys[kv] = {};
+      for (const [u, w] of Object.entries(ks).slice(0, 500)) if (w && typeof w.iv === 'string' && typeof w.ct === 'string' && w.ct.length < 200) keys[kv][u] = { iv: w.iv, ct: w.ct };
+    }
+    out[cid] = { kind: m.kind === 'dm' ? 'dm' : 'group', name: str(m.name, 60), members: ids(m.members), admins: ids(m.admins), mode: m.mode === 'admins' ? 'admins' : 'all', kv: +m.kv || 1, keys, created: +m.created || 0 };
+  }
+  return out;
 }
 function publicBody(p) {
   const share = p.share !== false, plan = {}, remaining = {};
@@ -1840,7 +2058,11 @@ function publicBody(p) {
     for (const [k, e] of Object.entries(p.remaining || {})) remaining[k] = e.n;
   }
   return { uid: Me.uid, ime: p.ime || '', prezime: p.prezime || '', indeks: p.indeks || '', fakultet: p.fakultet || '', foto: p.foto || '',
-    nivo: p.nivo || '', akred: p.akred || 0, godina: p.godina || 0, modul: p.modul || '', friends: p.friends || [], share, plan, remaining, updatedAt: new Date().toISOString() };
+    nivo: p.nivo || '', akred: p.akred || 0, godina: p.godina || 0, modul: p.modul || '', friends: p.friends || [], share, plan, remaining,
+    pub: p.ck && p.ck.pub ? { x: p.ck.pub.x, y: p.ck.pub.y } : null,
+    chats: Object.fromEntries(Object.entries(p.chatsOwned || {}).map(([cid, m]) => [cid, { kind: m.kind, name: m.name || '', members: m.members || [], admins: m.admins || [], mode: m.mode || 'all', kv: m.kv || 1, keys: m.keys || {}, created: m.created || 0 }])),
+    groups: p.groups || [], leftChats: p.leftChats || [], act: p.act || {},
+    updatedAt: new Date().toISOString() };
 }
 
 function subscribePeople() {
@@ -1850,12 +2072,14 @@ function subscribePeople() {
     clearTimeout(timer); F.ready = true; F.err = null;
     F.people = new Map(); F.mine = null;
     for (const d of snap.docs) { const v = d.data() || {}; if (d.id === Me.uid) F.mine = v; else F.people.set(d.id, sanitizePerson(d.id, v)); }
-    deriveFriends(); refresh(); renderFriendsUi();
+    deriveFriends(); refreshSoon(); renderFriendsUi(); onPeopleChanged();
     const p = prof();
     if (p && p.onboarded && !snap.metadata.fromCache && (!F.mine || F.mine.ime !== p.ime || (F.mine.friends || []).length !== (p.friends || []).length)) Me.save();
   }, err => { clearTimeout(timer); F.err = err && err.code || 'unavailable'; renderFriendsUi(); });
 }
 
+let refreshTimer = 0;
+function refreshSoon() { clearTimeout(refreshTimer); refreshTimer = setTimeout(refresh, 120); }
 function deriveFriends() {
   const p = prof(), my = new Set((p && p.friends) || []), ignored = new Set((p && p.ignored) || []);
   const isMutual = u => { const o = F.people.get(u); return o && o.friends.includes(Me.uid); };
@@ -1895,10 +2119,10 @@ function ignoreRequest(uid) { const p = prof(); if (!p) return; p.ignored = uniq
 
 // ---- dijalog Prijatelji ----
 function openFriends(uid) {
-  F.view = uid ? 'detail' : 'list'; F.detail = uid || null; F.confirmRemove = null;
+  F.view = uid ? 'detail' : 'list'; F.detail = uid || null; F.confirmRemove = null; F.keep = true;
   if (!uid && FR.incoming.length) F.tab = 'requests';
+  go('prijatelji');
   renderFriendsUi();
-  if (!$('#friendsDlg').open) $('#friendsDlg').showModal();
 }
 function personSub(o) {
   return [o.indeks && `indeks ${o.indeks}`, o.nivo && o.godina ? `${o.nivo} · ${o.godina}. godina` : o.nivo, o.modul].filter(Boolean).join(' · ') || o.fakultet || '';
@@ -1907,7 +2131,6 @@ function commonCount(o) { return MY.filter(s => Object.entries(o.plan).some(([k,
 function renderFriendsUi() {
   const n = FR.incoming.length;
   const badge = $('#friendsBadge'); if (badge) { badge.textContent = n; badge.hidden = !n; }
-  if (!$('#friendsDlg').open && F.view !== '__force') { /* i dalje osveži sadržaj ako se otvori */ }
   const b = $('#friendsBody'); if (!b) return;
   if (Me.mode !== 'db') { b.innerHTML = `<div class="empty"><strong>Prijatelji rade na claude.ai</strong>Otvori aplikaciju na claude.ai sa svojim nalogom da bi dodao/la prijatelje i video/la njihove ispite.</div>`; return; }
   if (!prof()) { b.innerHTML = `<div class="empty"><strong>Prvo podesi profil</strong><button class="btn primary" data-open-settings>Podesi profil</button></div>`; return; }
@@ -1918,7 +2141,7 @@ function renderFriendsUi() {
     <button type="button" data-ftab="requests" aria-pressed="${F.tab === 'requests'}">Zahtevi${n ? `<span class="dotn">${n}</span>` : ''}</button>
     <button type="button" data-ftab="find" aria-pressed="${F.tab === 'find'}">Pronađi</button></div>`;
   let h = tabs;
-  const row = (o, actions, sub) => `<div class="prow">${avatarHtml(o, 44)}<div class="pi"><div class="pn">${esc(fullName(o))}</div><div class="ps">${esc(sub != null ? sub : personSub(o))}</div></div><div class="pa">${actions}</div></div>`;
+  const row = (o, actions, sub) => `<div class="prow"><span class="avwrap">${avatarHtml(o, 44)}${C.online.has(o.uid) ? '<i class="onl"></i>' : ''}</span><div class="pi"><div class="pn">${esc(fullName(o))}</div><div class="ps">${esc(sub != null ? sub : personSub(o))}</div></div><div class="pa">${actions}</div></div>`;
   if (F.tab === 'friends') {
     if (!FR.friends.length) h += `<div class="empty"><strong>Još nemaš prijatelja</strong>Pronađi kolege po imenu ili broju indeksa i pošalji im zahtev. Kad te i oni dodaju, videćete ispite jedni drugih.<div><button class="btn primary" data-ftab="find">{{i:user-plus-rounded:18}} Pronađi prijatelje</button></div></div>`;
     else h += '<div class="plist">' + FR.friends.map(o => {
@@ -1926,8 +2149,8 @@ function renderFriendsUi() {
       const sub = `${personSub(o)}${personSub(o) ? ' · ' : ''}${o.share ? `${np} zakazano` : 'plan nije deljen'}`;
       const act = F.confirmRemove === o.uid
         ? `<button class="btn sm" data-fcancel>Otkaži</button><button class="btn danger solid sm" data-fremove="${esc(o.uid)}">Ukloni</button>`
-        : `${c ? `<span class="pill planned">${c} zajedničkih</span>` : ''}<button class="btn sm" data-fopen="${esc(o.uid)}">Plan</button><button class="iconbtn sm" data-fask="${esc(o.uid)}" aria-label="Ukloni prijatelja" title="Ukloni prijatelja">{{i:user-cross-rounded:18}}</button>`;
-      return row(o, act, sub);
+        : `${c ? `<span class="pill planned">${c} zajedničkih</span>` : ''}<button class="btn primary sm" data-fmsg="${esc(o.uid)}">{{i:chat-round-line:16}} Poruka</button><button class="btn sm" data-fopen="${esc(o.uid)}">Plan</button><button class="iconbtn sm" data-fask="${esc(o.uid)}" aria-label="Ukloni prijatelja" title="Ukloni prijatelja">{{i:user-cross-rounded:18}}</button>`;
+      return row(o, act, (C.online.has(o.uid) ? '● online · ' : '') + sub);
     }).join('') + '</div>';
   } else if (F.tab === 'requests') {
     if (!FR.incoming.length && !FR.outgoing.length) h += `<div class="empty"><strong>Nema zahteva</strong>Kad te neko doda, zahtev će se pojaviti ovde.</div>`;
@@ -1979,6 +2202,7 @@ function renderFriendDetail(b) {
 $('#friendsBody').addEventListener('click', e => {
   const t = e.target;
   const tb = t.closest('[data-ftab]'); if (tb) { F.tab = tb.dataset.ftab; F.confirmRemove = null; renderFriendsUi(); if (F.tab === 'find') setTimeout(() => $('#fq') && $('#fq').focus(), 20); return; }
+  const fm = t.closest('[data-fmsg]'); if (fm) { const uid = fm.dataset.fmsg; createChat([uid]).then(cid => cid && openMini(cid)); return; }
   const op = t.closest('[data-fopen]'); if (op) { F.view = 'detail'; F.detail = op.dataset.fopen; renderFriendsUi(); return; }
   if (t.closest('[data-fback]')) { F.view = 'list'; renderFriendsUi(); return; }
   const ad = t.closest('[data-fadd]'); if (ad) { addFriend(ad.dataset.fadd); return; }
@@ -1986,9 +2210,8 @@ $('#friendsBody').addEventListener('click', e => {
   if (t.closest('[data-fcancel]')) { F.confirmRemove = null; renderFriendsUi(); return; }
   const rm = t.closest('[data-fremove]'); if (rm) { F.confirmRemove = null; removeFriend(rm.dataset.fremove); return; }
   const ig = t.closest('[data-fignore]'); if (ig) { ignoreRequest(ig.dataset.fignore); return; }
-  const jn = t.closest('[data-fjoin]'); if (jn) { const ex = examById(jn.dataset.fjoin); if (ex) { $('#friendsDlg').close(); schedule(jn.dataset.fsifra, ex); } return; }
+  const jn = t.closest('[data-fjoin]'); if (jn) { const ex = examById(jn.dataset.fjoin); if (ex) { go('plan'); schedule(jn.dataset.fsifra, ex); } return; }
 });
-$('#friendsBtn').addEventListener('click', () => openFriends());
 $('#meBtn').addEventListener('click', () => openWizard(!(prof() && prof().onboarded), 'profil'));
 function renderMeBtn() {
   const p = prof();
@@ -1996,6 +2219,7 @@ function renderMeBtn() {
   $('#meBtn').title = p && p.ime ? `${fullName(p)} · profil` : 'Profil';
 }
 
+/*CHAT*/
 // ================= Upload =================
 let pdfLibPromise = null;
 function loadScript(src) { return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = () => rej(new Error('Ne mogu da učitam ' + src)); document.head.appendChild(s); }); }
@@ -2133,8 +2357,7 @@ function renderManage() {
     </div>`).join('') + `</div>
     <div class="actions"><button class="btn primary" data-open-upload>{{i:document-add:18}} Dodaj rok (PDF)</button></div>`;
 }
-function openManage() { confirmId = null; renderManage(); if (!$('#manageDlg').open) $('#manageDlg').showModal(); }
-$('#manageBtn').addEventListener('click', openManage);
+function openManage() { confirmId = null; go('rokovi'); renderManage(); }
 $('#manageBody').addEventListener('click', async e => {
   const ask = e.target.closest('[data-ask]'); if (ask) { confirmId = ask.dataset.ask; renderManage(); return; }
   if (e.target.closest('[data-cancel]')) { confirmId = null; renderManage(); return; }
@@ -2149,6 +2372,42 @@ $('#manageBody').addEventListener('click', async e => {
     } catch (err) { confirmId = null; renderManage(); toast('Brisanje nije uspelo. Pokušaj ponovo.'); }
   }
 });
+
+// ================= Navigacija =================
+// Sekcije aplikacije. Nove celine (npr. „predmeti" sa blanketima po ispitu, „instruktori" za časove)
+// dodaju se ovde + jedna stavka u traci i jedan <section class="page">.
+const ROUTES = {
+  plan: { title: 'Moj plan', sec: 'planer', sub: () => '' },
+  kalendar: { title: 'Kalendar', sec: 'planer', sub: () => '' },
+  poruke: { title: 'Poruke', sec: 'poruke', sub: () => 'Privatne poruke i grupe su šifrovane' },
+  prijatelji: { title: 'Prijatelji', sec: 'prijatelji', sub: () => { const n = FR.friends.length, on = FR.friends.filter(f => C.online.has(f.uid)).length; return `${num(n, 'prijatelj', 'prijatelja', 'prijatelja')}${on ? ` · ${on} online` : ''}`; } },
+  rokovi: { title: 'Ispitni rokovi', sec: 'rokovi', sub: () => 'Zajednički rasporedi za sve korisnike' }
+};
+let route = ROUTES[location.hash.slice(1)] ? location.hash.slice(1) : (S.view === 'plan' ? 'plan' : 'kalendar');
+if (route === 'plan') S.view = 'plan'; else if (route === 'kalendar' && S.view === 'plan') S.view = 'mesec';
+function go(r) { if (!ROUTES[r]) r = 'plan'; if (location.hash.slice(1) !== r) location.hash = r; else applyRoute(); }
+function setRouteUi() {
+  const sec = ROUTES[route].sec;
+  document.querySelectorAll('.page').forEach(el => { el.hidden = el.id !== 'sec-' + sec; });
+  document.querySelectorAll('[data-route]').forEach(a => { if (a.dataset.route === route) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  $('#pageTitle').textContent = ROUTES[route].title;
+  document.body.dataset.route = route;
+  $('#filtersToggle').hidden = sec !== 'planer';
+}
+function applyRoute() {
+  const r = ROUTES[location.hash.slice(1)] ? location.hash.slice(1) : 'plan';
+  const changed = r !== route; route = r;
+  if (r === 'plan') S.view = 'plan';
+  if (r === 'kalendar' && S.view === 'plan') S.view = S.calView || 'mesec';
+  setRouteUi();
+  if (r === 'poruke') openFull(C.pendingCid || null); else if (C.full) closeFull();
+  C.pendingCid = null;
+  if (r === 'prijatelji') { if (changed && !F.keep) { F.view = 'list'; if (FR.incoming.length) F.tab = 'requests'; } F.keep = false; renderFriendsUi(); }
+  if (r === 'rokovi') renderManage();
+  saveUi(); refresh();
+  if (changed) window.scrollTo(0, 0);
+}
+window.addEventListener('hashchange', applyRoute);
 
 // ================= Start =================
 function pickInitialMonth() {
@@ -2168,8 +2427,11 @@ function pickInitialMonth() {
   }
   try { await Me.load(); }
   catch (err) { $('#bannerArea').insertAdjacentHTML('beforeend', `<div class="banner err" style="margin-bottom:14px">Tvoj plan trenutno nije dostupan. Osveži stranicu za koji trenutak.</div>`); Me.loadFailed = true; }
-  rebuild(); derive(); deriveFriends(); applyFilters(); pickInitialMonth(); S.loaded = true; refresh();
+  rebuild(); derive(); deriveFriends(); applyFilters(); pickInitialMonth(); S.loaded = true;
+  setRouteUi(); refresh();
   subscribePeople();
+  await initChat();
+  if (route === 'poruke') openFull(); else if (route === 'rokovi') renderManage();
   if (!Me.loadFailed && (!prof() || !prof().onboarded) && S.exams.length) openWizard(true, null);
   else if (prof() && prof().onboarded && !prof().ime) { openWizard(false, 'profil'); W.note = 'Novo: dopuni profil imenom, a po želji i brojem indeksa i slikom, da bi te prijatelji pronašli.'; renderWizard(); }
 })();

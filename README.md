@@ -50,3 +50,25 @@ crta isti oblik kao SVG pozadinu (sa ivicom i senkom).
 [Solar icon set](https://www.figma.com/community/file/1166831539721848736) autora 480 Design, licenca
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Korišćene ikonice su u `src/solar-icons.json`
 (iz paketa `@iconify-json/solar`); u kodu se pišu kao `{{i:ime:veličina}}`, a `build.py` ih ugrađuje kao SVG.
+
+## Poruke
+
+- Svaki korisnik piše samo u svoj prostor `box/<uid>/c/<chatId>` (pravilo `{self}`), pa je pošiljalac uvek autentičan.
+- Privatne poruke i grupe su šifrovane (AES-GCM). Ključ grupe je za svakog člana umotan ECDH (P-256) ključem
+  između vlasnika i člana; javni ključevi su u `people/<uid>.pub`, privatni u ličnom profilu.
+  Uklanjanje člana pravi novu verziju ključa.
+- Grupe: vlasnik upravlja članovima i adminima, mod „svi pišu" / „samo admini".
+- Fakultetski četovi (`fak-<naziv>`) su javni i nisu šifrovani; svako se može učlaniti.
+- Prilozi (slike, video, PDF, tekst do 20 MB) idu u prostor za fajlove artifakta; PDF i tekst imaju pregled u aplikaciji.
+- Online status i „kuca…" preko `room` sposobnosti. Video poziv otvara Jitsi Meet sobu u novom tabu
+  (WebRTC i kamera nisu dostupni unutar okvira artifakta).
+
+## Navigacija i plan proširenja
+
+Traka levo (desktop) / tabovi dole (telefon), adrese `#plan`, `#kalendar`, `#poruke`, `#prijatelji`, `#rokovi`.
+Nova celina = stavka u `ROUTES` + stavka u traci + `<section class="page" id="sec-...">`.
+
+Planirano:
+- `#predmeti` – stranica po predmetu: blanketi za svaki ispitni rok (PDF/slike), komentari, ko još polaže.
+- `#instruktori` – pronalaženje profesora/kolega koji drže časove za predmet i zakazivanje časa.
+- Na telefonu, kad bude više od 5 sekcija, poslednji tab postaje „Više" (Rokovi, Instruktori…).

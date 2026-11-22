@@ -580,66 +580,261 @@ label.btn { cursor: pointer; }
 .mcell.sel, .mcell.sel:hover { background: var(--brand); color: var(--on-brand); }
 #friendsBody > .btn.ghost { align-self: flex-start; }
 @media (max-width: 600px) { #friendsBtn { padding: 8px 12px; } #friendsBtn { font-size: 0; gap: 0; } #friendsBtn .badge { font-size: 12px; } }
+
+/* ================= Poruke ================= */
+body.noscroll { overflow: hidden; }
+.onc { font-family: var(--f-body); font-size: 12px; font-weight: 600; color: var(--ok); margin-left: 2px; }
+.onc::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); margin-right: 4px; vertical-align: 1px; }
+.avwrap { position: relative; display: inline-flex; flex: none; }
+.avwrap .onl, .chead .onl { position: absolute; right: -1px; bottom: -1px; width: 11px; height: 11px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 2px var(--surface); }
+.ondot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); margin-right: 3px; }
+.av.grp { color: hsl(var(--h, 220) 60% var(--av-fg)); }
+.av.fak { background: var(--brand-soft); color: var(--brand-fg); }
+.minichat { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); width: min(380px, calc(100vw - 32px)); height: min(540px, calc(100vh - 100px)); z-index: 40; background: var(--surface); border-radius: var(--rad-xl); box-shadow: var(--shadow-pop); display: flex; flex-direction: column; overflow: hidden; }
+.cfull { height: 100%; display: grid; grid-template-columns: 330px minmax(0, 1fr) auto; gap: 12px; }
+.cside, .cconv, .cinfo { background: var(--surface); border-radius: var(--rad-xl); box-shadow: var(--shadow-card); min-height: 0; display: flex; flex-direction: column; }
+.cside { padding: 14px; gap: 10px; }
+.csh { display: flex; align-items: center; gap: 8px; }
+.csh h2 { margin: 0 auto 0 4px; font-size: 22px; }
+.clist { overflow: auto; display: flex; flex-direction: column; gap: 2px; margin: 0 -6px; padding: 0 6px; }
+.crow { display: flex; align-items: center; gap: 12px; text-align: left; border: 0; background: transparent; color: var(--ink); padding: 8px; border-radius: var(--rad-md); width: 100%; }
+.crow:hover { background: var(--tile); }
+.crow.on { background: var(--brand-soft); }
+.crow .ci { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.crow .ci b { font-weight: 600; font-size: 14.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.crow .ci > span { font-size: 12.5px; color: var(--ink-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.crow.unread .ci b { font-weight: 700; }
+.crow .cm { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; font-size: 12px; color: var(--ink-3); }
+.udot { width: 10px; height: 10px; border-radius: 50%; background: var(--brand); }
+.crow.sug { background: var(--tile); }
+.sugh { font-size: 11.5px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); padding: 14px 8px 6px; }
+.cconv { position: relative; overflow: hidden; }
+.cconv.drag, .minichat.drag { box-shadow: inset 0 0 0 3px var(--brand), var(--shadow-card); }
+.chead { display: flex; align-items: center; gap: 10px; padding: 12px 12px 10px 14px; border-bottom: 1px solid var(--line); position: relative; }
+.chead .ct { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.chead .ct b { font-family: var(--f-head); font-weight: 500; font-size: 17px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chead .cs { font-size: 12.5px; color: var(--ink-3); }
+.chead .back { display: none; }
+.msgs { flex: 1; overflow-y: auto; padding: 12px 12px 6px; display: flex; flex-direction: column; gap: 2px; overscroll-behavior: contain; }
+.typing { min-height: 18px; padding: 0 16px; font-size: 12.5px; color: var(--ink-3); font-style: italic; }
+.mday { text-align: center; margin: 12px 0 6px; }
+.mday span { font-size: 12px; font-weight: 600; color: var(--ink-3); background: var(--tile); border-radius: 8px; padding: 3px 10px; }
+.msys { text-align: center; font-size: 12.5px; color: var(--ink-3); margin: 6px 0; }
+.msg { display: flex; gap: 8px; align-items: flex-end; margin-top: 8px; }
+.msg.grp { margin-top: 1px; }
+.msg.me { flex-direction: row-reverse; }
+.mav { width: 30px; flex: none; }
+.mbody { max-width: min(78%, 560px); display: flex; flex-direction: column; min-width: 0; }
+.msg.me .mbody { align-items: flex-end; }
+.mname { font-size: 12px; font-weight: 600; color: var(--ink-2); margin: 0 0 3px 10px; }
+.adm { font-size: 10.5px; color: var(--brand-fg); background: var(--brand-soft); border-radius: 6px; padding: 0 5px; margin-left: 3px; }
+.mrow { display: flex; align-items: center; gap: 4px; max-width: 100%; }
+.msg.me .mrow { flex-direction: row-reverse; }
+.bubble { background: var(--tile); color: var(--ink); border-radius: 18px; padding: 8px 12px; font-size: 14.5px; line-height: 1.4; overflow-wrap: anywhere; min-width: 0; }
+.msg.me .bubble { background: var(--brand); color: var(--on-brand); }
+.msg.me .bubble a { color: inherit; }
+.bubble a { color: var(--brand-fg); text-decoration: underline; }
+.bubble.media { padding: 4px; background: transparent; }
+.msg.me .bubble.media { background: transparent; }
+.bubble.card { background: var(--tile); color: var(--ink); padding: 10px; min-width: min(280px, 60vw); }
+.msg.me .bubble.card { background: var(--brand-soft); color: var(--ink); }
+.bubble.deleted, .bubble.locked { background: transparent; box-shadow: inset 0 0 0 1px var(--line-strong); color: var(--ink-3); font-style: italic; }
+.msg.me .bubble.deleted { background: transparent; color: var(--ink-3); }
+.bubble.locked { display: inline-flex; gap: 6px; align-items: center; }
+.rq { font-size: 12.5px; border-left: 3px solid currentColor; padding: 2px 8px; margin-bottom: 6px; opacity: .8; border-radius: 2px; }
+.mmeta { font-size: 11px; color: var(--ink-3); margin: 3px 8px 0; }
+.msg.grp .mmeta { display: none; }
+.msg:hover .mmeta { display: block; }
+.mact { display: flex; gap: 2px; opacity: 0; transition: opacity .12s; }
+.msg:hover .mact, .msg:focus-within .mact { opacity: 1; }
+.mact button { border: 0; background: var(--surface); color: var(--ink-2); width: 28px; height: 28px; border-radius: 9px; display: grid; place-items: center; box-shadow: var(--shadow-btn-2); }
+.mact button:hover { color: var(--ink); background: var(--tile); }
+.mact button.warn-btn { background: var(--bad); color: #fff; }
+@media (hover: none) { .mact { opacity: 1; } }
+.rpick { display: flex; gap: 2px; background: var(--surface); border-radius: 14px; padding: 4px; box-shadow: var(--shadow-pop); margin-top: 4px; }
+.rpick button { border: 0; background: none; font-size: 20px; width: 34px; height: 34px; border-radius: 10px; }
+.rpick button:hover { background: var(--tile); }
+.rx { display: flex; gap: 4px; margin-top: 3px; flex-wrap: wrap; }
+.rxb { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 1px 7px; font-size: 13px; color: var(--ink-2); }
+.rxb.on { border-color: var(--brand-line); background: var(--brand-soft); color: var(--brand-fg); }
+.att.img { border: 0; padding: 0; background: none; border-radius: 14px; overflow: hidden; display: block; max-width: 100%; }
+.att.img img { display: block; max-width: min(320px, 100%); max-height: 320px; border-radius: 14px; object-fit: cover; }
+.att.vid { display: block; max-width: min(340px, 100%); max-height: 320px; border-radius: 14px; background: #000; }
+.att.file { display: flex; align-items: center; gap: 10px; background: var(--surface); color: var(--ink); border-radius: 12px; padding: 8px; margin-bottom: 4px; min-width: 220px; }
+.att.file .fic { width: 40px; height: 40px; border-radius: 10px; background: var(--bad-soft); color: var(--bad); font-weight: 700; font-size: 11px; display: grid; place-items: center; flex: none; }
+.att.file .fi { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.att.file .fi b { font-size: 13.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.att.file .fi span { font-size: 12px; color: var(--ink-3); }
+.poll { display: flex; flex-direction: column; gap: 6px; }
+.pq { font-weight: 600; display: flex; gap: 6px; align-items: center; }
+.popt { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: space-between; gap: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 12px; padding: 8px 10px; text-align: left; font-size: 14px; }
+.popt .bar { position: absolute; inset: 0 auto 0 0; background: var(--brand-soft); transition: width .25s; }
+.popt.on { border-color: var(--brand-line); }
+.popt .pt, .popt .pc { position: relative; display: flex; align-items: center; gap: 6px; }
+.popt .pc { font-weight: 600; font-variant-numeric: tabular-nums; }
+.popt .rb { width: 16px; height: 16px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--line-strong); display: inline-block; }
+.popt.on .pt svg { color: var(--brand-fg); }
+.pf { font-size: 12px; color: var(--ink-3); }
+.callc { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.callc > svg { color: var(--brand-fg); }
+.callc span { flex: 1; min-width: 150px; font-size: 13.5px; }
+.cwrap { border-top: 1px solid var(--line); padding: 8px 10px 10px; display: flex; flex-direction: column; gap: 8px; }
+.composer { display: flex; align-items: flex-end; gap: 4px; }
+.cin { flex: 1; min-width: 0; resize: none; border: 1px solid transparent; background: var(--tile); border-radius: 18px; padding: 10px 14px; font: inherit; font-size: 14.5px; line-height: 1.35; max-height: 140px; color: var(--ink); }
+.cin:focus { outline: none; border-color: var(--brand-line); background: var(--surface); }
+.cbtn { border: 0; background: transparent; color: var(--ink-2); width: 40px; height: 40px; border-radius: 13px; display: grid; place-items: center; cursor: pointer; flex: none; }
+.cbtn:hover { background: var(--tile); color: var(--ink); }
+.cbtn.send { background: var(--brand); color: var(--on-brand); box-shadow: var(--shadow-btn); }
+.cbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; color: var(--ink-2); background: var(--tile); border-radius: 12px; padding: 6px 6px 6px 12px; }
+.cbar span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cbar button { border: 0; background: none; color: var(--ink-2); width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; }
+.ro { display: flex; gap: 8px; align-items: center; justify-content: center; font-size: 13.5px; color: var(--ink-3); padding: 8px; }
+.pdraft { display: flex; flex-direction: column; gap: 6px; background: var(--tile); border-radius: 14px; padding: 10px; }
+.pdraft input:not([type]) { border: 1px solid transparent; background: var(--surface); border-radius: 10px; padding: 8px 10px; font: inherit; font-size: 14px; color: var(--ink); }
+.pdraft .pdq { font-weight: 600; }
+.pdrow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.pdrow .grow { flex: 1; }
+.cempty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; padding: 30px 20px; color: var(--ink-2); }
+.cempty b { font-family: var(--f-head); font-weight: 500; font-size: 18px; color: var(--ink); }
+.cempty .muted { display: inline-flex; gap: 6px; align-items: center; font-size: 13px; }
+.cempty.big > svg { color: var(--brand-fg); }
+.cinfo { width: 330px; padding: 14px; gap: 14px; overflow: auto; }
+.cinfo .ih { display: flex; align-items: center; justify-content: space-between; }
+.cinfo .ib { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+.cinfo .ib h3 { margin: 4px 0 0; font-size: 20px; }
+.row2 { display: flex; gap: 6px; }
+.field-in { flex: 1; min-width: 0; height: 40px; border: 1px solid transparent; background: var(--tile); border-radius: var(--rad-sm); padding: 0 12px; font: inherit; color: var(--ink); }
+.field-in:focus { outline: none; border-color: var(--brand-line); background: var(--surface); }
+.ncbody { padding: 14px; overflow: auto; display: flex; flex-direction: column; gap: 14px; }
+.ncbody .plist .sopt { align-items: center; width: 100%; }
+#previewDlg { width: min(1000px, calc(100vw - 24px)); }
+#previewDlg header .grow { flex: 1; }
+.pimg { display: block; max-width: 100%; max-height: 75vh; margin: 0 auto; border-radius: var(--rad-md); }
+.pdfpages { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+.pdfpages canvas { max-width: 100%; height: auto !important; border-radius: 8px; box-shadow: var(--shadow-card); background: #fff; }
+.ptext { white-space: pre-wrap; word-break: break-word; background: var(--tile); border-radius: var(--rad-md); padding: 14px; font-size: 13px; max-height: 70vh; overflow: auto; margin: 0; }
+@media (max-width: 1100px) { .cinfo { position: absolute; right: 12px; top: 12px; bottom: 12px; z-index: 2; box-shadow: var(--shadow-pop); } .cfull { grid-template-columns: 290px minmax(0, 1fr); } }
+@media (max-width: 760px) {
+  .cfull { grid-template-columns: minmax(0, 1fr); }
+  .cfull[data-pane="list"] .cconv { display: none; }
+  .cfull[data-pane="conv"] .cside { display: none; }
+  .chead .back { display: inline-grid; }
+  .cinfo { left: 12px; width: auto; }
+  .minichat { right: 8px; left: 8px; width: auto; bottom: 8px; height: min(560px, calc(100vh - 80px)); }
+  #chatBtn { font-size: 0; gap: 0; padding: 8px 12px; } #chatBtn .badge { font-size: 12px; }
+}
+
+/* ================= Navigacija (traka levo / tabovi dole) ================= */
+.app { display: grid; grid-template-columns: 92px minmax(0, 1fr); min-height: 100vh; }
+.rail { position: sticky; top: env(safe-area-inset-top, 0px); height: calc(100vh - env(safe-area-inset-top, 0px)); display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 18px 8px 16px; padding-left: max(8px, env(safe-area-inset-left, 0px)); background: var(--surface); box-shadow: 1px 0 0 var(--line); z-index: 30; }
+.rlogo { width: 46px; height: 46px; border-radius: var(--rad-sm); background: var(--brand); color: var(--on-brand); display: grid; place-items: center; box-shadow: var(--shadow-btn); margin-bottom: 8px; }
+.rnav { display: flex; flex-direction: column; gap: 4px; width: 100%; }
+.ritem { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 9px 4px 8px; border-radius: var(--rad-md); color: var(--ink-3); text-decoration: none; font-size: 12px; font-weight: 600; transition: background-color .15s, color .15s; }
+.ritem svg { width: 24px; height: 24px; }
+.ritem:hover { background: var(--tile); color: var(--ink); }
+.ritem[aria-current="page"] { background: var(--brand-soft); color: var(--brand-fg); }
+.ritem[aria-current="page"]::before { content: ""; position: absolute; left: -8px; top: 12px; bottom: 12px; width: 4px; border-radius: 0 4px 4px 0; background: var(--brand); }
+.nbadge { position: absolute; top: 4px; right: 12px; min-width: 18px; height: 18px; border-radius: 7px; background: var(--bad); color: #fff; font-size: 11px; font-weight: 700; display: grid; place-items: center; padding: 0 4px; box-shadow: 0 0 0 2px var(--surface); }
+.nonl { position: absolute; top: 4px; left: 12px; min-width: 18px; height: 18px; border-radius: 7px; background: var(--ok); color: #fff; font-size: 11px; font-weight: 700; font-style: normal; display: grid; place-items: center; padding: 0 4px; box-shadow: 0 0 0 2px var(--surface); }
+.rfoot { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.iconbtn.flat { box-shadow: none; border-color: transparent; background: transparent; color: var(--ink-2); }
+.iconbtn.flat:hover { background: var(--tile); color: var(--ink); }
+.wrap { max-width: 1640px; width: 100%; }
+header.top .ptitle h1 { font-size: 30px; }
+.page[hidden] { display: none !important; }
+.page.narrow { max-width: 860px; }
+.pagecard { padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+.chatfull { height: calc(100vh - 140px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); min-height: 460px; }
+.chatfull .cfull { height: 100%; position: relative; }
+.chatfull .csh h2 { display: none; }
+.chatfull .csh .btn { flex: 1; }
+@media (max-width: 860px) {
+  .app { display: block; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 72px); }
+  .rail { display: contents; }
+  .rlogo { display: none; }
+  .rnav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 35; flex-direction: row; gap: 0; background: var(--surface); box-shadow: 0 -1px 0 var(--line), 0 -8px 24px -12px rgb(0 0 0 / .2); padding: 6px max(8px, env(safe-area-inset-left, 0px)) calc(env(safe-area-inset-bottom, 0px) + 6px) max(8px, env(safe-area-inset-right, 0px)); }
+  .ritem { flex: 1; padding: 6px 2px; font-size: 11px; }
+  .ritem[aria-current="page"]::before { display: none; }
+  .nbadge { right: calc(50% - 22px); top: 1px; }
+  .nonl { left: calc(50% - 22px); top: 1px; }
+  .rfoot { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 18px); right: max(12px, env(safe-area-inset-right, 0px)); flex-direction: row; z-index: 31; }
+  header.top { padding-right: 150px; }
+  header.top .ptitle h1 { font-size: 24px; }
+  .minichat { bottom: calc(env(safe-area-inset-bottom, 0px) + 78px); }
+  .toast { bottom: calc(env(safe-area-inset-bottom, 0px) + 84px); }
+  .chatfull { height: calc(100vh - 190px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); }
+}
 </style>
 </head>
 <body>
 
 
-<div class="wrap">
-  <header class="top">
-    <div class="brand">
-      <div class="logo" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="16.5" cy="16.25" r="1.5"/><path d="M10 21.75H14C17.7712 21.75 19.6569 21.75 20.8284 20.5784C22 19.4069 22 17.5212 22 13.75V11.75C22 7.97876 22 6.09315 20.8284 4.92157C19.6569 3.75 17.7712 3.75 14 3.75H10C6.22876 3.75 4.34315 3.75 3.17157 4.92157C2 6.09315 2 7.97876 2 11.75V13.75C2 17.5212 2 19.4069 3.17157 20.5784C4.34315 21.75 6.22876 21.75 10 21.75Z"/><path d="M2.03516 8.75H21.965"/><path d="M7 3.78496V2.25"/><path d="M17 3.78496V2.25"/></g></svg></div>
-      <div>
-        <h1>Planer ispita</h1>
-        <div class="sub" id="storeInfo">Učitavanje…</div>
-      </div>
+<div class="app">
+  <nav class="rail" aria-label="Glavna navigacija">
+    <a class="rlogo" href="#plan" aria-label="Planer ispita, početna"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="16.5" cy="16.25" r="1.5"/><path d="M10 21.75H14C17.7712 21.75 19.6569 21.75 20.8284 20.5784C22 19.4069 22 17.5212 22 13.75V11.75C22 7.97876 22 6.09315 20.8284 4.92157C19.6569 3.75 17.7712 3.75 14 3.75H10C6.22876 3.75 4.34315 3.75 3.17157 4.92157C2 6.09315 2 7.97876 2 11.75V13.75C2 17.5212 2 19.4069 3.17157 20.5784C4.34315 21.75 6.22876 21.75 10 21.75Z"/><path d="M2.03516 8.75H21.965"/><path d="M7 3.78496V2.25"/><path d="M17 3.78496V2.25"/></g></svg></a>
+    <div class="rnav">
+      <a href="#plan" data-route="plan" class="ritem"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M7.88403 3.86687L5.88403 5.10813C3.98695 6.28551 3.0384 6.87421 2.5192 7.82274C2 8.77128 2 9.91549 2 12.2039V13.725C2 17.6258 2 19.5763 3.17157 20.7881C4.34315 22 6.22876 22 10 22H14C17.7712 22 19.6569 22 20.8284 20.7881C22 19.5763 22 17.6258 22 13.725V12.2039C22 9.91549 22 8.77128 21.4808 7.82274C20.9616 6.87421 20.0131 6.28551 18.116 5.10812L16.116 3.86687C14.1106 2.62229 13.1079 2 12 2C10.8921 2 9.88939 2.62229 7.88403 3.86687Z"/><path d="M9 16C9.85038 16.6303 10.8846 17 12 17C13.1154 17 14.1496 16.6303 15 16"/></g></svg><span>Plan</span></a>
+      <a href="#kalendar" data-route="kalendar" class="ritem"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M10 21.75H14C17.7712 21.75 19.6569 21.75 20.8284 20.5784C22 19.4069 22 17.5212 22 13.75V11.75C22 7.97876 22 6.09315 20.8284 4.92157C19.6569 3.75 17.7712 3.75 14 3.75H10C6.22876 3.75 4.34315 3.75 3.17157 4.92157C2 6.09315 2 7.97876 2 11.75V13.75C2 17.5212 2 19.4069 3.17157 20.5784C4.34315 21.75 6.22876 21.75 10 21.75Z"/><path d="M2.03516 8.75H21.965"/><path stroke-linejoin="round" d="M17 12.75H17.0001"/><path stroke-linejoin="round" d="M12 12.75H12.0001"/><path stroke-linejoin="round" d="M7 12.75H7.0001"/><path stroke-linejoin="round" d="M17 16.7734H17.0001"/><path stroke-linejoin="round" d="M12 16.7734H12.0001"/><path stroke-linejoin="round" d="M7 16.7734H7.0001"/><path d="M7 3.78496V2.25"/><path d="M17 3.78496V2.25"/></g></svg><span>Kalendar</span></a>
+      <a href="#poruke" data-route="poruke" class="ritem"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M22 12C22 17.5228 17.5228 22 12 22C10.4003 22 8.88837 21.6244 7.54753 20.9565C7.19121 20.7791 6.78393 20.72 6.39939 20.8229L4.17335 21.4185C3.20701 21.677 2.32295 20.793 2.58151 19.8267L3.17712 17.6006C3.28001 17.2161 3.22094 16.8088 3.04346 16.4525C2.37562 15.1116 2 13.5997 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/><path stroke-linejoin="round" d="M8 12H8.009M11.991 12H12M15.991 12H16"/></g></svg><span>Poruke</span><b class="nbadge" id="chatBadge" hidden></b></a>
+      <a href="#prijatelji" data-route="prijatelji" class="ritem"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="9" cy="6" r="4"/><path d="M15 9C16.6569 9 18 7.65685 18 6C18 4.34315 16.6569 3 15 3"/><ellipse cx="9" cy="17" rx="7" ry="4"/><path d="M18 14C19.7542 14.3847 21 15.3589 21 16.5C21 17.5293 19.9863 18.4229 18.5 18.8704"/></g></svg><span>Prijatelji</span><b class="nbadge" id="friendsBadge" hidden></b><i class="nonl" id="onlineCount" hidden></i></a>
+      <a href="#rokovi" data-route="rokovi" class="ritem"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M11 22H13C16.7712 22 18.6569 22 19.8284 20.8284C21 19.6569 21 17.7712 21 14V10C21 6.22876 21 4.34315 19.8284 3.17157C18.6569 2 16.7712 2 13 2H11C7.22876 2 5.34315 2 4.17157 3.17157C3 4.34315 3 6.22876 3 10V14C3 17.7712 3 19.6569 4.17157 20.8284C5.34315 22 7.22876 22 11 22Z"/><path d="M8 12H16"/><path d="M8 8H16"/><path d="M8 16H13"/></g></svg><span>Rokovi</span></a>
     </div>
-    <div class="grow"></div>
-    <button class="btn filters-toggle" id="filtersToggle" aria-expanded="false">Moji ispiti <span id="fcount" class="mono"></span></button>
-    <button class="btn" id="friendsBtn" title="Prijatelji"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="9" cy="6" r="4"/><path d="M15 9C16.6569 9 18 7.65685 18 6C18 4.34315 16.6569 3 15 3"/><ellipse cx="9" cy="17" rx="7" ry="4"/><path d="M18 14C19.7542 14.3847 21 15.3589 21 16.5C21 17.5293 19.9863 18.4229 18.5 18.8704"/></g></svg> Prijatelji<span class="badge" id="friendsBadge" hidden></span></button>
-    <button class="iconbtn" id="themeBtn" aria-label="Tema" title="Tema"></button>
-    <button class="iconbtn" id="settingsBtn" aria-label="Podešavanja" title="Podešavanja"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M9.5 14C11.1569 14 12.5 15.3431 12.5 17C12.5 18.6568 11.1569 20 9.5 20C7.84315 20 6.5 18.6568 6.5 17C6.5 15.3431 7.84315 14 9.5 14Z"/><path d="M14.5 3.99998C12.8431 3.99998 11.5 5.34312 11.5 6.99998C11.5 8.65683 12.8431 9.99998 14.5 9.99998C16.1569 9.99998 17.5 8.65683 17.5 6.99998C17.5 5.34312 16.1569 3.99998 14.5 3.99998Z"/><path d="M15 16.9585L22 16.9585"/><path d="M9 6.9585L2 6.9585"/><path d="M2 16.9585L4 16.9585"/><path d="M22 6.9585L20 6.9585"/></g></svg></button>
-    <button class="btn" id="manageBtn">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M11 22H13C16.7712 22 18.6569 22 19.8284 20.8284C21 19.6569 21 17.7712 21 14V10C21 6.22876 21 4.34315 19.8284 3.17157C18.6569 2 16.7712 2 13 2H11C7.22876 2 5.34315 2 4.17157 3.17157C3 4.34315 3 6.22876 3 10V14C3 17.7712 3 19.6569 4.17157 20.8284C5.34315 22 7.22876 22 11 22Z"/><path d="M8 12H16"/><path d="M8 8H16"/><path d="M8 16H13"/></g></svg>
-      Rokovi
-    </button>
-    <button class="mebtn" id="meBtn" aria-label="Moj profil" title="Profil"></button>
-  </header>
+    <div class="rfoot">
+      <button class="iconbtn flat" id="themeBtn" aria-label="Tema" title="Tema"></button>
+      <button class="iconbtn flat" id="settingsBtn" aria-label="Podešavanja" title="Podešavanja"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M9.5 14C11.1569 14 12.5 15.3431 12.5 17C12.5 18.6568 11.1569 20 9.5 20C7.84315 20 6.5 18.6568 6.5 17C6.5 15.3431 7.84315 14 9.5 14Z"/><path d="M14.5 3.99998C12.8431 3.99998 11.5 5.34312 11.5 6.99998C11.5 8.65683 12.8431 9.99998 14.5 9.99998C16.1569 9.99998 17.5 8.65683 17.5 6.99998C17.5 5.34312 16.1569 3.99998 14.5 3.99998Z"/><path d="M15 16.9585L22 16.9585"/><path d="M9 6.9585L2 6.9585"/><path d="M2 16.9585L4 16.9585"/><path d="M22 6.9585L20 6.9585"/></g></svg></button>
+      <button class="mebtn" id="meBtn" aria-label="Moj profil" title="Profil"></button>
+    </div>
+  </nav>
 
-  <div id="bannerArea"></div>
+  <div class="wrap">
+    <header class="top">
+      <div class="ptitle"><h1 id="pageTitle">Moj plan</h1><div class="sub" id="storeInfo">Učitavanje…</div></div>
+      <div class="grow"></div>
+      <button class="btn filters-toggle" id="filtersToggle" aria-expanded="false">Moji ispiti <span id="fcount" class="mono"></span></button>
+    </header>
 
-  <div class="layout">
-    <aside class="card filters side collapsed" id="filters" aria-label="Moji ispiti"></aside>
+    <div id="bannerArea"></div>
 
-    <section class="main">
-      <div id="pickArea"></div>
-      <div class="toolbar">
-        <div class="seg" role="group" aria-label="Prikaz">
-          <button data-view="plan" aria-pressed="true">Plan</button>
-          <button data-view="mesec" aria-pressed="false">Mesec</button>
-          <button data-view="godina" aria-pressed="false">Godina</button>
-          <button data-view="lista" aria-pressed="false">Lista</button>
-        </div>
-        <div class="navbtns" id="navbtns">
-          <button class="iconbtn" id="prev" aria-label="Prethodni"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 5L9 12L15 19"/></svg></button>
-          <button class="iconbtn" id="next" aria-label="Sledeći"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5L15 12L9 19"/></svg></button>
-        </div>
-        <button class="btn" id="todayBtn">Danas</button>
-        <div class="period" id="period"></div>
+    <section class="page" id="sec-planer">
+      <div class="layout">
+        <aside class="card filters side collapsed" id="filters" aria-label="Moji ispiti"></aside>
+
+        <section class="main">
+          <div id="pickArea"></div>
+          <div class="toolbar">
+            <div class="seg" role="group" aria-label="Prikaz" id="calSeg">
+              <button data-view="mesec" aria-pressed="false">Mesec</button>
+              <button data-view="godina" aria-pressed="false">Godina</button>
+              <button data-view="lista" aria-pressed="false">Lista</button>
+            </div>
+            <div class="navbtns" id="navbtns">
+              <button class="iconbtn" id="prev" aria-label="Prethodni"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 5L9 12L15 19"/></svg></button>
+              <button class="iconbtn" id="next" aria-label="Sledeći"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5L15 12L9 19"/></svg></button>
+            </div>
+            <button class="btn" id="todayBtn">Danas</button>
+            <div class="period" id="period"></div>
+          </div>
+          <div class="card" id="viewArea"></div>
+        </section>
+
+        <aside class="card day-panel" id="dayPanel" aria-live="polite"></aside>
       </div>
-      <div class="card" id="viewArea"></div>
     </section>
 
-    <aside class="card day-panel" id="dayPanel" aria-live="polite"></aside>
+    <section class="page" id="sec-poruke" hidden><div id="chatFull" class="chatfull"></div></section>
+    <section class="page narrow" id="sec-prijatelji" hidden><div class="card pagecard" id="friendsBody"></div></section>
+    <section class="page narrow" id="sec-rokovi" hidden><div class="card pagecard" id="manageBody"></div></section>
   </div>
 </div>
 
 <dialog id="setupDlg" aria-labelledby="wizTitle"><div class="wiz" id="wiz"></div></dialog>
 
-<dialog id="friendsDlg" aria-labelledby="friendsTitle">
+
+<div id="miniChat" class="minichat" hidden></div>
+<dialog id="previewDlg" aria-labelledby="previewTitle">
   <div class="dlg">
-    <header><h2 id="friendsTitle">Prijatelji</h2><button class="iconbtn" data-close aria-label="Zatvori"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M19.0068 5L5.00684 19"/><path d="M19 19L5 5"/></g></svg></button></header>
-    <div class="body" id="friendsBody"></div>
+    <header><h2 id="previewTitle">Pregled</h2><span class="grow"></span><a class="btn sm" id="previewOpen" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M22 13.9979C21.9711 17.4119 21.7815 19.294 20.5404 20.5352C19.0755 22 16.7179 22 12.0026 22C7.28733 22 4.9297 22 3.46485 20.5352C2 19.0703 2 16.7127 2 11.9974C2 7.28212 2 4.92448 3.46485 3.45963C4.70599 2.21848 6.58807 2.02895 10.0021 2"/><path stroke-linejoin="round" d="M22 7H14C12.1824 7 11.0867 7.89202 10.6804 8.30029L10.4908 8.49082L10.3003 8.68042C9.89202 9.08671 9 10.1824 9 12V15M17 12L22 7L17 2"/></g></svg> Otvori</a><button class="iconbtn" data-close aria-label="Zatvori"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M19.0068 5L5.00684 19"/><path d="M19 19L5 5"/></g></svg></button></header>
+    <div class="body" id="previewBody"></div>
   </div>
 </dialog>
 
@@ -652,12 +847,6 @@ label.btn { cursor: pointer; }
   </div>
 </dialog>
 
-<dialog id="manageDlg" aria-labelledby="manageTitle">
-  <div class="dlg">
-    <header><h2 id="manageTitle">Ispitni rokovi</h2><button class="iconbtn" data-close aria-label="Zatvori"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M19.0068 5L5.00684 19"/><path d="M19 19L5 5"/></g></svg></button></header>
-    <div class="body" id="manageBody"></div>
-  </div>
-</dialog>
 
 <script>
 // ===== Jezgro: transliteracija + parsiranje rasporeda ispita =====
@@ -1657,7 +1846,12 @@ function renderDay() {
 }
 
 function renderView() {
+  if (S.view !== 'plan') S.calView = S.view;
+  if (route === 'plan' && S.view !== 'plan') { location.hash = 'kalendar'; route = 'kalendar'; setRouteUi(); }
+  else if (route === 'kalendar' && S.view === 'plan') { location.hash = 'plan'; route = 'plan'; setRouteUi(); }
   document.querySelectorAll('[data-view]').forEach(b => b.setAttribute('aria-pressed', b.dataset.view === S.view));
+  $('#calSeg').hidden = S.view === 'plan';
+  document.querySelector('#sec-planer .toolbar').hidden = S.view === 'plan';
   $('#navbtns').hidden = $('#todayBtn').hidden = S.view === 'lista' || S.view === 'plan';
   if (!S.loaded) { $('#viewArea').innerHTML = `<div class="empty"><span class="spinner"></span><div style="margin-top:8px">Učitavanje rasporeda…</div></div>`; $('#period').textContent = ''; return; }
   if (!S.exams.length) {
@@ -1667,9 +1861,12 @@ function renderView() {
   if (S.view === 'plan') renderPlan(); else if (S.view === 'mesec') renderMonth(); else if (S.view === 'godina') renderYear(); else renderList();
 }
 function storeInfo() {
+  if (route !== 'plan' && route !== 'kalendar') { $('#storeInfo').textContent = ROUTES[route].sub(); return; }
   const n = S.rokovi.length;
+  const planned = MY.filter(s => s.plan).length;
+  const lead = route === 'plan' && prof() ? `${planned} od ${ispita(MY.length)} zakazano · ` : '';
   const where = Store.mode === 'db' ? (Me.mode === 'db' ? 'plan sačuvan na tvom nalogu' : 'plan sačuvan u ovom pregledaču') : Store.mode === 'local' ? 'sačuvano u ovom pregledaču' : 'nije sačuvano (privatni prozor)';
-  $('#storeInfo').textContent = `${num(n, 'rok', 'roka', 'rokova')} · ${where}`;
+  $('#storeInfo').textContent = `${lead}${num(n, 'rok', 'roka', 'rokova')} · ${where}`;
 }
 function refresh() {
   applyFilters();
@@ -1680,6 +1877,7 @@ function refresh() {
   storeInfo();
   renderMeBtn();
   renderFriendsUi();
+  if (typeof renderChatBadges === 'function') renderChatBadges();
 }
 
 document.querySelector('.toolbar .seg').addEventListener('click', e => {
@@ -1723,7 +1921,7 @@ document.addEventListener('click', e => {
   const mo = t.closest('[data-month]');
   if (mo) { const [y, m] = mo.dataset.month.split('-').map(Number); S.y = y; S.m = m; S.view = 'mesec'; renderView(); return; }
   if (t.closest('#moreBtn')) { S.listLimit += 500; renderList(); return; }
-  if (t.closest('[data-open-upload]')) { if ($('#manageDlg').open) $('#manageDlg').close(); openUpload(); return; }
+  if (t.closest('[data-open-upload]')) { openUpload(); return; }
   const close = t.closest('[data-close]'); if (close) close.closest('dialog').close();
 });
 document.addEventListener('keydown', e => {
@@ -2029,6 +2227,7 @@ function finishWizard() {
   S.pick = null; S.scope = 'moji';
   if (wasFirst) { S.view = 'plan'; S.tab = 'todo'; }
   saveUi(); derive(); deriveFriends(); refresh();
+  if (wasFirst) initChat();
   toast(wasFirst ? `Zdravo, ${Me.data.ime}! ${ispita(Object.keys(remaining).length)} čeka planiranje.` : 'Podešavanja su sačuvana.');
 }
 
@@ -2067,8 +2266,27 @@ function sanitizePerson(uid, v) {
     foto: FOTO_RE.test(v.foto || '') && v.foto.length < 120000 ? v.foto : '',
     nivo: str(v.nivo, 4), akred: +v.akred || null, godina: +v.godina || null, modul: str(v.modul, 6),
     friends: Array.isArray(v.friends) ? v.friends.filter(x => typeof x === 'string').slice(0, 500) : [],
-    share: v.share !== false, plan, remaining
+    share: v.share !== false, plan, remaining,
+    pub: v.pub && typeof v.pub.x === 'string' && typeof v.pub.y === 'string' && v.pub.x.length < 64 && v.pub.y.length < 64 ? { x: v.pub.x, y: v.pub.y } : null,
+    chats: sanitizeChats(v.chats),
+    groups: Array.isArray(v.groups) ? v.groups.filter(g => typeof g === 'string' && /^fak-[a-z0-9-]{1,40}$/.test(g)).slice(0, 20) : [],
+    leftChats: Array.isArray(v.leftChats) ? v.leftChats.filter(g => typeof g === 'string').slice(0, 500) : [],
+    act: v.act && typeof v.act === 'object' ? Object.fromEntries(Object.entries(v.act).filter(([k, t]) => typeof t === 'number' && k.length < 200).slice(0, 500)) : {}
   };
+}
+function sanitizeChats(chats) {
+  const out = {}; if (!chats || typeof chats !== 'object') return out;
+  const ids = a => Array.isArray(a) ? a.filter(x => typeof x === 'string' && x.length < 80).slice(0, 500) : [];
+  for (const [cid, m] of Object.entries(chats).slice(0, 200)) {
+    if (!/^(dm|g)-[A-Za-z0-9_-]{1,160}$/.test(cid) || !m || typeof m !== 'object') continue;
+    const keys = {};
+    if (m.keys && typeof m.keys === 'object') for (const [kv, ks] of Object.entries(m.keys).slice(0, 8)) {
+      if (!ks || typeof ks !== 'object') continue; keys[kv] = {};
+      for (const [u, w] of Object.entries(ks).slice(0, 500)) if (w && typeof w.iv === 'string' && typeof w.ct === 'string' && w.ct.length < 200) keys[kv][u] = { iv: w.iv, ct: w.ct };
+    }
+    out[cid] = { kind: m.kind === 'dm' ? 'dm' : 'group', name: str(m.name, 60), members: ids(m.members), admins: ids(m.admins), mode: m.mode === 'admins' ? 'admins' : 'all', kv: +m.kv || 1, keys, created: +m.created || 0 };
+  }
+  return out;
 }
 function publicBody(p) {
   const share = p.share !== false, plan = {}, remaining = {};
@@ -2077,7 +2295,11 @@ function publicBody(p) {
     for (const [k, e] of Object.entries(p.remaining || {})) remaining[k] = e.n;
   }
   return { uid: Me.uid, ime: p.ime || '', prezime: p.prezime || '', indeks: p.indeks || '', fakultet: p.fakultet || '', foto: p.foto || '',
-    nivo: p.nivo || '', akred: p.akred || 0, godina: p.godina || 0, modul: p.modul || '', friends: p.friends || [], share, plan, remaining, updatedAt: new Date().toISOString() };
+    nivo: p.nivo || '', akred: p.akred || 0, godina: p.godina || 0, modul: p.modul || '', friends: p.friends || [], share, plan, remaining,
+    pub: p.ck && p.ck.pub ? { x: p.ck.pub.x, y: p.ck.pub.y } : null,
+    chats: Object.fromEntries(Object.entries(p.chatsOwned || {}).map(([cid, m]) => [cid, { kind: m.kind, name: m.name || '', members: m.members || [], admins: m.admins || [], mode: m.mode || 'all', kv: m.kv || 1, keys: m.keys || {}, created: m.created || 0 }])),
+    groups: p.groups || [], leftChats: p.leftChats || [], act: p.act || {},
+    updatedAt: new Date().toISOString() };
 }
 
 function subscribePeople() {
@@ -2087,12 +2309,14 @@ function subscribePeople() {
     clearTimeout(timer); F.ready = true; F.err = null;
     F.people = new Map(); F.mine = null;
     for (const d of snap.docs) { const v = d.data() || {}; if (d.id === Me.uid) F.mine = v; else F.people.set(d.id, sanitizePerson(d.id, v)); }
-    deriveFriends(); refresh(); renderFriendsUi();
+    deriveFriends(); refreshSoon(); renderFriendsUi(); onPeopleChanged();
     const p = prof();
     if (p && p.onboarded && !snap.metadata.fromCache && (!F.mine || F.mine.ime !== p.ime || (F.mine.friends || []).length !== (p.friends || []).length)) Me.save();
   }, err => { clearTimeout(timer); F.err = err && err.code || 'unavailable'; renderFriendsUi(); });
 }
 
+let refreshTimer = 0;
+function refreshSoon() { clearTimeout(refreshTimer); refreshTimer = setTimeout(refresh, 120); }
 function deriveFriends() {
   const p = prof(), my = new Set((p && p.friends) || []), ignored = new Set((p && p.ignored) || []);
   const isMutual = u => { const o = F.people.get(u); return o && o.friends.includes(Me.uid); };
@@ -2132,10 +2356,10 @@ function ignoreRequest(uid) { const p = prof(); if (!p) return; p.ignored = uniq
 
 // ---- dijalog Prijatelji ----
 function openFriends(uid) {
-  F.view = uid ? 'detail' : 'list'; F.detail = uid || null; F.confirmRemove = null;
+  F.view = uid ? 'detail' : 'list'; F.detail = uid || null; F.confirmRemove = null; F.keep = true;
   if (!uid && FR.incoming.length) F.tab = 'requests';
+  go('prijatelji');
   renderFriendsUi();
-  if (!$('#friendsDlg').open) $('#friendsDlg').showModal();
 }
 function personSub(o) {
   return [o.indeks && `indeks ${o.indeks}`, o.nivo && o.godina ? `${o.nivo} · ${o.godina}. godina` : o.nivo, o.modul].filter(Boolean).join(' · ') || o.fakultet || '';
@@ -2144,7 +2368,6 @@ function commonCount(o) { return MY.filter(s => Object.entries(o.plan).some(([k,
 function renderFriendsUi() {
   const n = FR.incoming.length;
   const badge = $('#friendsBadge'); if (badge) { badge.textContent = n; badge.hidden = !n; }
-  if (!$('#friendsDlg').open && F.view !== '__force') { /* i dalje osveži sadržaj ako se otvori */ }
   const b = $('#friendsBody'); if (!b) return;
   if (Me.mode !== 'db') { b.innerHTML = `<div class="empty"><strong>Prijatelji rade na claude.ai</strong>Otvori aplikaciju na claude.ai sa svojim nalogom da bi dodao/la prijatelje i video/la njihove ispite.</div>`; return; }
   if (!prof()) { b.innerHTML = `<div class="empty"><strong>Prvo podesi profil</strong><button class="btn primary" data-open-settings>Podesi profil</button></div>`; return; }
@@ -2155,7 +2378,7 @@ function renderFriendsUi() {
     <button type="button" data-ftab="requests" aria-pressed="${F.tab === 'requests'}">Zahtevi${n ? `<span class="dotn">${n}</span>` : ''}</button>
     <button type="button" data-ftab="find" aria-pressed="${F.tab === 'find'}">Pronađi</button></div>`;
   let h = tabs;
-  const row = (o, actions, sub) => `<div class="prow">${avatarHtml(o, 44)}<div class="pi"><div class="pn">${esc(fullName(o))}</div><div class="ps">${esc(sub != null ? sub : personSub(o))}</div></div><div class="pa">${actions}</div></div>`;
+  const row = (o, actions, sub) => `<div class="prow"><span class="avwrap">${avatarHtml(o, 44)}${C.online.has(o.uid) ? '<i class="onl"></i>' : ''}</span><div class="pi"><div class="pn">${esc(fullName(o))}</div><div class="ps">${esc(sub != null ? sub : personSub(o))}</div></div><div class="pa">${actions}</div></div>`;
   if (F.tab === 'friends') {
     if (!FR.friends.length) h += `<div class="empty"><strong>Još nemaš prijatelja</strong>Pronađi kolege po imenu ili broju indeksa i pošalji im zahtev. Kad te i oni dodaju, videćete ispite jedni drugih.<div><button class="btn primary" data-ftab="find"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="6" r="4"/><path stroke-linejoin="round" d="M17 16.6666V19.3333"/><path stroke-linejoin="round" d="M15.666 18L18.3327 18"/><path d="M21 18C21 20.2091 19.2091 22 17 22C15.8869 22 14.8799 21.5453 14.1548 20.8115C13.4408 20.089 13 19.096 13 18C13 15.8976 14.6221 14.174 16.683 14.0124C16.7876 14.0042 16.8933 14 17 14C19.2091 14 21 15.7909 21 18Z"/><path d="M16.683 14.0124C15.4431 13.3838 13.8093 13.002 12.019 13.002C8.14253 13.002 5 14.7924 5 17.001C5 19.2096 8.14253 21 12.019 21C12.7637 21 13.4813 20.934 14.1548 20.8115"/></g></svg> Pronađi prijatelje</button></div></div>`;
     else h += '<div class="plist">' + FR.friends.map(o => {
@@ -2163,8 +2386,8 @@ function renderFriendsUi() {
       const sub = `${personSub(o)}${personSub(o) ? ' · ' : ''}${o.share ? `${np} zakazano` : 'plan nije deljen'}`;
       const act = F.confirmRemove === o.uid
         ? `<button class="btn sm" data-fcancel>Otkaži</button><button class="btn danger solid sm" data-fremove="${esc(o.uid)}">Ukloni</button>`
-        : `${c ? `<span class="pill planned">${c} zajedničkih</span>` : ''}<button class="btn sm" data-fopen="${esc(o.uid)}">Plan</button><button class="iconbtn sm" data-fask="${esc(o.uid)}" aria-label="Ukloni prijatelja" title="Ukloni prijatelja"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="6" r="4"/><path stroke-linejoin="round" d="M15.666 16.6667L16.9995 18.0002M16.9995 18.0002L18.3327 19.3333M16.9995 18.0002L18.333 16.6667M16.9995 18.0002L15.6663 19.3333"/><path d="M21 18C21 20.2091 19.2091 22 17 22C15.8869 22 14.8799 21.5453 14.1548 20.8115C13.4408 20.089 13 19.096 13 18C13 15.8976 14.6221 14.174 16.683 14.0124C16.7876 14.0042 16.8933 14 17 14C19.2091 14 21 15.7909 21 18Z"/><path d="M16.683 14.0124C15.4431 13.3838 13.8093 13.0019 12.019 13.0019C8.14253 13.0019 5 14.7924 5 17.001C5 19.2096 8.14253 21 12.019 21C12.7637 21 13.4813 20.9339 14.1548 20.8115"/></g></svg></button>`;
-      return row(o, act, sub);
+        : `${c ? `<span class="pill planned">${c} zajedničkih</span>` : ''}<button class="btn primary sm" data-fmsg="${esc(o.uid)}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M22 12C22 17.5228 17.5228 22 12 22C10.4003 22 8.88837 21.6244 7.54753 20.9565C7.19121 20.7791 6.78393 20.72 6.39939 20.8229L4.17335 21.4185C3.20701 21.677 2.32295 20.793 2.58151 19.8267L3.17712 17.6006C3.28001 17.2161 3.22094 16.8088 3.04346 16.4525C2.37562 15.1116 2 13.5997 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/><path d="M8 10.5H16"/><path d="M8 14H13.5"/></g></svg> Poruka</button><button class="btn sm" data-fopen="${esc(o.uid)}">Plan</button><button class="iconbtn sm" data-fask="${esc(o.uid)}" aria-label="Ukloni prijatelja" title="Ukloni prijatelja"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="6" r="4"/><path stroke-linejoin="round" d="M15.666 16.6667L16.9995 18.0002M16.9995 18.0002L18.3327 19.3333M16.9995 18.0002L18.333 16.6667M16.9995 18.0002L15.6663 19.3333"/><path d="M21 18C21 20.2091 19.2091 22 17 22C15.8869 22 14.8799 21.5453 14.1548 20.8115C13.4408 20.089 13 19.096 13 18C13 15.8976 14.6221 14.174 16.683 14.0124C16.7876 14.0042 16.8933 14 17 14C19.2091 14 21 15.7909 21 18Z"/><path d="M16.683 14.0124C15.4431 13.3838 13.8093 13.0019 12.019 13.0019C8.14253 13.0019 5 14.7924 5 17.001C5 19.2096 8.14253 21 12.019 21C12.7637 21 13.4813 20.9339 14.1548 20.8115"/></g></svg></button>`;
+      return row(o, act, (C.online.has(o.uid) ? '● online · ' : '') + sub);
     }).join('') + '</div>';
   } else if (F.tab === 'requests') {
     if (!FR.incoming.length && !FR.outgoing.length) h += `<div class="empty"><strong>Nema zahteva</strong>Kad te neko doda, zahtev će se pojaviti ovde.</div>`;
@@ -2216,6 +2439,7 @@ function renderFriendDetail(b) {
 $('#friendsBody').addEventListener('click', e => {
   const t = e.target;
   const tb = t.closest('[data-ftab]'); if (tb) { F.tab = tb.dataset.ftab; F.confirmRemove = null; renderFriendsUi(); if (F.tab === 'find') setTimeout(() => $('#fq') && $('#fq').focus(), 20); return; }
+  const fm = t.closest('[data-fmsg]'); if (fm) { const uid = fm.dataset.fmsg; createChat([uid]).then(cid => cid && openMini(cid)); return; }
   const op = t.closest('[data-fopen]'); if (op) { F.view = 'detail'; F.detail = op.dataset.fopen; renderFriendsUi(); return; }
   if (t.closest('[data-fback]')) { F.view = 'list'; renderFriendsUi(); return; }
   const ad = t.closest('[data-fadd]'); if (ad) { addFriend(ad.dataset.fadd); return; }
@@ -2223,15 +2447,791 @@ $('#friendsBody').addEventListener('click', e => {
   if (t.closest('[data-fcancel]')) { F.confirmRemove = null; renderFriendsUi(); return; }
   const rm = t.closest('[data-fremove]'); if (rm) { F.confirmRemove = null; removeFriend(rm.dataset.fremove); return; }
   const ig = t.closest('[data-fignore]'); if (ig) { ignoreRequest(ig.dataset.fignore); return; }
-  const jn = t.closest('[data-fjoin]'); if (jn) { const ex = examById(jn.dataset.fjoin); if (ex) { $('#friendsDlg').close(); schedule(jn.dataset.fsifra, ex); } return; }
+  const jn = t.closest('[data-fjoin]'); if (jn) { const ex = examById(jn.dataset.fjoin); if (ex) { go('plan'); schedule(jn.dataset.fsifra, ex); } return; }
 });
-$('#friendsBtn').addEventListener('click', () => openFriends());
 $('#meBtn').addEventListener('click', () => openWizard(!(prof() && prof().onboarded), 'profil'));
 function renderMeBtn() {
   const p = prof();
   $('#meBtn').innerHTML = p && p.ime ? avatarHtml({ uid: Me.uid, ...p }, 34) : `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="6" r="4"/><ellipse cx="12" cy="17" rx="7" ry="4"/></g></svg>`;
   $('#meBtn').title = p && p.ime ? `${fullName(p)} · profil` : 'Profil';
 }
+
+// ================= Poruke (chat) =================
+// Model:
+//  - Svaki korisnik piše SAMO u svoj prostor box/<uid>/c/<cid> (pravilo {self}) → pošiljalac je autentičan.
+//  - Privatni četovi (DM i grupe) su šifrovani (AES-GCM). Ključ grupe je za svakog člana umotan
+//    ECDH(P-256) ključem između vlasnika i člana. Metapodaci grupe su u javnoj kartici vlasnika (people/<uid>.chats).
+//  - Fakultetski četovi su javni (bez šifrovanja), učlanjenje: people/<uid>.groups.
+//  - Online status i „kuca…" idu preko `room` sposobnosti.
+const C = {
+  on: false, assets: null, room: null, priv: null, pairCache: new Map(), keyCache: new Map(),
+  boxes: new Map(), subs: new Map(), dec: new Map(), online: new Set(), typing: new Map(),
+  mini: null, full: false, active: null, info: false, reply: null, edit: null, pollDraft: null,
+  q: '', newChat: null, seenAct: new Map(), renderTimer: 0, myBox: new Map(), writing: new Map(), pendingWrite: new Set(),
+  mobilePane: 'list', lastTypingEmit: 0, preview: null
+};
+const REACTIONS = ['👍', '❤️', '😂', '😮', '😢', '🎉'];
+const MAX_MSGS = 250, MAX_BOX_BYTES = 220000, MAX_SUBS = 48;
+
+// ---------- pomoćne ----------
+const b64 = buf => { const a = new Uint8Array(buf); let s = ''; for (let i = 0; i < a.length; i += 0x8000) s += String.fromCharCode.apply(null, a.subarray(i, i + 0x8000)); return btoa(s); };
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const rid = (n = 12) => b64(crypto.getRandomValues(new Uint8Array(n))).replace(/[+/=]/g, '').slice(0, n);
+const enc = new TextEncoder(), dec = new TextDecoder();
+const fmtTime = ts => { const d = new Date(ts); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
+const fmtSize = n => n > 1048576 ? `${(n / 1048576).toFixed(1)} MB` : n > 1024 ? `${Math.round(n / 1024)} KB` : `${n} B`;
+const slug = s => fold(s).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'fakultet';
+function linkify(text) {
+  return esc(text).replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)\]"'])/g, u => `<a href="${u}" target="_blank" rel="noopener noreferrer">${u}</a>`).replace(/\n/g, '<br>');
+}
+function personById(uid) { if (uid === Me.uid) return { uid, ...(prof() || {}) }; return F.people.get(uid) || { uid, ime: 'Nepoznat', prezime: 'korisnik' }; }
+const firstName = uid => { const p = personById(uid); return p.ime || fullName(p); };
+
+// ---------- kriptografija ----------
+const ECDH = { name: 'ECDH', namedCurve: 'P-256' };
+async function ensureKeys() {
+  const p = prof(); if (!p || !window.crypto || !crypto.subtle) return false;
+  if (!p.ck || !p.ck.priv || !p.ck.pub) {
+    const kp = await crypto.subtle.generateKey(ECDH, true, ['deriveKey']);
+    p.ck = { priv: await crypto.subtle.exportKey('jwk', kp.privateKey), pub: await crypto.subtle.exportKey('jwk', kp.publicKey) };
+    Me.save();
+  }
+  C.priv = await crypto.subtle.importKey('jwk', p.ck.priv, ECDH, false, ['deriveKey']);
+  return true;
+}
+const pubOf = uid => uid === Me.uid ? (prof() && prof().ck && prof().ck.pub) : (F.people.get(uid) || {}).pub;
+async function pairKey(uid) {
+  const jwk = pubOf(uid); if (!jwk || !C.priv) return null;
+  const k = uid + '|' + jwk.x;
+  if (!C.pairCache.has(k)) C.pairCache.set(k, (async () => {
+    const pub = await crypto.subtle.importKey('jwk', { kty: 'EC', crv: 'P-256', x: jwk.x, y: jwk.y }, ECDH, false, []);
+    return crypto.subtle.deriveKey({ name: 'ECDH', public: pub }, C.priv, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+  })().catch(() => null));
+  return C.pairCache.get(k);
+}
+async function aesEnc(key, bytes) { const iv = crypto.getRandomValues(new Uint8Array(12)); const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, bytes); return { iv: b64(iv), ct: b64(ct) }; }
+async function aesDec(key, o) { return new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(o.iv) }, key, unb64(o.ct))); }
+// ključ četa (verzija kv) koji je vlasnik `ko` umotao za mene
+async function chatKey(ko, cid, kv) {
+  const meta = chatMeta(ko, cid); if (!meta) return null;
+  const w = meta.keys && meta.keys[kv] && meta.keys[kv][Me.uid]; if (!w) return null;
+  const k = `${ko}|${cid}|${kv}|${w.ct.slice(0, 16)}`;
+  if (!C.keyCache.has(k)) C.keyCache.set(k, (async () => {
+    const pk = await pairKey(ko); if (!pk) return null;
+    const raw = await aesDec(pk, w);
+    return crypto.subtle.importKey('raw', raw, 'AES-GCM', false, ['encrypt', 'decrypt']);
+  })().catch(() => null));
+  return C.keyCache.get(k);
+}
+async function wrapKeyFor(uid, raw) { const pk = await pairKey(uid); return pk ? aesEnc(pk, raw) : null; }
+
+// ---------- četovi ----------
+function ownedChats() { return (prof() && prof().chatsOwned) || {}; }
+function chatMeta(owner, cid) { return owner === Me.uid ? ownedChats()[cid] : ((F.people.get(owner) || {}).chats || {})[cid]; }
+function facultyList() {
+  const set = new Map();
+  const add = f => { if (f && f.trim()) set.set(slug(f), f.trim()); };
+  add(prof() && prof().fakultet);
+  for (const o of F.people.values()) add(o.fakultet);
+  return [...set.entries()].map(([s, name]) => ({ cid: 'fak-' + s, name }));
+}
+// svi četovi u kojima sam član
+function myChats() {
+  const p = prof(); if (!p) return [];
+  const left = new Set(p.leftChats || []), out = new Map();
+  const consider = (owner, cid, m) => {
+    if (!m || !Array.isArray(m.members) || !m.members.includes(Me.uid) || left.has(cid)) return;
+    const prev = out.get(cid);
+    if (prev && prev.kind === 'dm' && prev.owner < owner) return; // DM: važi kopija vlasnika sa manjim id-jem
+    out.set(cid, { cid, owner, kind: m.kind === 'dm' ? 'dm' : 'group', name: m.name || '', members: m.members, admins: m.admins || [], mode: m.mode === 'admins' ? 'admins' : 'all', kv: m.kv || 1, created: m.created || 0 });
+  };
+  for (const [cid, m] of Object.entries(ownedChats())) consider(Me.uid, cid, m);
+  for (const o of F.people.values()) for (const [cid, m] of Object.entries(o.chats || {})) consider(o.uid, cid, m);
+  for (const cid of p.groups || []) {
+    const f = facultyList().find(x => x.cid === cid);
+    const members = [Me.uid, ...[...F.people.values()].filter(o => (o.groups || []).includes(cid)).map(o => o.uid)];
+    out.set(cid, { cid, owner: null, kind: 'fak', name: f ? f.name : cid.replace(/^fak-/, ''), members, admins: [], mode: 'all', kv: 0 });
+  }
+  return [...out.values()];
+}
+const chatById = cid => myChats().find(c => c.cid === cid) || null;
+function chatTitle(c) {
+  if (c.kind === 'dm') { const o = c.members.find(u => u !== Me.uid); return fullName(personById(o)); }
+  return c.name || c.members.filter(u => u !== Me.uid).map(firstName).join(', ') || 'Grupa';
+}
+function chatAvatar(c, size = 40) {
+  if (c.kind === 'dm') { const o = personById(c.members.find(u => u !== Me.uid)); return `<span class="avwrap">${avatarHtml(o, size)}${C.online.has(o.uid) ? '<i class="onl"></i>' : ''}</span>`; }
+  const st = `width:${size}px;height:${size}px;font-size:${Math.round(size * 0.42)}px`;
+  if (c.kind === 'fak') return `<span class="av grp fak" style="${st}"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M3.0916 10.3634L9.78281 13.5004C11.2038 14.1665 12.7963 14.1665 14.2173 13.5004L20.9084 10.3634C22.3639 9.68105 22.3639 7.31899 20.9084 6.63664L14.2172 3.49965C12.7962 2.83345 11.2037 2.83345 9.78272 3.49965L3.0916 6.63659C1.63614 7.31895 1.63613 9.68101 3.0916 10.3634Z"/><path d="M2 8.5V14"/><path d="M19 11.5V16.6254C19 17.6334 18.4965 18.5772 17.6147 19.0656C16.1463 19.8787 13.796 21 12 21C10.204 21 7.8537 19.8787 6.38533 19.0656C5.5035 18.5772 5 17.6334 5 16.6254V11.5"/></g></svg></span>`;
+  const w = chatTitle(c).split(/\s+/).filter(Boolean);
+  return `<span class="av grp" style="${st};--h:${hueOf(c.cid)}">${esc(initials({ ime: w[0] || '#', prezime: w[1] || '' }))}</span>`;
+}
+function canWrite(c) { if (!c) return false; if (c.kind === 'fak' || c.kind === 'dm' || c.mode === 'all') return true; return c.owner === Me.uid || c.admins.includes(Me.uid); }
+function isAdmin(c, uid) { return c.owner === uid || c.admins.includes(uid); }
+function lastAct(c) { let t = 0; for (const u of c.members) { const p = u === Me.uid ? prof() : F.people.get(u); const a = p && p.act && p.act[c.cid]; if (a > t) t = a; } return t || c.created || 0; }
+function othersAct(c) { let t = 0; for (const u of c.members) { if (u === Me.uid) continue; const p = F.people.get(u); const a = p && p.act && p.act[c.cid]; if (a > t) t = a; } return t; }
+function isUnread(c) { const r = ((prof() || {}).readAt || {})[c.cid] || 0; return othersAct(c) > r && !(C.active === c.cid && chatVisible()); }
+function unreadCount() { return myChats().filter(isUnread).length; }
+const chatVisible = () => (C.full || !!C.mini) && document.visibilityState === 'visible';
+
+// ---------- moj prostor (box) ----------
+function boxRef(uid, cid) { return Store.db.doc(`box/${uid}/c/${cid}`); }
+async function loadMyBox(cid) {
+  if (C.myBox.has(cid)) return C.myBox.get(cid);
+  let v = C.boxes.get(`${Me.uid}|${cid}`);
+  if (!v) { try { const s = await boxRef(Me.uid, cid).get(); v = s.exists ? s.data() : null; } catch { v = null; } }
+  const box = { cid, msgs: Array.isArray(v && v.msgs) ? JSON.parse(JSON.stringify(v.msgs)) : [], st: v && v.st ? JSON.parse(JSON.stringify(v.st)) : null };
+  C.myBox.set(cid, box); return box;
+}
+// jedno pisanje po dokumentu; nagomilane izmene idu u sledeći upis
+async function writeMyBox(cid) {
+  if (C.writing.get(cid)) { C.pendingWrite.add(cid); return; }
+  C.writing.set(cid, true);
+  const box = C.myBox.get(cid);
+  while (box.msgs.length > MAX_MSGS) box.msgs.shift();
+  while (box.msgs.length > 1 && JSON.stringify(box).length > MAX_BOX_BYTES) box.msgs.shift();
+  try { await boxRef(Me.uid, cid).set({ cid, msgs: box.msgs, st: box.st || null, at: Date.now() }); }
+  catch (e) { toast(e && e.code === 'quota_exceeded' ? 'Baza poruka je puna. Obriši stare poruke ili grupe.' : 'Poruka nije poslata. Proveri vezu i pokušaj ponovo.'); }
+  C.writing.set(cid, false);
+  if (C.pendingWrite.delete(cid)) writeMyBox(cid);
+}
+// stanje (glasovi, reakcije, pročitano) – šifrovano kao i poruke
+async function myState(c) {
+  const box = await loadMyBox(c.cid);
+  if (!box.st) return { votes: {}, reacts: {}, read: 0 };
+  if (box.st.p) return box.st.p;
+  const key = await chatKey(box.st.ko, c.cid, box.st.kv);
+  if (!key) return { votes: {}, reacts: {}, read: 0 };
+  try { return JSON.parse(dec.decode(await aesDec(key, box.st))); } catch { return { votes: {}, reacts: {}, read: 0 }; }
+}
+async function sealFor(c, obj) {
+  if (c.kind === 'fak') return { p: obj };
+  const key = await chatKey(c.owner, c.cid, c.kv);
+  if (!key) throw { code: 'no_key' };
+  return { ko: c.owner, kv: c.kv, ...(await aesEnc(key, enc.encode(JSON.stringify(obj)))) };
+}
+async function setMyState(c, fn) {
+  const st = await myState(c); fn(st);
+  const box = await loadMyBox(c.cid);
+  box.st = await sealFor(c, st);
+  await writeMyBox(c.cid);
+}
+async function sendMessage(c, body) {
+  if (!canWrite(c)) { toast('U ovoj grupi pišu samo administratori.'); return false; }
+  try {
+    const box = await loadMyBox(c.cid);
+    const id = rid(10), ts = Date.now();
+    box.msgs.push({ id, ts, ...(await sealFor(c, body)) });
+    C.dec.delete(`${Me.uid}|${c.cid}|${id}`);
+    renderChatsSoon();
+    await writeMyBox(c.cid);
+    const p = prof(); p.act = { ...(p.act || {}), [c.cid]: ts }; p.readAt = { ...(p.readAt || {}), [c.cid]: ts }; Me.save();
+    return true;
+  } catch (e) {
+    toast(e && e.code === 'no_key' ? 'Ključ za ovaj čet još nije stigao. Vlasnik grupe treba da otvori aplikaciju.' : 'Poruka nije poslata.');
+    return false;
+  }
+}
+async function editMessage(c, id, fn) {
+  const box = await loadMyBox(c.cid);
+  const i = box.msgs.findIndex(m => m.id === id); if (i < 0) return;
+  const body = await decryptMsg(c, Me.uid, box.msgs[i]); if (!body) return;
+  fn(body);
+  box.msgs[i] = { id, ts: box.msgs[i].ts, ...(await sealFor(c, body)) };
+  C.dec.delete(`${Me.uid}|${c.cid}|${id}`);
+  renderChatsSoon();
+  await writeMyBox(c.cid);
+}
+async function decryptMsg(c, from, m) {
+  const k = `${from}|${c.cid}|${m.id}`, sig = (m.ct || '').slice(-12) + (m.p ? JSON.stringify(m.p).length : '');
+  const hit = C.dec.get(k); if (hit && hit.sig === sig) return hit.body;
+  let body = null;
+  try {
+    if (m.p && c.kind === 'fak') body = m.p;
+    else if (m.ct && m.iv && c.kind !== 'fak') { const key = await chatKey(m.ko, c.cid, m.kv); if (key) body = JSON.parse(dec.decode(await aesDec(key, m))); }
+  } catch { body = null; }
+  if (body && typeof body === 'object') {
+    body = { t: str(body.t, 10) || 'text', text: str(body.text, 4000), att: body.att && typeof body.att === 'object' ? { id: str(body.att.id, 40), name: str(body.att.name, 160), type: str(body.att.type, 60), size: +body.att.size || 0 } : null,
+      poll: body.poll && Array.isArray(body.poll.opts) ? { q: str(body.poll.q, 200), opts: body.poll.opts.slice(0, 10).map(o => str(o, 100)), multi: !!body.poll.multi } : null,
+      reply: str(body.reply, 40), edited: +body.edited || 0, del: !!body.del, url: /^https:\/\/meet\.jit\.si\/[A-Za-z0-9-]+$/.test(body.url || '') ? body.url : '', sys: str(body.sys, 200) };
+  }
+  C.dec.set(k, { sig, body }); return body;
+}
+async function decryptState(c, from, st) {
+  if (!st) return null;
+  try {
+    if (st.p && c.kind === 'fak') return st.p;
+    if (st.ct && c.kind !== 'fak') { const key = await chatKey(st.ko, c.cid, st.kv); if (key) return JSON.parse(dec.decode(await aesDec(key, st))); }
+  } catch {}
+  return null;
+}
+
+// ---------- pretplate na poruke otvorenih četova ----------
+function wantedSubs() {
+  const want = new Set(), cids = uniq([C.full && C.active, C.mini].filter(Boolean));
+  for (const cid of cids) {
+    const c = chatById(cid); if (!c) continue;
+    let mem = c.members.slice();
+    if (mem.length > MAX_SUBS) mem = mem.sort((a, b) => (b === Me.uid) - (a === Me.uid) || ((personById(b).act || {})[cid] || 0) - ((personById(a).act || {})[cid] || 0)).slice(0, MAX_SUBS);
+    for (const u of mem) want.add(`${u}|${cid}`);
+  }
+  return want;
+}
+function syncSubs() {
+  if (!C.on) return;
+  const want = wantedSubs();
+  for (const [k, un] of C.subs) if (!want.has(k)) { un(); C.subs.delete(k); C.boxes.delete(k); }
+  for (const k of want) if (!C.subs.has(k)) {
+    const [u, cid] = k.split('|');
+    C.subs.set(k, boxRef(u, cid).onSnapshot(s => { C.boxes.set(k, s.exists ? s.data() : null); renderChatsSoon(); }, () => { C.subs.delete(k); }));
+  }
+}
+
+// ---------- vremenska linija ----------
+async function timeline(c) {
+  const items = [], states = new Map();
+  for (const u of c.members) {
+    const v = C.boxes.get(`${u}|${c.cid}`); if (!v) continue;
+    const st = await decryptState(c, u, v.st); if (st) states.set(u, st);
+    for (const m of (Array.isArray(v.msgs) ? v.msgs : []).slice(-MAX_MSGS)) {
+      if (!m || typeof m.id !== 'string' || !(m.ts > 0)) continue;
+      const body = await decryptMsg(c, u, m);
+      if (c.mode === 'admins' && c.kind === 'group' && !isAdmin(c, u) && !(body && body.sys)) continue; // samo admini
+      items.push({ from: u, id: m.id, ts: m.ts, body });
+    }
+  }
+  items.sort((a, b) => a.ts - b.ts || a.id.localeCompare(b.id));
+  // glasovi i reakcije
+  const votes = {}, reacts = {};
+  for (const [u, st] of states) {
+    for (const [mid, arr] of Object.entries(st.votes || {})) if (Array.isArray(arr)) (votes[mid] = votes[mid] || {})[u] = arr.filter(x => Number.isInteger(x)).slice(0, 10);
+    for (const [mid, e] of Object.entries(st.reacts || {})) if (REACTIONS.includes(e)) (reacts[mid] = reacts[mid] || {})[u] = e;
+  }
+  return { items, votes, reacts, states };
+}
+
+// ---------- prikaz ----------
+function renderChatsSoon() { clearTimeout(C.renderTimer); C.renderTimer = setTimeout(renderChats, 40); }
+async function renderChats() {
+  renderChatBadges();
+  if (C.full) await renderFull();
+  if (C.mini) await renderMini();
+  markRead();
+}
+function renderChatBadges() {
+  const n = unreadCount(), b = $('#chatBadge');
+  if (b) { b.textContent = n; b.hidden = !n; }
+  const on = FR.friends.filter(f => C.online.has(f.uid)).length, ob = $('#onlineCount');
+  if (ob) { ob.textContent = on || ''; ob.hidden = !on; ob.title = `${on} ${on === 1 ? 'prijatelj je' : 'prijatelja je'} online`; }
+  if (route === 'prijatelji') storeInfo();
+}
+function markRead() {
+  const p = prof(); if (!p || !C.active || !chatVisible()) return;
+  const c = chatById(C.active); if (!c) return;
+  const a = othersAct(c), r = (p.readAt || {})[c.cid] || 0;
+  if (a > r) {
+    p.readAt = { ...(p.readAt || {}), [c.cid]: a }; Me.save();
+    clearTimeout(C.readTimer); C.readTimer = setTimeout(() => setMyState(c, st => { st.read = Date.now(); }).catch(() => {}), 1500);
+  }
+}
+function dayLabel(ts) { const d = iso(new Date(ts)); return d === todayIso ? 'Danas' : daysBetween(d, todayIso) === 1 ? 'Juče' : cap(fmtDay(d)); }
+function attHtml(att) {
+  const url = '/_blob/' + encodeURIComponent(att.id);
+  if (/^image\//.test(att.type)) return `<button class="att img" data-preview="${esc(att.id)}" data-ptype="${esc(att.type)}" data-pname="${esc(att.name)}"><img src="${url}" alt="${esc(att.name)}" loading="lazy"></button>`;
+  if (/^video\//.test(att.type)) return `<video class="att vid" src="${url}" controls preload="metadata"></video>`;
+  const icon = att.type === 'application/pdf' ? 'PDF' : (att.name.split('.').pop() || 'fajl').slice(0, 4).toUpperCase();
+  return `<div class="att file"><span class="fic">${esc(icon)}</span><span class="fi"><b>${esc(att.name)}</b><span>${fmtSize(att.size)}</span></span><button class="btn sm" data-preview="${esc(att.id)}" data-ptype="${esc(att.type)}" data-pname="${esc(att.name)}">Pregled</button></div>`;
+}
+function pollHtml(c, it, votes) {
+  const pv = votes[it.id] || {}, total = Object.keys(pv).length, mine = pv[Me.uid] || [];
+  const counts = it.body.poll.opts.map((_, i) => Object.values(pv).filter(a => a.includes(i)).length);
+  const max = Math.max(1, ...counts);
+  return `<div class="poll"><div class="pq"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="M2 5.5L3.21429 7L7.5 3"/><path stroke-linejoin="round" d="M2 12.5L3.21429 14L7.5 10"/><path stroke-linejoin="round" d="M2 19.5L3.21429 21L7.5 17"/><path d="M22 19L12 19"/><path d="M22 12L12 12"/><path d="M22 5L12 5"/></g></svg> ${esc(it.body.poll.q)}</div>` + it.body.poll.opts.map((o, i) => {
+    const who = Object.entries(pv).filter(([, a]) => a.includes(i)).map(([u]) => personById(u));
+    return `<button class="popt${mine.includes(i) ? ' on' : ''}" data-vote="${esc(it.id)}" data-opt="${i}" data-from="${esc(it.from)}"><span class="bar" style="width:${Math.round(100 * counts[i] / max)}%"></span><span class="pt">${mine.includes(i) ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path stroke-linejoin="round" d="M8.5 12.5L10.5 14.5L15.5 9.5"/></g></svg>' : '<i class="rb"></i>'} ${esc(o)}</span><span class="pc">${who.length ? avatarStack(who, 18, 3) : ''}${counts[i]}</span></button>`;
+  }).join('') + `<div class="pf">${total} ${total === 1 ? 'glas' : 'glasova'}${it.body.poll.multi ? ' · više odgovora' : ''}</div></div>`;
+}
+function msgHtml(c, it, prev, tl, opts) {
+  const mine = it.from === Me.uid, p = personById(it.from), b = it.body;
+  if (b && b.sys) return `<div class="msys">${esc(b.sys)}</div>`;
+  const grouped = prev && prev.from === it.from && it.ts - prev.ts < 5 * 60000 && !(prev.body && prev.body.sys);
+  let inner;
+  if (!b) inner = `<div class="bubble locked"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M8 22H16C18.8284 22 20.2426 22 21.1213 21.1213C22 20.2426 22 18.8284 22 16C22 13.1716 22 11.7574 21.1213 10.8787C20.2426 10 18.8284 10 16 10H8C5.17157 10 3.75736 10 2.87868 10.8787C2 11.7574 2 13.1716 2 16C2 18.8284 2 20.2426 2.87868 21.1213C3.75736 22 5.17157 22 8 22Z"/><path d="M12 14V18"/><path d="M6 10V8C6 4.68629 8.68629 2 12 2C15.3137 2 18 4.68629 18 8V10"/></g></svg> Poruka nije dostupna (nema ključa)</div>`;
+  else if (b.del) inner = `<div class="bubble deleted">Poruka je obrisana</div>`;
+  else {
+    let content = '';
+    if (b.reply) { const r = tl.items.find(x => x.id === b.reply); content += `<div class="rq">${r && r.body ? `<b>${esc(firstName(r.from))}</b> ${esc((r.body.text || (r.body.att ? r.body.att.name : r.body.poll ? r.body.poll.q : '')).slice(0, 90))}` : 'Poruka nije dostupna'}</div>`; }
+    if (b.t === 'poll' && b.poll) content += pollHtml(c, it, tl.votes);
+    else if (b.t === 'call') content += `<div class="callc"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M17 9.49995L17.6584 9.17077C19.6042 8.19783 20.5772 7.71135 21.2886 8.15102C22 8.5907 22 9.67848 22 11.8541V12.1458C22 14.3214 22 15.4092 21.2886 15.8489C20.5772 16.2885 19.6042 15.8021 17.6584 14.8291L17 14.4999V9.49995Z"/><path d="M13.5607 7.43934C14.1464 8.02513 14.1464 8.97487 13.5607 9.56066C12.9749 10.1464 12.0251 10.1464 11.4393 9.56066C10.8536 8.97487 10.8536 8.02513 11.4393 7.43934C12.0251 6.85355 12.9749 6.85355 13.5607 7.43934Z"/><path d="M9.5 20C6.21252 20 4.56878 20 3.46243 19.092C3.25989 18.9258 3.07418 18.7401 2.90796 18.5376C2 17.4312 2 15.7875 2 12.5V11.5C2 8.21252 2 6.56878 2.90796 5.46243C3.07418 5.25989 3.25989 5.07418 3.46243 4.90796C4.56878 4 6.21252 4 9.5 4C12.7875 4 14.4312 4 15.5376 4.90796C15.7401 5.07418 15.9258 5.25989 16.092 5.46243C17 6.56878 17 8.21252 17 11.5V12.5C17 15.7875 17 17.4312 16.092 18.5376C15.9258 18.7401 15.7401 18.9258 15.5376 19.092C14.4312 20 12.7875 20 9.5 20Z"/></g></svg><span><b>${mine ? 'Pokrenuo/la si' : esc(firstName(it.from)) + ' je pokrenuo/la'} video poziv</b><br><span class="muted">Otvara se u novom tabu (Jitsi Meet)</span></span><a class="btn primary sm" href="${esc(b.url)}" target="_blank" rel="noopener noreferrer">Uđi u poziv</a></div>`;
+    else {
+      if (b.att) content += attHtml(b.att);
+      if (b.text) content += `<div class="tx">${linkify(b.text)}</div>`;
+    }
+    inner = `<div class="bubble${b.att && !b.text && /^(image|video)\//.test(b.att.type) ? ' media' : ''}${b.t === 'poll' || b.t === 'call' ? ' card' : ''}">${content}</div>`;
+  }
+  const rx = tl.reacts[it.id] ? Object.entries(tl.reacts[it.id]) : [];
+  const rxGroups = {}; for (const [u, e] of rx) (rxGroups[e] = rxGroups[e] || []).push(u);
+  const rxHtml = rx.length ? `<div class="rx">${Object.entries(rxGroups).map(([e, us]) => `<button class="rxb${us.includes(Me.uid) ? ' on' : ''}" data-react="${esc(it.id)}" data-emoji="${e}" title="${esc(us.map(firstName).join(', '))}">${e} ${us.length}</button>`).join('')}</div>` : '';
+  const actions = b && !b.del ? `<div class="mact">${canWrite(c) ? `<button data-mreply="${esc(it.id)}" title="Odgovori" aria-label="Odgovori"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.5 17L4.5 12L9.5 7M4.5 12L14.5 12C16.1667 12 19.5 13 19.5 17"/></svg></button>` : ''}<button data-mreact="${esc(it.id)}" title="Reaguj" aria-label="Reaguj"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round"><circle cx="12" cy="12" r="10" stroke-width="1.5"/><path stroke-width="1.5" d="M9 16C9.85038 16.6303 10.8846 17 12 17C13.1154 17 14.1496 16.6303 15 16"/><path d="M15.5 10.5C15.5 11.0523 15.2761 11.5 15 11.5C14.7239 11.5 14.5 11.0523 14.5 10.5C14.5 9.94772 14.7239 9.5 15 9.5C15.2761 9.5 15.5 9.94772 15.5 10.5Z"/><ellipse cx="9" cy="10.5" rx=".5" ry="1"/></g></svg></button>${mine && b.t === 'text' && !b.att ? `<button data-medit="${esc(it.id)}" title="Izmeni" aria-label="Izmeni"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M14.3601 4.07866L15.2869 3.15178C16.8226 1.61607 19.3125 1.61607 20.8482 3.15178C22.3839 4.68748 22.3839 7.17735 20.8482 8.71306L19.9213 9.63993M14.3601 4.07866C14.3601 4.07866 14.4759 6.04828 16.2138 7.78618C17.9517 9.52407 19.9213 9.63993 19.9213 9.63993M19.9213 9.63993L11.4001 18.1612C10.8229 18.7383 10.5344 19.0269 10.2162 19.2751C9.84082 19.5679 9.43469 19.8189 9.00498 20.0237C8.6407 20.1973 8.25352 20.3263 7.47918 20.5844L4.19792 21.6782L3.39584 21.9456C3.01478 22.0726 2.59466 21.9734 2.31063 21.6894C2.0266 21.4053 1.92743 20.9852 2.05445 20.6042L2.32181 19.8021L3.41556 16.5208C3.67368 15.7465 3.80273 15.3593 3.97634 14.995C4.18114 14.5653 4.43213 14.1592 4.7249 13.7838C4.97308 13.4656 5.26166 13.1771 5.83882 12.5999L14.3601 4.07866M4.19792 21.6782L2.32181 19.8021"/></svg></button>` : ''}${mine ? `<button data-mdel="${esc(it.id)}" title="Obriši" aria-label="Obriši"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M9.1709 4C9.58273 2.83481 10.694 2 12.0002 2C13.3064 2 14.4177 2.83481 14.8295 4"/><path d="M20.5001 6H3.5"/><path d="M18.8332 8.5L18.3732 15.3991C18.1962 18.054 18.1077 19.3815 17.2427 20.1907C16.3777 21 15.0473 21 12.3865 21H11.6132C8.95235 21 7.62195 21 6.75694 20.1907C5.89194 19.3815 5.80344 18.054 5.62644 15.3991L5.1665 8.5"/><path d="M9.5 11L10 16"/><path d="M14.5 11L14 16"/></g></svg></button>` : ''}</div>` : '';
+  const picker = C.reactFor === it.id ? `<div class="rpick">${REACTIONS.map(e => `<button data-react="${esc(it.id)}" data-emoji="${e}">${e}</button>`).join('')}</div>` : '';
+  return `<div class="msg${mine ? ' me' : ''}${grouped ? ' grp' : ''}" data-mid="${esc(it.id)}">
+    ${mine ? '' : `<div class="mav">${grouped ? '' : avatarHtml(p, 30)}</div>`}
+    <div class="mbody">${!mine && !grouped && c.kind !== 'dm' ? `<div class="mname">${esc(fullName(p))}${isAdmin(c, it.from) && c.kind === 'group' ? ' <span class="adm">admin</span>' : ''}</div>` : ''}
+      <div class="mrow">${inner}${actions}</div>${picker}${rxHtml}
+      <div class="mmeta">${fmtTime(it.ts)}${b && b.edited ? ' · izmenjeno' : ''}${opts.seenId === it.id ? ' · Viđeno' : ''}</div></div></div>`;
+}
+async function convHtml(c, mode) {
+  const tl = await timeline(c);
+  const loaded = c.members.some(u => C.boxes.has(`${u}|${c.cid}`));
+  let h = '', prev = null, lastDay = '';
+  let seenId = null;
+  if (c.kind === 'dm') {
+    const other = c.members.find(u => u !== Me.uid), r = (tl.states.get(other) || {}).read || 0;
+    const mineSeen = tl.items.filter(i => i.from === Me.uid && i.ts <= r); if (mineSeen.length) seenId = mineSeen[mineSeen.length - 1].id;
+  }
+  for (const it of tl.items) {
+    const d = dayLabel(it.ts); if (d !== lastDay) { lastDay = d; h += `<div class="mday"><span>${d}</span></div>`; prev = null; }
+    h += msgHtml(c, it, prev, tl, { seenId }); prev = it;
+  }
+  if (!tl.items.length) h = loaded || !C.subs.size ? `<div class="cempty">${chatAvatar(c, 64)}<b>${esc(chatTitle(c))}</b><span>${c.kind === 'fak' ? 'Javni čet fakulteta. Pozdravi kolege!' : c.kind === 'dm' ? 'Napiši prvu poruku.' : 'Grupa je spremna. Napiši prvu poruku.'}</span><span class="muted">${c.kind === 'fak' ? 'Poruke u fakultetskom četu nisu šifrovane.' : '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M8 22H16C18.8284 22 20.2426 22 21.1213 21.1213C22 20.2426 22 18.8284 22 16C22 13.1716 22 11.7574 21.1213 10.8787C20.2426 10 18.8284 10 16 10H8C5.17157 10 3.75736 10 2.87868 10.8787C2 11.7574 2 13.1716 2 16C2 18.8284 2 20.2426 2.87868 21.1213C3.75736 22 5.17157 22 8 22Z"/><path d="M12 14V18"/><path d="M6 10V8C6 4.68629 8.68629 2 12 2C15.3137 2 18 4.68629 18 8V10"/></g></svg> Poruke su šifrovane i vide ih samo članovi.'}</span></div>` : `<div class="cempty"><span class="spinner"></span></div>`;
+  const typers = [...(C.typing.get(c.cid) || new Map()).entries()].filter(([u, t]) => Date.now() - t < 4000 && u !== Me.uid).map(([u]) => firstName(u));
+  return { msgs: h, typing: typers.length ? `${typers.join(', ')} ${typers.length === 1 ? 'kuca' : 'kucaju'}…` : '' };
+}
+function headSub(c) {
+  if (c.kind === 'dm') { const o = c.members.find(u => u !== Me.uid); return C.online.has(o) ? '<span class="ondot"></span> online' : 'van mreže'; }
+  const on = c.members.filter(u => u !== Me.uid && C.online.has(u)).length;
+  return `${c.members.length} ${c.members.length === 1 ? 'član' : 'članova'}${on ? ` · ${on} online` : ''}${c.mode === 'admins' ? ' · pišu samo admini' : ''}`;
+}
+function composerHtml(c, where) {
+  if (!canWrite(c)) return `<div class="ro"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M8 22H16C18.8284 22 20.2426 22 21.1213 21.1213C22 20.2426 22 18.8284 22 16C22 13.1716 22 11.7574 21.1213 10.8787C20.2426 10 18.8284 10 16 10H8C5.17157 10 3.75736 10 2.87868 10.8787C2 11.7574 2 13.1716 2 16C2 18.8284 2 20.2426 2.87868 21.1213C3.75736 22 5.17157 22 8 22Z"/><path d="M12 14V18"/><path d="M6 10V8C6 4.68629 8.68629 2 12 2C15.3137 2 18 4.68629 18 8V10"/></g></svg> U ovoj grupi pišu samo administratori.</div>`;
+  let bar = '';
+  if (C.reply && C.reply.cid === c.cid) bar = `<div class="cbar"><span>Odgovor na poruku: <b>${esc(C.reply.preview)}</b></span><button data-cbar-x aria-label="Otkaži"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M19.0068 5L5.00684 19"/><path d="M19 19L5 5"/></g></svg></button></div>`;
+  if (C.edit && C.edit.cid === c.cid) bar = `<div class="cbar"><span>Izmena poruke</span><button data-cbar-x aria-label="Otkaži"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M19.0068 5L5.00684 19"/><path d="M19 19L5 5"/></g></svg></button></div>`;
+  const poll = C.pollDraft && C.pollDraft.cid === c.cid ? `<div class="pdraft"><input class="pdq" placeholder="Pitanje ankete" maxlength="200" value="${esc(C.pollDraft.q)}" aria-label="Pitanje ankete">${C.pollDraft.opts.map((o, i) => `<input class="pdo" data-i="${i}" placeholder="Opcija ${i + 1}" maxlength="100" value="${esc(o)}" aria-label="Opcija ${i + 1}">`).join('')}
+    <div class="pdrow">${C.pollDraft.opts.length < 10 ? '<button class="linkbtn" data-poll-add>+ Dodaj opciju</button>' : ''}<label class="switch"><input type="checkbox" class="pdm" ${C.pollDraft.multi ? 'checked' : ''}> Više odgovora</label><span class="grow"></span><button class="btn sm" data-poll-x>Otkaži</button><button class="btn primary sm" data-poll-send>Pošalji anketu</button></div></div>` : '';
+  return `${bar}${poll}<div class="composer">
+    <label class="cbtn" title="Pošalji sliku, video ili dokument" aria-label="Priloži fajl"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M7.9175 17.8068L15.8084 10.2535C16.7558 9.34668 16.7558 7.87637 15.8084 6.96951C14.861 6.06265 13.325 6.06265 12.3776 6.96951L4.54387 14.4681C2.74382 16.1911 2.74382 18.9847 4.54387 20.7077C6.34391 22.4308 9.26237 22.4308 11.0624 20.7077L19.0105 13.0997C21.6632 10.5605 21.6632 6.44362 19.0105 3.90441C16.3578 1.3652 12.0569 1.3652 9.40419 3.90441L3 10.0346"/></svg><input type="file" class="cfile" multiple hidden accept="image/*,video/*,application/pdf,text/plain,text/csv,text/markdown,application/json,.md,.csv,.txt,.json"></label>
+    <button class="cbtn" data-poll-new title="Anketa" aria-label="Napravi anketu"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="M2 5.5L3.21429 7L7.5 3"/><path stroke-linejoin="round" d="M2 12.5L3.21429 14L7.5 10"/><path stroke-linejoin="round" d="M2 19.5L3.21429 21L7.5 17"/><path d="M22 19L12 19"/><path d="M22 12L12 12"/><path d="M22 5L12 5"/></g></svg></button>
+    <textarea class="cin" rows="1" placeholder="${c.kind === 'fak' ? 'Poruka za ceo fakultet…' : 'Napiši poruku…'}" aria-label="Poruka">${C.edit && C.edit.cid === c.cid ? esc(C.edit.text) : esc(C.draft && C.draft[c.cid] || '')}</textarea>
+    <button class="cbtn send" data-send title="Pošalji (Enter)" aria-label="Pošalji"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none"><path stroke="currentColor" stroke-width="1.5" d="m18.636 15.67l1.716-5.15c1.5-4.498 2.25-6.747 1.062-7.934s-3.436-.438-7.935 1.062L8.33 5.364C4.7 6.574 2.885 7.18 2.37 8.067a2.72 2.72 0 0 0 0 2.73c.515.888 2.33 1.493 5.96 2.704c.584.194.875.291 1.119.454c.236.158.439.361.597.597c.163.244.26.535.454 1.118c1.21 3.63 1.816 5.446 2.703 5.962a2.72 2.72 0 0 0 2.731 0c.887-.516 1.492-2.331 2.703-5.962Z"/><path fill="currentColor" d="M16.212 8.848a.75.75 0 0 0-1.055-1.066zm-5.55 5.488l5.55-5.488l-1.055-1.066l-5.55 5.488z"/></g></svg></button></div>`;
+}
+function scrollKeep(el, fn) {
+  const atBottom = !el || el.scrollHeight - el.scrollTop - el.clientHeight < 60;
+  const old = el ? el.scrollTop : 0;
+  fn();
+  return atBottom ? 'bottom' : old;
+}
+async function paintConv(root, c, where) {
+  const { msgs, typing } = await convHtml(c, where);
+  const list = root.querySelector('.msgs'), prevTop = list ? list.scrollTop : 0;
+  const atBottom = !list || list.scrollHeight - list.scrollTop - list.clientHeight < 80 || root.dataset.cid !== c.cid;
+  const focused = document.activeElement && root.contains(document.activeElement) && document.activeElement.classList.contains('cin');
+  const caret = focused ? document.activeElement.selectionStart : null;
+  root.dataset.cid = c.cid;
+  root.querySelector('.msgs').innerHTML = msgs;
+  root.querySelector('.typing').textContent = typing;
+  if (!root.querySelector('.cwrap').dataset.for || root.querySelector('.cwrap').dataset.for !== c.cid + '|' + canWrite(c) + '|' + !!C.reply + !!C.edit + !!C.pollDraft) {
+    root.querySelector('.cwrap').innerHTML = composerHtml(c, where);
+    root.querySelector('.cwrap').dataset.for = c.cid + '|' + canWrite(c) + '|' + !!C.reply + !!C.edit + !!C.pollDraft;
+  }
+  const l2 = root.querySelector('.msgs');
+  l2.scrollTop = atBottom ? l2.scrollHeight : prevTop;
+  if (focused) { const ta = root.querySelector('.cin'); ta.focus(); if (caret != null) ta.setSelectionRange(caret, caret); }
+}
+
+// ---------- mali prozor (dole desno) ----------
+async function openMini(cid) {
+  if (!C.on) { toast('Poruke rade kad je aplikacija otvorena na claude.ai, sa nalogom.'); return; }
+  if (C.full) { C.active = cid; renderFull(); return; }
+  C.mini = cid; C.active = cid; C.reply = C.edit = C.pollDraft = null;
+  const w = $('#miniChat'); w.hidden = false; w.innerHTML = ''; delete w.dataset.cid;
+  syncSubs(); await renderMini();
+  const ta = w.querySelector('.cin'); ta && ta.focus();
+}
+function closeMini() { C.mini = null; if (!C.full) C.active = null; $('#miniChat').hidden = true; syncSubs(); renderChatBadges(); }
+async function renderMini() {
+  const w = $('#miniChat'); const c = C.mini && chatById(C.mini);
+  if (!c) { if (C.mini) closeMini(); return; }
+  if (!w.querySelector('.msgs') || w.dataset.shell !== c.cid) {
+    w.dataset.shell = c.cid;
+    w.innerHTML = `<div class="chead">${chatAvatar(c, 36)}<div class="ct"><b>${esc(chatTitle(c))}</b><span class="cs"></span></div>
+      <button class="iconbtn sm" data-call="${esc(c.cid)}" title="Video poziv" aria-label="Video poziv"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M17 9.49995L17.6584 9.17077C19.6042 8.19783 20.5772 7.71135 21.2886 8.15102C22 8.5907 22 9.67848 22 11.8541V12.1458C22 14.3214 22 15.4092 21.2886 15.8489C20.5772 16.2885 19.6042 15.8021 17.6584 14.8291L17 14.4999V9.49995Z"/><path d="M13.5607 7.43934C14.1464 8.02513 14.1464 8.97487 13.5607 9.56066C12.9749 10.1464 12.0251 10.1464 11.4393 9.56066C10.8536 8.97487 10.8536 8.02513 11.4393 7.43934C12.0251 6.85355 12.9749 6.85355 13.5607 7.43934Z"/><path d="M9.5 20C6.21252 20 4.56878 20 3.46243 19.092C3.25989 18.9258 3.07418 18.7401 2.90796 18.5376C2 17.4312 2 15.7875 2 12.5V11.5C2 8.21252 2 6.56878 2.90796 5.46243C3.07418 5.25989 3.25989 5.07418 3.46243 4.90796C4.56878 4 6.21252 4 9.5 4C12.7875 4 14.4312 4 15.5376 4.90796C15.7401 5.07418 15.9258 5.25989 16.092 5.46243C17 6.56878 17 8.21252 17 11.5V12.5C17 15.7875 17 17.4312 16.092 18.5376C15.9258 18.7401 15.7401 18.9258 15.5376 19.092C14.4312 20 12.7875 20 9.5 20Z"/></g></svg></button>
+      <button class="iconbtn sm" data-expand title="Ceo ekran" aria-label="Otvori na celom ekranu"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22Z"/><path stroke-linejoin="round" d="M17 10V7H14M17 7L13.5 10.5M7 14V17H10M7 17L10.5 13.5"/></g></svg></button>
+      <button class="iconbtn sm" data-mini-x title="Zatvori" aria-label="Zatvori"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M19.0068 5L5.00684 19"/><path d="M19 19L5 5"/></g></svg></button></div>
+      <div class="msgs" role="log" aria-live="polite"></div><div class="typing"></div><div class="cwrap"></div>`;
+  }
+  w.querySelector('.cs').innerHTML = headSub(c);
+  await paintConv(w, c, 'mini');
+}
+
+// ---------- ceo ekran ----------
+function openFull(cid) {
+  if (route !== 'poruke') { C.pendingCid = cid || C.mini || null; go('poruke'); return; }
+  if (!C.on) { $('#chatFull').innerHTML = `<div class="card pagecard"><div class="empty"><strong>Poruke rade na claude.ai</strong>Otvori aplikaciju na claude.ai sa svojim nalogom${prof() && prof().onboarded ? '' : ' i podesi profil'} da bi slao/la poruke prijateljima.</div></div>`; return; }
+  if (C.mini && !cid) cid = C.mini;
+  if (C.mini) { C.mini = null; $('#miniChat').hidden = true; }
+  C.full = true;
+  const list = myChats().sort((a, b) => lastAct(b) - lastAct(a));
+  C.active = cid || C.active || (list[0] && list[0].cid) || null;
+  C.mobilePane = cid ? 'conv' : 'list';
+  $('#chatFull').innerHTML = '';
+  syncSubs(); renderFull();
+}
+function closeFull() {
+  C.full = false;
+  if (C.mini) { $('#miniChat').hidden = false; C.active = C.mini; renderMini(); } else C.active = null;
+  syncSubs(); renderChatBadges();
+}
+function chatListHtml() {
+  const words = fold(C.q).split(/\s+/).filter(Boolean);
+  const list = myChats().filter(c => !words.length || words.every(w => fold(chatTitle(c)).includes(w))).sort((a, b) => lastAct(b) - lastAct(a));
+  let h = list.map(c => `<button class="crow${C.active === c.cid ? ' on' : ''}${isUnread(c) ? ' unread' : ''}" data-open-chat="${esc(c.cid)}">${chatAvatar(c, 44)}<span class="ci"><b>${esc(chatTitle(c))}</b><span>${c.kind === 'fak' ? 'Fakultet · javni čet' : c.kind === 'dm' ? headSub(c).replace(/<[^>]+>/g, '') : headSub(c)}</span></span><span class="cm">${lastAct(c) ? `<span>${iso(new Date(lastAct(c))) === todayIso ? fmtTime(lastAct(c)) : fmtShort(iso(new Date(lastAct(c))))}</span>` : ''}${isUnread(c) ? '<i class="udot"></i>' : ''}</span></button>`).join('');
+  if (!list.length) h = `<div class="muted" style="padding:14px">${words.length ? 'Nema četova za ovu pretragu.' : 'Još nemaš poruka. Pokreni novi čet ili se pridruži četu fakulteta.'}</div>`;
+  const joined = new Set((prof() || {}).groups || []);
+  const sug = facultyList().filter(f => !joined.has(f.cid));
+  if (sug.length && !words.length) h += `<div class="sugh">Predloženi četovi fakulteta</div>` + sug.map(f => {
+    const n = [...F.people.values()].filter(o => (o.groups || []).includes(f.cid)).length;
+    return `<div class="crow sug"><span class="av grp fak" style="width:44px;height:44px;font-size:18px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M3.0916 10.3634L9.78281 13.5004C11.2038 14.1665 12.7963 14.1665 14.2173 13.5004L20.9084 10.3634C22.3639 9.68105 22.3639 7.31899 20.9084 6.63664L14.2172 3.49965C12.7962 2.83345 11.2037 2.83345 9.78272 3.49965L3.0916 6.63659C1.63614 7.31895 1.63613 9.68101 3.0916 10.3634Z"/><path d="M2 8.5V14"/><path d="M19 11.5V16.6254C19 17.6334 18.4965 18.5772 17.6147 19.0656C16.1463 19.8787 13.796 21 12 21C10.204 21 7.8537 19.8787 6.38533 19.0656C5.5035 18.5772 5 17.6334 5 16.6254V11.5"/></g></svg></span><span class="ci"><b>${esc(f.name)}</b><span>${n ? `${n} ${n === 1 ? 'član' : 'članova'}` : 'budi prvi član'} · javni čet</span></span><button class="btn sm" data-join-fak="${esc(f.cid)}">Pridruži se</button></div>`;
+  }).join('');
+  return h;
+}
+async function renderFull() {
+  const root = $('#chatFull'); if (!C.full) return;
+  if (!root.querySelector('.cside')) {
+    root.innerHTML = `<div class="cfull">
+      <aside class="cside"><div class="csh"><h2>Poruke</h2><button class="btn primary sm" data-new-chat><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M22 10.5V12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2H13.5"/><path d="M16.652 3.45506L17.3009 2.80624C18.3759 1.73125 20.1188 1.73125 21.1938 2.80624C22.2687 3.88124 22.2687 5.62415 21.1938 6.69914L20.5449 7.34795M16.652 3.45506C16.652 3.45506 16.7331 4.83379 17.9497 6.05032C19.1662 7.26685 20.5449 7.34795 20.5449 7.34795M16.652 3.45506L10.6872 9.41993C10.2832 9.82394 10.0812 10.0259 9.90743 10.2487C9.70249 10.5114 9.52679 10.7957 9.38344 11.0965C9.26191 11.3515 9.17157 11.6225 8.99089 12.1646L8.41242 13.9M8.41242 13.9L8.03811 15.0229C7.9492 15.2897 8.01862 15.5837 8.21744 15.7826C8.41626 15.9814 8.71035 16.0508 8.97709 15.9619L10.1 15.5876L11.8354 15.0091C12.3775 14.8284 12.6485 14.7381 12.9035 14.6166C13.2043 14.4732 13.4886 14.2975 13.7513 14.0926C13.9741 13.9188 14.1761 13.7168 14.5801 13.3128L20.5449 7.34795M10.1 15.5876L8.41242 13.9"/></g></svg> Novi čet</button></div>
+        <div class="search">${SEARCH_ICON}<input id="cq" type="search" placeholder="Pretraži četove" autocomplete="off" aria-label="Pretraži četove"></div>
+        <div class="clist"></div></aside>
+      <section class="cconv"></section><aside class="cinfo" hidden></aside></div>`;
+    root.querySelector('#cq').addEventListener('input', e => { C.q = e.target.value; root.querySelector('.clist').innerHTML = chatListHtml(); });
+  }
+  root.querySelector('.cfull').dataset.pane = C.mobilePane;
+  root.querySelector('.clist').innerHTML = chatListHtml();
+  const conv = root.querySelector('.cconv'), c = C.active && chatById(C.active);
+  if (C.newChat) { conv.innerHTML = newChatHtml(); conv.dataset.shell = 'new'; bindNewChat(conv); root.querySelector('.cinfo').hidden = true; return; }
+  if (!c) { conv.dataset.shell = ''; conv.innerHTML = `<div class="cempty big"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M22 12C22 17.5228 17.5228 22 12 22C10.4003 22 8.88837 21.6244 7.54753 20.9565C7.19121 20.7791 6.78393 20.72 6.39939 20.8229L4.17335 21.4185C3.20701 21.677 2.32295 20.793 2.58151 19.8267L3.17712 17.6006C3.28001 17.2161 3.22094 16.8088 3.04346 16.4525C2.37562 15.1116 2 13.5997 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/><path stroke-linejoin="round" d="M8 12H8.009M11.991 12H12M15.991 12H16"/></g></svg><b>Izaberi čet ili pokreni novi</b><span class="muted">Privatne poruke i grupe su šifrovane – vide ih samo članovi.</span><button class="btn primary" data-new-chat>Novi čet</button></div>`; root.querySelector('.cinfo').hidden = true; return; }
+  if (conv.dataset.shell !== c.cid) {
+    conv.dataset.shell = c.cid; delete conv.dataset.cid;
+    conv.innerHTML = `<div class="chead"><button class="iconbtn sm back" data-gopane="list" aria-label="Nazad na listu"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 12H4M10 18L4 12L10 6"/></svg></button>${chatAvatar(c, 40)}<div class="ct"><b>${esc(chatTitle(c))}</b><span class="cs"></span></div>
+      <button class="iconbtn sm" data-call="${esc(c.cid)}" title="Video poziv" aria-label="Video poziv"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M17 9.49995L17.6584 9.17077C19.6042 8.19783 20.5772 7.71135 21.2886 8.15102C22 8.5907 22 9.67848 22 11.8541V12.1458C22 14.3214 22 15.4092 21.2886 15.8489C20.5772 16.2885 19.6042 15.8021 17.6584 14.8291L17 14.4999V9.49995Z"/><path d="M13.5607 7.43934C14.1464 8.02513 14.1464 8.97487 13.5607 9.56066C12.9749 10.1464 12.0251 10.1464 11.4393 9.56066C10.8536 8.97487 10.8536 8.02513 11.4393 7.43934C12.0251 6.85355 12.9749 6.85355 13.5607 7.43934Z"/><path d="M9.5 20C6.21252 20 4.56878 20 3.46243 19.092C3.25989 18.9258 3.07418 18.7401 2.90796 18.5376C2 17.4312 2 15.7875 2 12.5V11.5C2 8.21252 2 6.56878 2.90796 5.46243C3.07418 5.25989 3.25989 5.07418 3.46243 4.90796C4.56878 4 6.21252 4 9.5 4C12.7875 4 14.4312 4 15.5376 4.90796C15.7401 5.07418 15.9258 5.25989 16.092 5.46243C17 6.56878 17 8.21252 17 11.5V12.5C17 15.7875 17 17.4312 16.092 18.5376C15.9258 18.7401 15.7401 18.9258 15.5376 19.092C14.4312 20 12.7875 20 9.5 20Z"/></g></svg></button>
+      <button class="iconbtn sm" data-info title="Detalji" aria-label="Detalji četa"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 17V11"/><path stroke-linejoin="round" d="M12 8H12.0001"/></g></svg></button></div>
+      <div class="msgs" role="log" aria-live="polite"></div><div class="typing"></div><div class="cwrap"></div>`;
+  }
+  conv.querySelector('.cs').innerHTML = headSub(c);
+  await paintConv(conv, c, 'full');
+  const info = root.querySelector('.cinfo'); info.hidden = !C.info; if (C.info) info.innerHTML = infoHtml(c);
+}
+function infoHtml(c) {
+  const owner = c.owner === Me.uid;
+  let h = `<div class="ih"><b>Detalji</b><button class="iconbtn sm" data-info aria-label="Zatvori detalje"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M19.0068 5L5.00684 19"/><path d="M19 19L5 5"/></g></svg></button></div><div class="ib">${chatAvatar(c, 72)}<h3>${esc(chatTitle(c))}</h3><span class="muted">${c.kind === 'fak' ? 'Javni čet fakulteta' : c.kind === 'dm' ? 'Privatna poruka' : 'Grupa'}</span></div>`;
+  if (c.kind !== 'fak') h += `<div class="hint"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M8 22H16C18.8284 22 20.2426 22 21.1213 21.1213C22 20.2426 22 18.8284 22 16C22 13.1716 22 11.7574 21.1213 10.8787C20.2426 10 18.8284 10 16 10H8C5.17157 10 3.75736 10 2.87868 10.8787C2 11.7574 2 13.1716 2 16C2 18.8284 2 20.2426 2.87868 21.1213C3.75736 22 5.17157 22 8 22Z"/><path d="M12 14V18"/><path d="M6 10V8C6 4.68629 8.68629 2 12 2C15.3137 2 18 4.68629 18 8V10"/></g></svg><span>Šifrovano: poruke mogu da pročitaju samo članovi.</span></div>`;
+  else h += `<div class="hint"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M22 12C22 13.3132 21.7413 14.6136 21.2388 15.8268C20.7362 17.0401 19.9997 18.1425 19.0711 19.0711C18.1425 19.9997 17.0401 20.7362 15.8268 21.2388C14.6136 21.7413 13.3132 22 12 22C10.6868 22 9.38642 21.7413 8.17317 21.2388C6.95991 20.7362 5.85752 19.9997 4.92893 19.0711C4.00035 18.1425 3.26375 17.0401 2.7612 15.8268C2.25866 14.6136 2 13.3132 2 12C2 10.6868 2.25866 9.38642 2.76121 8.17316C3.26375 6.95991 4.00035 5.85752 4.92893 4.92893C5.85752 4.00035 6.95991 3.26375 8.17317 2.7612C9.38642 2.25866 10.6868 2 12 2C13.3132 2 14.6136 2.25866 15.8268 2.76121C17.0401 3.26375 18.1425 4.00035 19.0711 4.92893C19.9997 5.85752 20.7362 6.95991 21.2388 8.17317C21.7413 9.38642 22 10.6868 22 12L22 12Z"/><path d="M16 12C16 13.3132 15.8965 14.6136 15.6955 15.8268C15.4945 17.0401 15.1999 18.1425 14.8284 19.0711C14.457 19.9997 14.016 20.7362 13.5307 21.2388C13.0454 21.7413 12.5253 22 12 22C11.4747 22 10.9546 21.7413 10.4693 21.2388C9.98396 20.7362 9.54301 19.9997 9.17157 19.0711C8.80014 18.1425 8.5055 17.0401 8.30448 15.8268C8.10346 14.6136 8 13.3132 8 12C8 10.6868 8.10346 9.38642 8.30448 8.17316C8.5055 6.95991 8.80014 5.85752 9.17157 4.92893C9.54301 4.00035 9.98396 3.26375 10.4693 2.7612C10.9546 2.25866 11.4747 2 12 2C12.5253 2 13.0454 2.25866 13.5307 2.76121C14.016 3.26375 14.457 4.00035 14.8284 4.92893C15.1999 5.85752 15.4945 6.95991 15.6955 8.17317C15.8965 9.38642 16 10.6868 16 12L16 12Z"/><path d="M2 12H22"/></g></svg><span>Javni čet: poruke vide svi članovi fakulteta koji koriste aplikaciju i nisu šifrovane.</span></div>`;
+  if (c.kind === 'group' && owner) {
+    h += `<div class="sgroup"><h3 class="sec">Ko može da piše</h3><div class="chips"><button class="chip" data-mode="all" aria-pressed="${c.mode === 'all'}">Svi članovi</button><button class="chip" data-mode="admins" aria-pressed="${c.mode === 'admins'}">Samo admini</button></div></div>`;
+    h += `<div class="sgroup"><h3 class="sec">Naziv</h3><div class="row2"><input class="field-in" id="cname" value="${esc(c.name)}" maxlength="60" aria-label="Naziv grupe"><button class="btn sm" data-rename>Sačuvaj</button></div></div>`;
+  }
+  if (c.kind !== 'dm') {
+    h += `<div class="sgroup"><h3 class="sec">Članovi · ${c.members.length}</h3><div class="plist">` + c.members.slice(0, 200).map(u => {
+      const p = personById(u);
+      const role = c.owner === u ? '<span class="pill planned">vlasnik</span>' : c.admins.includes(u) ? '<span class="pill planned">admin</span>' : '';
+      const act = owner && u !== Me.uid && c.kind === 'group' ? `<button class="btn sm" data-admin="${esc(u)}">${c.admins.includes(u) ? 'Ukloni admina' : 'Postavi za admina'}</button><button class="iconbtn sm" data-kick="${esc(u)}" title="Ukloni iz grupe" aria-label="Ukloni iz grupe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="6" r="4"/><path stroke-linejoin="round" d="M15.666 16.6667L16.9995 18.0002M16.9995 18.0002L18.3327 19.3333M16.9995 18.0002L18.333 16.6667M16.9995 18.0002L15.6663 19.3333"/><path d="M21 18C21 20.2091 19.2091 22 17 22C15.8869 22 14.8799 21.5453 14.1548 20.8115C13.4408 20.089 13 19.096 13 18C13 15.8976 14.6221 14.174 16.683 14.0124C16.7876 14.0042 16.8933 14 17 14C19.2091 14 21 15.7909 21 18Z"/><path d="M16.683 14.0124C15.4431 13.3838 13.8093 13.0019 12.019 13.0019C8.14253 13.0019 5 14.7924 5 17.001C5 19.2096 8.14253 21 12.019 21C12.7637 21 13.4813 20.9339 14.1548 20.8115"/></g></svg></button>` : '';
+      return `<div class="prow">${`<span class="avwrap">${avatarHtml(p, 34)}${C.online.has(u) ? '<i class="onl"></i>' : ''}</span>`}<div class="pi"><div class="pn">${esc(fullName(p))}${u === Me.uid ? ' (ti)' : ''}</div></div><div class="pa">${role}${act}</div></div>`;
+    }).join('') + '</div></div>';
+    if (owner && c.kind === 'group') {
+      const can = FR.friends.filter(f => !c.members.includes(f.uid));
+      if (can.length) h += `<div class="sgroup"><h3 class="sec">Dodaj prijatelje</h3><div class="plist">${can.map(f => `<div class="prow">${avatarHtml(f, 30)}<div class="pi"><div class="pn">${esc(fullName(f))}</div></div><button class="btn sm" data-addm="${esc(f.uid)}">Dodaj</button></div>`).join('')}</div></div>`;
+    }
+  }
+  h += `<div class="actions" style="justify-content:flex-start">${c.kind === 'fak' ? `<button class="btn danger sm" data-leave-fak="${esc(c.cid)}">Napusti čet</button>` : c.kind === 'group' ? (owner ? `<button class="btn danger sm" data-del-chat="${esc(c.cid)}">Obriši grupu</button>` : `<button class="btn danger sm" data-leave="${esc(c.cid)}">Napusti grupu</button>`) : ''}</div>`;
+  return h;
+}
+
+// ---------- novi čet ----------
+function newChatHtml() {
+  const n = C.newChat, sel = n.sel;
+  const words = fold(n.q || '').split(/\s+/).filter(Boolean);
+  const list = FR.friends.filter(f => !words.length || words.every(w => fold(fullName(f)).includes(w)));
+  return `<div class="chead"><button class="iconbtn sm" data-new-x aria-label="Nazad"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 12H4M10 18L4 12L10 6"/></svg></button><div class="ct"><b>Novi čet</b><span class="cs">${sel.size ? `Izabrano: ${sel.size}` : 'Izaberi jednog ili više prijatelja'}</span></div></div>
+    <div class="ncbody">
+      ${!FR.friends.length ? `<div class="empty"><strong>Nemaš još prijatelja</strong>Dodaj prijatelje da bi im slao/la poruke.<div><button class="btn primary" data-open-friends>Pronađi prijatelje</button></div></div>` : `
+      <div class="search">${SEARCH_ICON}<input id="ncq" type="search" placeholder="Pretraži prijatelje" value="${esc(n.q || '')}" autocomplete="off" aria-label="Pretraži prijatelje"></div>
+      <div class="plist">${list.map(f => `<button class="sopt" data-ncsel="${esc(f.uid)}" aria-pressed="${sel.has(f.uid)}"><span class="box"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13L9 17L19 7"/></svg></span><span class="avwrap">${avatarHtml(f, 32)}${C.online.has(f.uid) ? '<i class="onl"></i>' : ''}</span><span class="sn2">${esc(fullName(f))}</span></button>`).join('')}</div>
+      ${sel.size > 1 ? `<div class="sgroup"><h3 class="sec">Naziv grupe</h3><input class="field-in" id="ncname" placeholder="npr. Učimo za Operativne" maxlength="60" value="${esc(n.name || '')}" aria-label="Naziv grupe"></div>
+      <div class="sgroup"><h3 class="sec">Ko može da piše</h3><div class="chips"><button class="chip" data-ncmode="all" aria-pressed="${n.mode !== 'admins'}">Svi članovi</button><button class="chip" data-ncmode="admins" aria-pressed="${n.mode === 'admins'}">Samo admini</button></div></div>` : ''}
+      <div class="actions"><button class="btn primary" data-nc-create ${sel.size ? '' : 'disabled'}>${sel.size > 1 ? 'Napravi grupu' : 'Otvori čet'}</button></div>`}
+    </div>`;
+}
+function bindNewChat(conv) {
+  const q = conv.querySelector('#ncq'); if (q) q.addEventListener('input', e => { C.newChat.q = e.target.value; const pos = e.target.selectionStart; renderFull(); const n2 = $('#ncq'); n2.focus(); n2.setSelectionRange(pos, pos); });
+  const nm = conv.querySelector('#ncname'); if (nm) nm.addEventListener('input', e => { C.newChat.name = e.target.value; });
+}
+async function newKeysFor(members) {
+  const raw = crypto.getRandomValues(new Uint8Array(32)), keys = {};
+  for (const u of members) { const w = await wrapKeyFor(u, raw); if (w) keys[u] = w; }
+  return { raw: b64(raw), keys };
+}
+async function createChat(members, name, mode) {
+  const p = prof();
+  if (!(await ensureKeys())) { toast('Ovaj pregledač ne podržava šifrovanje poruka.'); return null; }
+  const isDm = members.length === 1;
+  let cid;
+  if (isDm) {
+    const other = members[0];
+    const existing = myChats().find(c => c.kind === 'dm' && c.members.includes(other));
+    if (existing) return existing.cid;
+    cid = 'dm-' + [Me.uid, other].sort().join('-').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 120);
+  } else cid = 'g-' + rid(14);
+  const all = uniq([Me.uid, ...members]);
+  const { raw, keys } = await newKeysFor(all);
+  p.chatsOwned = { ...(p.chatsOwned || {}), [cid]: { kind: isDm ? 'dm' : 'group', name: isDm ? '' : (name || '').trim().slice(0, 60), members: all, admins: [], mode: mode === 'admins' ? 'admins' : 'all', kv: 1, keys: { 1: keys }, raw: { 1: raw }, created: Date.now() } };
+  p.leftChats = (p.leftChats || []).filter(x => x !== cid);
+  Me.save();
+  if (!isDm) { const c = chatById(cid); if (c) sendMessage(c, { t: 'sys', sys: `${firstName(Me.uid)} je napravio/la grupu` }); }
+  return cid;
+}
+// vlasnik: dopuni ključeve za članove kojima fali (npr. nisu imali javni ključ kad su dodati)
+async function ensureWrapped() {
+  const p = prof(); if (!p || !p.chatsOwned || !C.priv) return;
+  let changed = false;
+  for (const [cid, m] of Object.entries(p.chatsOwned)) {
+    const raw = m.raw && m.raw[m.kv]; if (!raw) continue;
+    const ks = (m.keys[m.kv] = m.keys[m.kv] || {});
+    for (const u of m.members) if (!ks[u] && pubOf(u)) { const w = await wrapKeyFor(u, unb64(raw)); if (w) { ks[u] = w; changed = true; } }
+    // članovi koji su napustili grupu
+    const leftUs = m.members.filter(u => u !== Me.uid && ((F.people.get(u) || {}).leftChats || []).includes(cid));
+    if (leftUs.length && m.kind === 'group') { await rotateMembers(cid, m.members.filter(u => !leftUs.includes(u)), false); changed = true; }
+  }
+  if (changed) Me.save();
+}
+async function rotateMembers(cid, members, save = true) {
+  const p = prof(), m = p.chatsOwned[cid]; if (!m) return;
+  const kv = (m.kv || 1) + 1, { raw, keys } = await newKeysFor(members);
+  m.members = members; m.admins = (m.admins || []).filter(u => members.includes(u));
+  m.kv = kv; m.keys = { ...m.keys, [kv]: keys }; m.raw = { ...m.raw, [kv]: raw };
+  // čuvamo poslednjih 5 verzija ključa (starije poruke ostaju čitljive)
+  const vs = Object.keys(m.keys).map(Number).sort((a, b) => b - a);
+  for (const v of vs.slice(5)) { delete m.keys[v]; delete m.raw[v]; }
+  C.keyCache.clear();
+  if (save) Me.save();
+}
+
+// ---------- prilozi ----------
+const ALLOWED = /^(image\/(png|jpeg|gif|webp|svg\+xml)|video\/(mp4|webm|quicktime)|application\/pdf|text\/(plain|csv|markdown)|application\/json)$/;
+function fileType(f) {
+  if (f.type && ALLOWED.test(f.type)) return f.type;
+  const ext = (f.name.split('.').pop() || '').toLowerCase();
+  return { md: 'text/markdown', csv: 'text/csv', txt: 'text/plain', json: 'application/json', pdf: 'application/pdf', mov: 'video/quicktime', mp4: 'video/mp4', webm: 'video/webm' }[ext] || '';
+}
+async function sendFiles(c, files) {
+  if (!C.assets) { toast('Slanje fajlova ti trenutno nije dostupno (potreban je pristup za korišćenje aplikacije).'); return; }
+  for (const f of files) {
+    const type = fileType(f);
+    if (!type) { toast(`„${f.name}" nije podržan. Šalji slike, video, PDF ili tekst (Word i PowerPoint sačuvaj kao PDF).`); continue; }
+    if (f.size > 20 * 1048576) { toast(`„${f.name}" je veći od 20 MB.`); continue; }
+    toast(`Šaljem ${f.name}…`);
+    try {
+      const r = await C.assets.upload(f, { type });
+      await sendMessage(c, { t: /^image\//.test(type) ? 'img' : /^video\//.test(type) ? 'video' : 'file', att: { id: r.id, name: f.name.slice(0, 160), type: r.contentType || type, size: r.sizeBytes || f.size } });
+    } catch (e) { toast(e && e.code === 'quota_exceeded' ? 'Prostor za fajlove je pun.' : `„${f.name}" nije poslat. Pokušaj ponovo.`); }
+  }
+}
+async function openPreview(id, type, name) {
+  const url = '/_blob/' + encodeURIComponent(id);
+  const dlg = $('#previewDlg'), body = $('#previewBody');
+  $('#previewTitle').textContent = name || 'Pregled';
+  $('#previewOpen').href = url;
+  body.innerHTML = '<div class="empty"><span class="spinner"></span></div>';
+  if (!dlg.open) dlg.showModal();
+  try {
+    if (/^image\//.test(type)) body.innerHTML = `<img class="pimg" src="${url}" alt="${esc(name)}">`;
+    else if (/^video\//.test(type)) body.innerHTML = `<video class="pimg" src="${url}" controls autoplay></video>`;
+    else if (type === 'application/pdf') {
+      const lib = await loadPdfJs();
+      const data = new Uint8Array(await (await fetch(url)).arrayBuffer());
+      const pdf = await lib.getDocument({ data, isEvalSupported: false }).promise;
+      body.innerHTML = `<div class="pdfpages"></div><div class="muted" style="text-align:center;padding:8px">${pdf.numPages} ${pdf.numPages === 1 ? 'strana' : 'strana'}${pdf.numPages > 30 ? ' · prikazano prvih 30' : ''}</div>`;
+      const host = body.querySelector('.pdfpages');
+      for (let i = 1; i <= Math.min(pdf.numPages, 30); i++) {
+        if (!dlg.open) break;
+        const page = await pdf.getPage(i), vp = page.getViewport({ scale: 1.4 });
+        const cv = document.createElement('canvas'); cv.width = vp.width; cv.height = vp.height; host.appendChild(cv);
+        await page.render({ canvasContext: cv.getContext('2d'), viewport: vp }).promise;
+      }
+    } else {
+      const t = await (await fetch(url)).text();
+      body.innerHTML = `<pre class="ptext">${esc(t.slice(0, 200000))}</pre>`;
+    }
+  } catch { body.innerHTML = `<div class="empty"><strong>Pregled nije uspeo</strong>Otvori fajl u novom tabu.</div>`; }
+}
+
+// ---------- prisutnost (online) i „kuca…" ----------
+async function initRoom() {
+  try { C.room = await window.claude.use('room'); } catch { C.room = null; }
+  if (!C.room) return;
+  try { C.room.presence({ app: 'planer' }); } catch {}
+  C.room.onPeers(peers => {
+    C.online = new Set(peers.filter(p => p.kind === 'viewer' && !p.isMe && p.by).map(p => p.by));
+    renderChatBadges(); renderFriendsUi(); if (C.full || C.mini) renderChatsSoon();
+  });
+  C.room.on('typing', m => {
+    if (!m.by || m.isMe || !m.data || typeof m.data.cid !== 'string') return;
+    const c = chatById(m.data.cid); if (!c || !c.members.includes(m.by)) return;
+    if (!C.typing.has(c.cid)) C.typing.set(c.cid, new Map());
+    C.typing.get(c.cid).set(m.by, Date.now());
+    renderChatsSoon(); setTimeout(renderChatsSoon, 4200);
+  });
+  C.room.on('call', m => {
+    if (!m.by || m.isMe || !m.data) return;
+    const c = chatById(m.data.cid); if (!c || !c.members.includes(m.by)) return;
+    const url = String(m.data.url || ''); if (!/^https:\/\/meet\.jit\.si\/[A-Za-z0-9-]+$/.test(url)) return;
+    toast(`${firstName(m.by)} započinje video poziv${c.kind !== 'dm' ? ' u „' + chatTitle(c) + '"' : ''}.`, { label: 'Otvori čet', fn: () => openMini(c.cid) });
+  });
+}
+function emitTyping(cid) {
+  if (!C.room || Date.now() - C.lastTypingEmit < 2500) return;
+  C.lastTypingEmit = Date.now();
+  C.room.emit('typing', { cid }).catch(() => {});
+}
+async function startCall(c) {
+  const url = `https://meet.jit.si/PlanerIspita-${rid(16).replace(/[^A-Za-z0-9]/g, '')}`;
+  const ok = await sendMessage(c, { t: 'call', url });
+  if (!ok) return;
+  if (C.room) C.room.emit('call', { cid: c.cid, url }).catch(() => {});
+  const a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer'; document.body.appendChild(a); a.click(); a.remove();
+}
+
+// ---------- obaveštenja o novim porukama ----------
+function notifyNew() {
+  const p = prof(); if (!p) return;
+  for (const c of myChats()) {
+    const a = othersAct(c), seen = C.seenAct.get(c.cid);
+    if (seen != null && a > seen && isUnread(c)) {
+      const who = c.members.find(u => u !== Me.uid && ((F.people.get(u) || {}).act || {})[c.cid] === a);
+      toast(`Nova poruka${who ? ' od ' + firstName(who) : ''}${c.kind !== 'dm' ? ' u „' + chatTitle(c) + '"' : ''}`, { label: 'Otvori', fn: () => openMini(c.cid) });
+    }
+    C.seenAct.set(c.cid, a);
+  }
+}
+
+// ---------- događaji ----------
+function chatRootOf(el) { return el.closest('#miniChat, #chatFull .cconv'); }
+async function handleSend(root) {
+  const c = chatById(root.dataset.cid || C.active); if (!c) return;
+  const ta = root.querySelector('.cin'); const text = ta.value.trim(); if (!text) return;
+  if (text.length > 4000) { toast('Poruka je preduga (najviše 4000 znakova).'); return; }
+  if (C.edit && C.edit.cid === c.cid) {
+    const id = C.edit.id; C.edit = null; ta.value = '';
+    await editMessage(c, id, b => { b.text = text; b.edited = Date.now(); });
+    renderChatsSoon(); return;
+  }
+  const reply = C.reply && C.reply.cid === c.cid ? C.reply.id : '';
+  C.reply = null; ta.value = ''; if (C.draft) delete C.draft[c.cid];
+  ta.style.height = '';
+  await sendMessage(c, { t: 'text', text, reply });
+}
+function chatClick(e) {
+  const t = e.target;
+  const root = chatRootOf(t); const c = chatById((root && root.dataset.cid) || C.active);
+  const oc = t.closest('[data-open-chat]'); if (oc) { C.active = oc.dataset.openChat; C.info = false; C.newChat = null; C.reply = C.edit = C.pollDraft = null; C.mobilePane = 'conv'; syncSubs(); renderFull(); return; }
+  if (t.closest('[data-mini-x]')) { closeMini(); return; }
+  if (t.closest('[data-expand]')) { const cid = C.mini; closeMini(); C.pendingCid = cid; go('poruke'); return; }
+  const pn = t.closest("[data-gopane]"); if (pn) { C.mobilePane = pn.dataset.gopane; renderFull(); return; }
+  if (t.closest('[data-new-chat]')) { C.newChat = { sel: new Set(), q: '', name: '', mode: 'all' }; C.mobilePane = 'conv'; renderFull(); return; }
+  if (t.closest('[data-new-x]')) { C.newChat = null; renderFull(); return; }
+  if (t.closest('[data-open-friends]')) { openFriends(); return; }
+  const ns = t.closest('[data-ncsel]'); if (ns) { const s = C.newChat.sel, u = ns.dataset.ncsel; s.has(u) ? s.delete(u) : s.add(u); renderFull(); return; }
+  const nm = t.closest('[data-ncmode]'); if (nm) { C.newChat.mode = nm.dataset.ncmode; renderFull(); return; }
+  if (t.closest('[data-nc-create]')) {
+    const n = C.newChat; const btn = t.closest('[data-nc-create]'); btn.disabled = true;
+    createChat([...n.sel], n.name, n.mode).then(cid => { C.newChat = null; if (cid) { C.active = cid; syncSubs(); } renderFull(); });
+    return;
+  }
+  const jf = t.closest('[data-join-fak]'); if (jf) { const p = prof(); p.groups = uniq([...(p.groups || []), jf.dataset.joinFak]); Me.save(); C.active = jf.dataset.joinFak; C.mobilePane = 'conv'; syncSubs(); renderFull(); toast('Pridružio/la si se četu fakulteta.'); return; }
+  const lf = t.closest('[data-leave-fak]'); if (lf) { const p = prof(); p.groups = (p.groups || []).filter(x => x !== lf.dataset.leaveFak); Me.save(); C.active = null; C.info = false; syncSubs(); renderFull(); return; }
+  const lv = t.closest('[data-leave]'); if (lv) { const p = prof(); p.leftChats = uniq([...(p.leftChats || []), lv.dataset.leave]); Me.save(); C.active = null; C.info = false; syncSubs(); renderFull(); toast('Napustio/la si grupu.'); return; }
+  const dl = t.closest('[data-del-chat]'); if (dl) { if (dl.dataset.confirm !== '1') { dl.dataset.confirm = '1'; dl.textContent = 'Klikni ponovo da obrišeš grupu za sve'; return; } const p = prof(); delete p.chatsOwned[dl.dataset.delChat]; Me.save(); C.active = null; C.info = false; syncSubs(); renderFull(); toast('Grupa je obrisana.'); return; }
+  if (t.closest('[data-info]')) { C.info = !C.info; renderFull(); return; }
+  const cl = t.closest('[data-call]'); if (cl) { const cc = chatById(cl.dataset.call); if (cc) startCall(cc); return; }
+  if (!c) return;
+  const md = t.closest('[data-mode]'); if (md) { const m = prof().chatsOwned[c.cid]; m.mode = md.dataset.mode; Me.save(); sendMessage(c, { t: 'sys', sys: md.dataset.mode === 'admins' ? 'Sada u grupi pišu samo admini' : 'Sada u grupi pišu svi članovi' }); renderFull(); return; }
+  if (t.closest('[data-rename]')) { const v = $('#cname').value.trim().slice(0, 60); prof().chatsOwned[c.cid].name = v; Me.save(); renderFull(); return; }
+  const ad = t.closest('[data-admin]'); if (ad) { const m = prof().chatsOwned[c.cid], u = ad.dataset.admin; m.admins = m.admins.includes(u) ? m.admins.filter(x => x !== u) : [...m.admins, u]; Me.save(); renderFull(); return; }
+  const kk = t.closest('[data-kick]'); if (kk) { const u = kk.dataset.kick; rotateMembers(c.cid, c.members.filter(x => x !== u)).then(() => { sendMessage(chatById(c.cid), { t: 'sys', sys: `${firstName(u)} je uklonjen/a iz grupe` }); renderFull(); }); return; }
+  const am = t.closest('[data-addm]'); if (am) { const u = am.dataset.addm; const m = prof().chatsOwned[c.cid]; (async () => { const raw = m.raw && m.raw[m.kv]; const w = raw ? await wrapKeyFor(u, unb64(raw)) : null; m.members = uniq([...m.members, u]); if (w) m.keys[m.kv][u] = w; Me.save(); await sendMessage(chatById(c.cid), { t: 'sys', sys: `${firstName(Me.uid)} je dodao/la ${firstName(u)}` }); renderFull(); })(); return; }
+  if (t.closest('[data-send]')) { handleSend(root); return; }
+  if (t.closest('[data-cbar-x]')) { C.reply = C.edit = null; const ta = root.querySelector('.cin'); if (ta) ta.value = ''; renderChatsSoon(); return; }
+  const rp = t.closest('[data-mreply]'); if (rp) { const el = root.querySelector(`[data-mid="${CSS.escape(rp.dataset.mreply)}"] .bubble`); C.reply = { cid: c.cid, id: rp.dataset.mreply, preview: (el ? el.textContent : '').trim().slice(0, 80) }; C.edit = null; renderChatsSoon(); setTimeout(() => { const ta = root.querySelector('.cin'); ta && ta.focus(); }, 60); return; }
+  const rr = t.closest('[data-mreact]'); if (rr) { C.reactFor = C.reactFor === rr.dataset.mreact ? null : rr.dataset.mreact; renderChatsSoon(); return; }
+  const re = t.closest('[data-react]'); if (re) { const id = re.dataset.react, em = re.dataset.emoji; C.reactFor = null; setMyState(c, st => { st.reacts = st.reacts || {}; if (st.reacts[id] === em) delete st.reacts[id]; else st.reacts[id] = em; }).then(renderChatsSoon).catch(() => toast('Reakcija nije sačuvana.')); return; }
+  const ed = t.closest('[data-medit]'); if (ed) { const el = root.querySelector(`[data-mid="${CSS.escape(ed.dataset.medit)}"] .tx`); C.edit = { cid: c.cid, id: ed.dataset.medit, text: el ? el.innerText : '' }; C.reply = null; root.querySelector('.cwrap').dataset.for = ''; renderChatsSoon(); setTimeout(() => { const ta = root.querySelector('.cin'); if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); } }, 60); return; }
+  const de = t.closest('[data-mdel]'); if (de) { if (de.dataset.confirm !== '1') { de.dataset.confirm = '1'; de.classList.add('warn-btn'); de.title = 'Klikni ponovo za brisanje'; setTimeout(() => { de.dataset.confirm = ''; de.classList.remove('warn-btn'); }, 3000); return; } editMessage(c, de.dataset.mdel, b => { b.del = true; b.text = ''; b.att = null; b.poll = null; }); return; }
+  const vo = t.closest('[data-vote]'); if (vo) {
+    const mid = vo.dataset.vote, i = +vo.dataset.opt;
+    timeline(c).then(tl => { const it = tl.items.find(x => x.id === mid); const multi = it && it.body && it.body.poll && it.body.poll.multi;
+      return setMyState(c, st => { st.votes = st.votes || {}; const cur = st.votes[mid] || []; st.votes[mid] = cur.includes(i) ? cur.filter(x => x !== i) : multi ? [...cur, i] : [i]; if (!st.votes[mid].length) delete st.votes[mid]; }); }).then(renderChatsSoon).catch(() => toast('Glas nije sačuvan.'));
+    return;
+  }
+  if (t.closest('[data-poll-new]')) { C.pollDraft = { cid: c.cid, q: '', opts: ['', ''], multi: false }; renderChatsSoon(); setTimeout(() => { const q = root.querySelector('.pdq'); q && q.focus(); }, 60); return; }
+  if (t.closest('[data-poll-x]')) { C.pollDraft = null; renderChatsSoon(); return; }
+  if (t.closest('[data-poll-add]')) { readPollDraft(root); C.pollDraft.opts.push(''); root.querySelector('.cwrap').dataset.for = ''; renderChatsSoon(); return; }
+  if (t.closest('[data-poll-send]')) {
+    readPollDraft(root); const d = C.pollDraft, opts = d.opts.map(o => o.trim()).filter(Boolean);
+    if (!d.q.trim() || opts.length < 2) { toast('Upiši pitanje i bar dve opcije.'); return; }
+    C.pollDraft = null; sendMessage(c, { t: 'poll', poll: { q: d.q.trim(), opts, multi: d.multi } }); return;
+  }
+  const pv = t.closest('[data-preview]'); if (pv) { openPreview(pv.dataset.preview, pv.dataset.ptype, pv.dataset.pname); return; }
+}
+function readPollDraft(root) {
+  const d = C.pollDraft; if (!d) return;
+  const q = root.querySelector('.pdq'); if (q) d.q = q.value;
+  root.querySelectorAll('.pdo').forEach(el => { d.opts[+el.dataset.i] = el.value; });
+  const m = root.querySelector('.pdm'); if (m) d.multi = m.checked;
+}
+['#miniChat', '#chatFull'].forEach(sel => {
+  const el = $(sel);
+  el.addEventListener('click', chatClick);
+  el.addEventListener('keydown', e => {
+    if (e.target.classList.contains('cin') && e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); handleSend(chatRootOf(e.target)); }
+    if (e.key === 'Escape' && C.reactFor) { C.reactFor = null; renderChatsSoon(); }
+  });
+  el.addEventListener('input', e => {
+    if (C.pollDraft && e.target.closest('.pdraft')) readPollDraft(chatRootOf(e.target));
+    if (e.target.classList.contains('cin')) {
+      const root = chatRootOf(e.target), cid = root && root.dataset.cid; e.target.style.height = ''; e.target.style.height = Math.min(140, e.target.scrollHeight) + 'px';
+      if (cid && !C.edit) { C.draft = C.draft || {}; C.draft[cid] = e.target.value; }
+      if (cid) emitTyping(cid);
+    }
+  });
+  el.addEventListener('change', e => {
+    if (e.target.classList.contains('cfile') && e.target.files.length) { const c = chatById(chatRootOf(e.target).dataset.cid); if (c) sendFiles(c, [...e.target.files]); e.target.value = ''; }
+  });
+  el.addEventListener('paste', e => {
+    const files = [...(e.clipboardData && e.clipboardData.files || [])]; if (!files.length) return;
+    const root = chatRootOf(e.target); const c = root && chatById(root.dataset.cid); if (!c) return;
+    e.preventDefault(); sendFiles(c, files);
+  });
+  el.addEventListener('dragover', e => { if (chatRootOf(e.target)) { e.preventDefault(); chatRootOf(e.target).classList.add('drag'); } });
+  el.addEventListener('dragleave', e => { const r = chatRootOf(e.target); if (r) r.classList.remove('drag'); });
+  el.addEventListener('drop', e => { const r = chatRootOf(e.target); if (!r) return; e.preventDefault(); r.classList.remove('drag'); const c = chatById(r.dataset.cid); if (c && e.dataTransfer.files.length) sendFiles(c, [...e.dataTransfer.files]); });
+});
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') markRead(); });
+
+// pokretanje (posle učitavanja profila)
+async function initChat() {
+  if (Me.mode !== 'db' || !prof() || !prof().onboarded) { renderChatBadges(); return; }
+  C.on = true;
+  try { await ensureKeys(); } catch {}
+  try { C.assets = await window.claude.use('assets'); } catch { C.assets = null; }
+  initRoom();
+  renderChatBadges();
+}
+// poziva se na svaku promenu javnih kartica
+function onPeopleChanged() {
+  if (!C.on) return;
+  ensureWrapped().catch(() => {});
+  notifyNew(); syncSubs(); renderChatsSoon();
+}
+
 
 // ================= Upload =================
 let pdfLibPromise = null;
@@ -2370,8 +3370,7 @@ function renderManage() {
     </div>`).join('') + `</div>
     <div class="actions"><button class="btn primary" data-open-upload><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M18.18 8.03933L18.6435 7.57589C19.4113 6.80804 20.6563 6.80804 21.4241 7.57589C22.192 8.34374 22.192 9.58868 21.4241 10.3565L20.9607 10.82M18.18 8.03933C18.18 8.03933 18.238 9.02414 19.1069 9.89309C19.9759 10.762 20.9607 10.82 20.9607 10.82M20.9607 10.82L16.7001 15.0806C16.4115 15.3692 16.2672 15.5135 16.1081 15.6376C15.9204 15.7839 15.7173 15.9094 15.5025 16.0118C15.3203 16.0986 15.1268 16.1632 14.7396 16.2922L13.5 16.7054L13.099 16.8391L12.6979 16.9728C12.5074 17.0363 12.2973 16.9867 12.1553 16.8447C12.0133 16.7027 11.9637 16.4926 12.0272 16.3021L12.1609 15.901L12.2946 15.5L12.7078 14.2604C12.8368 13.8732 12.9014 13.6797 12.9882 13.4975C13.0906 13.2827 13.2161 13.0796 13.3624 12.8919C13.4865 12.7328 13.6308 12.5885 13.9194 12.2999L18.18 8.03933M13.099 16.8391L12.1609 15.901"/><path d="M8 13H10.5"/><path d="M8 9H14.5"/><path d="M8 17H9.5"/><path d="M19.8284 3.17157C18.6569 2 16.7712 2 13 2H11C7.22876 2 5.34315 2 4.17157 3.17157C3 4.34315 3 6.22876 3 10V14C3 17.7712 3 19.6569 4.17157 20.8284C5.34315 22 7.22876 22 11 22H13C16.7712 22 18.6569 22 19.8284 20.8284C20.7715 19.8853 20.9554 18.4796 20.9913 16"/></g></svg> Dodaj rok (PDF)</button></div>`;
 }
-function openManage() { confirmId = null; renderManage(); if (!$('#manageDlg').open) $('#manageDlg').showModal(); }
-$('#manageBtn').addEventListener('click', openManage);
+function openManage() { confirmId = null; go('rokovi'); renderManage(); }
 $('#manageBody').addEventListener('click', async e => {
   const ask = e.target.closest('[data-ask]'); if (ask) { confirmId = ask.dataset.ask; renderManage(); return; }
   if (e.target.closest('[data-cancel]')) { confirmId = null; renderManage(); return; }
@@ -2386,6 +3385,42 @@ $('#manageBody').addEventListener('click', async e => {
     } catch (err) { confirmId = null; renderManage(); toast('Brisanje nije uspelo. Pokušaj ponovo.'); }
   }
 });
+
+// ================= Navigacija =================
+// Sekcije aplikacije. Nove celine (npr. „predmeti" sa blanketima po ispitu, „instruktori" za časove)
+// dodaju se ovde + jedna stavka u traci i jedan <section class="page">.
+const ROUTES = {
+  plan: { title: 'Moj plan', sec: 'planer', sub: () => '' },
+  kalendar: { title: 'Kalendar', sec: 'planer', sub: () => '' },
+  poruke: { title: 'Poruke', sec: 'poruke', sub: () => 'Privatne poruke i grupe su šifrovane' },
+  prijatelji: { title: 'Prijatelji', sec: 'prijatelji', sub: () => { const n = FR.friends.length, on = FR.friends.filter(f => C.online.has(f.uid)).length; return `${num(n, 'prijatelj', 'prijatelja', 'prijatelja')}${on ? ` · ${on} online` : ''}`; } },
+  rokovi: { title: 'Ispitni rokovi', sec: 'rokovi', sub: () => 'Zajednički rasporedi za sve korisnike' }
+};
+let route = ROUTES[location.hash.slice(1)] ? location.hash.slice(1) : (S.view === 'plan' ? 'plan' : 'kalendar');
+if (route === 'plan') S.view = 'plan'; else if (route === 'kalendar' && S.view === 'plan') S.view = 'mesec';
+function go(r) { if (!ROUTES[r]) r = 'plan'; if (location.hash.slice(1) !== r) location.hash = r; else applyRoute(); }
+function setRouteUi() {
+  const sec = ROUTES[route].sec;
+  document.querySelectorAll('.page').forEach(el => { el.hidden = el.id !== 'sec-' + sec; });
+  document.querySelectorAll('[data-route]').forEach(a => { if (a.dataset.route === route) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  $('#pageTitle').textContent = ROUTES[route].title;
+  document.body.dataset.route = route;
+  $('#filtersToggle').hidden = sec !== 'planer';
+}
+function applyRoute() {
+  const r = ROUTES[location.hash.slice(1)] ? location.hash.slice(1) : 'plan';
+  const changed = r !== route; route = r;
+  if (r === 'plan') S.view = 'plan';
+  if (r === 'kalendar' && S.view === 'plan') S.view = S.calView || 'mesec';
+  setRouteUi();
+  if (r === 'poruke') openFull(C.pendingCid || null); else if (C.full) closeFull();
+  C.pendingCid = null;
+  if (r === 'prijatelji') { if (changed && !F.keep) { F.view = 'list'; if (FR.incoming.length) F.tab = 'requests'; } F.keep = false; renderFriendsUi(); }
+  if (r === 'rokovi') renderManage();
+  saveUi(); refresh();
+  if (changed) window.scrollTo(0, 0);
+}
+window.addEventListener('hashchange', applyRoute);
 
 // ================= Start =================
 function pickInitialMonth() {
@@ -2405,8 +3440,11 @@ function pickInitialMonth() {
   }
   try { await Me.load(); }
   catch (err) { $('#bannerArea').insertAdjacentHTML('beforeend', `<div class="banner err" style="margin-bottom:14px">Tvoj plan trenutno nije dostupan. Osveži stranicu za koji trenutak.</div>`); Me.loadFailed = true; }
-  rebuild(); derive(); deriveFriends(); applyFilters(); pickInitialMonth(); S.loaded = true; refresh();
+  rebuild(); derive(); deriveFriends(); applyFilters(); pickInitialMonth(); S.loaded = true;
+  setRouteUi(); refresh();
   subscribePeople();
+  await initChat();
+  if (route === 'poruke') openFull(); else if (route === 'rokovi') renderManage();
   if (!Me.loadFailed && (!prof() || !prof().onboarded) && S.exams.length) openWizard(true, null);
   else if (prof() && prof().onboarded && !prof().ime) { openWizard(false, 'profil'); W.note = 'Novo: dopuni profil imenom, a po želji i brojem indeksa i slikom, da bi te prijatelji pronašli.'; renderWizard(); }
 })();

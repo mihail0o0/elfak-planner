@@ -16,7 +16,7 @@ def icon(m):
     return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{size}" height="{size}" viewBox="0 0 24 24" aria-hidden="true">'
             + ICONS[name] + '</svg>')
 
-app = (src / 'app.html').read_text().replace('/*CORE*/', core).replace('/*SQUIRCLE*/', squircle).replace('/*FONTS*/', fonts)
+app = (src / 'app.html').read_text().replace('/*CORE*/', core).replace('/*SQUIRCLE*/', squircle).replace('/*CHAT*/', (src / 'chat.js').read_text()).replace('/*FONTS*/', fonts)
 app = re.sub(r'\{\{i:([a-z0-9-]+):(\d+)\}\}', icon, app)
 app = app.replace('<title>Planer ispita</title>', '<title>Planer ispita</title>\n<!-- Ikonice: Solar icon set, 480 Design, CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) -->', 1)
 (root / 'dist').mkdir(exist_ok=True)
