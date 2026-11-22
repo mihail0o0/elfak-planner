@@ -31,3 +31,9 @@ Stil prati flow.remenex.com: Chillax (naslovi, dugmad; ugrađen kao woff2 u `src
 plava `#1a3ffb`, narandžasta `#f77d44`, svetla (`#f7f7f7`) i tamna (neutralne pozadine `#0a0b10` / `#13151c` / `#1c1f28`) tema.
 Squircle uglovi: nativno preko `corner-shape: squircle` gde pregledač to podržava, inače `src/squircle.js`
 crta isti oblik kao SVG pozadinu (sa ivicom i senkom).
+
+## Ikonice
+
+[Solar icon set](https://www.figma.com/community/file/1166831539721848736) autora 480 Design, licenca
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Korišćene ikonice su u `src/solar-icons.json`
+(iz paketa `@iconify-json/solar`); u kodu se pišu kao `{{i:ime:veličina}}`, a `build.py` ih ugrađuje kao SVG.
