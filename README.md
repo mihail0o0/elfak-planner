@@ -16,6 +16,6 @@ Format podataka po roku: metapodaci `{id, rok, godina, fileName, uploadedAt, cou
 ## Dizajn
 
 Stil prati flow.remenex.com: Chillax (naslovi, dugmad; ugrađen kao woff2 u `src/fonts/`), Instrument Sans (tekst),
-plava `#1a3ffb`, narandžasta `#f77d44`, svetla (`#f7f7f7`) i tamna (`#04081f` / `#1a1f3f`) tema.
+plava `#1a3ffb`, narandžasta `#f77d44`, svetla (`#f7f7f7`) i tamna (neutralne pozadine `#0a0b10` / `#13151c` / `#1c1f28`) tema.
 Squircle uglovi: nativno preko `corner-shape: squircle` gde pregledač to podržava, inače `src/squircle.js`
 crta isti oblik kao SVG pozadinu (sa ivicom i senkom).
