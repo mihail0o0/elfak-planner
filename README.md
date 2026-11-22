@@ -16,6 +16,19 @@ na latinicu i prikazuje u kalendaru (plan, mesečni, godišnji i tabelarni prika
 - Profil i plan su lični (`data/users/<id>/profile` u bazi artifakta, ili localStorage van njega);
   rokovi su zajednički.
 
+## Profil i prijatelji
+
+- Prvo pokretanje: koraci Profil (ime, prezime, broj indeksa, fakultet, opciona slika – inače avatar
+  sa inicijalima) → studije → ispiti. Kasnije se sve menja u Podešavanjima (tabovi Profil, Studije,
+  Ispiti, Privatnost).
+- Svaki korisnik objavljuje javnu karticu `people/<uid>` (ime, indeks, fakultet, slika, studije i –
+  ako je deljenje uključeno – plan). Pravila baze: karticu menja samo vlasnik, čitaju je korisnici sa
+  pristupom „interact" i više.
+- Prijateljstvo: svako u svoju karticu upisuje koga je dodao; kad su oboje dodali jedno drugo, to su
+  prijatelji. Zahtevi = ljudi koji su tebe dodali, a ti njih nisi.
+- Zajedničko planiranje: avatari prijatelja u kalendaru i listi ispita, „Prijatelji ovog dana",
+  plan prijatelja sa „Pridruži se" (isti termin) i podatak u dijalogu potvrde ko polaže u istom terminu.
+
 - `index.html` – samostalna aplikacija; otvori je u pregledaču. Podaci se čuvaju u localStorage.
 - `src/core.js` – transliteracija i parser PDF redova (koristi pdf.js 3.11.174 sa cdnjs).
 - `src/app.html` – interfejs; `python3 build.py` spaja `core.js` u `dist/`.

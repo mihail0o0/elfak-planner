@@ -520,6 +520,61 @@ svg { flex: none; }
 .btn.danger-solid { --b-bg: var(--bad); color: #fff; border-color: var(--bad); box-shadow: inset 0 4px 4px rgb(255 255 255 / .2), 3px 4px 11px rgb(150 150 150 / .1); }
 .toast { display: flex; align-items: center; gap: 14px; }
 .toast button { border: 0; background: none; color: inherit; font-weight: 700; text-decoration: underline; padding: 0; }
+
+/* ================= Profil i prijatelji ================= */
+:root { --av-bg: 86%; --av-fg: 28%; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --av-bg: 30%; --av-fg: 86%; } }
+:root[data-theme="dark"] { --av-bg: 30%; --av-fg: 86%; }
+.av { display: inline-grid; place-items: center; flex: none; border-radius: 36%; background: hsl(var(--h, 220) 70% var(--av-bg)); color: hsl(var(--h, 220) 60% var(--av-fg)); font-family: var(--f-head); font-weight: 600; letter-spacing: .02em; object-fit: cover; line-height: 1; }
+img.av { background: var(--tile); }
+.av.more { background: var(--tile-hover); color: var(--ink-2); font-family: var(--f-body); }
+.avs { display: inline-flex; align-items: center; flex: none; }
+.avs .av { box-shadow: 0 0 0 2px var(--surface); }
+.avs .av + .av { margin-left: -6px; }
+.mebtn { border: 0; background: none; padding: 2px; border-radius: 40%; display: grid; place-items: center; min-width: 42px; height: 42px; color: var(--ink); }
+.mebtn:hover .av, .mebtn:focus-visible .av { box-shadow: 0 0 0 3px var(--brand-soft); }
+.mebtn > svg { width: 22px; height: 22px; }
+.badge { min-width: 20px; height: 20px; border-radius: 8px; background: var(--bad); color: #fff; font-family: var(--f-body); font-size: 12px; font-weight: 700; display: inline-grid; place-items: center; padding: 0 5px; margin-left: 2px; }
+.seg.tabs { box-shadow: none; background: var(--tile); align-self: flex-start; max-width: 100%; overflow-x: auto; }
+.seg.tabs button { white-space: nowrap; }
+.seg.tabs .n { font-family: var(--f-body); font-size: 12px; opacity: .6; margin-left: 5px; }
+.seg.tabs .dotn { font-family: var(--f-body); font-size: 11.5px; font-weight: 700; background: var(--bad); color: #fff; border-radius: 7px; padding: 0 6px; margin-left: 6px; }
+.plist { display: flex; flex-direction: column; gap: 6px; }
+.prow { display: flex; align-items: center; gap: 12px; padding: 10px 12px; background: var(--tile); border-radius: var(--rad-md); flex-wrap: wrap; }
+.prow .pi { flex: 1; min-width: 150px; }
+.prow .pn { font-weight: 600; font-size: 15px; }
+.prow .ps { font-size: 13px; color: var(--ink-3); }
+.prow .pa { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.phead { display: flex; align-items: center; gap: 16px; padding: 6px 2px; }
+.phead h3 { margin: 0 0 4px; font-size: 22px; }
+.phead .muted { font-size: 13.5px; }
+.dbadge.sm { width: 48px; height: 52px; flex: none; background: var(--surface); }
+.dbadge.sm b { font-size: 19px; }
+.dbadge.sm span { font-size: 10.5px; }
+.xrow .av { align-self: center; }
+.fnote { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-2); margin-top: 6px; }
+.fwith { display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2); font-weight: 500; }
+.favs { display: flex; align-items: center; gap: 6px; margin-top: auto; font-size: 11.5px; color: var(--ink-3); }
+.mcell.sel .favs { color: var(--on-brand); }
+.mcell.sel .avs .av { box-shadow: 0 0 0 2px var(--brand); }
+.mi .avs { margin-top: 2px; }
+.cstate.friends { background: var(--brand-soft); color: var(--brand-fg); align-items: center; }
+.cstate.friends b { color: var(--ink); }
+.pform { display: flex; flex-direction: column; gap: 14px; }
+.photo { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.photo .pbtns { display: flex; flex-direction: column; gap: 6px; }
+.photo .row { display: flex; gap: 6px; flex-wrap: wrap; }
+.photo .muted { font-size: 13px; }
+label.btn { cursor: pointer; }
+.sgroup { display: flex; flex-direction: column; gap: 8px; }
+.sgroup .chip .n { margin-left: 2px; }
+.switch.big { align-items: flex-start; background: var(--tile); border-radius: var(--rad-md); padding: 14px 16px; }
+.switch.big b { color: var(--ink); font-weight: 600; }
+.switch.big .muted { font-size: 13.5px; }
+.wiz-top .row h2 { font-family: var(--f-head); font-weight: 500; }
+.mcell.sel, .mcell.sel:hover { background: var(--brand); color: var(--on-brand); }
+#friendsBody > .btn.ghost { align-self: flex-start; }
+@media (max-width: 600px) { #friendsBtn { padding: 8px 12px; } #friendsBtn { font-size: 0; gap: 0; } #friendsBtn .badge { font-size: 12px; } }
 </style>
 
 <div class="wrap">
@@ -533,12 +588,14 @@ svg { flex: none; }
     </div>
     <div class="grow"></div>
     <button class="btn filters-toggle" id="filtersToggle" aria-expanded="false">Moji ispiti <span id="fcount" class="mono"></span></button>
+    <button class="btn" id="friendsBtn" title="Prijatelji"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="9" cy="6" r="4"/><path d="M15 9C16.6569 9 18 7.65685 18 6C18 4.34315 16.6569 3 15 3"/><ellipse cx="9" cy="17" rx="7" ry="4"/><path d="M18 14C19.7542 14.3847 21 15.3589 21 16.5C21 17.5293 19.9863 18.4229 18.5 18.8704"/></g></svg> Prijatelji<span class="badge" id="friendsBadge" hidden></span></button>
     <button class="iconbtn" id="themeBtn" aria-label="Tema" title="Tema"></button>
     <button class="iconbtn" id="settingsBtn" aria-label="Podešavanja" title="Podešavanja"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M9.5 14C11.1569 14 12.5 15.3431 12.5 17C12.5 18.6568 11.1569 20 9.5 20C7.84315 20 6.5 18.6568 6.5 17C6.5 15.3431 7.84315 14 9.5 14Z"/><path d="M14.5 3.99998C12.8431 3.99998 11.5 5.34312 11.5 6.99998C11.5 8.65683 12.8431 9.99998 14.5 9.99998C16.1569 9.99998 17.5 8.65683 17.5 6.99998C17.5 5.34312 16.1569 3.99998 14.5 3.99998Z"/><path d="M15 16.9585L22 16.9585"/><path d="M9 6.9585L2 6.9585"/><path d="M2 16.9585L4 16.9585"/><path d="M22 6.9585L20 6.9585"/></g></svg></button>
     <button class="btn" id="manageBtn">
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M11 22H13C16.7712 22 18.6569 22 19.8284 20.8284C21 19.6569 21 17.7712 21 14V10C21 6.22876 21 4.34315 19.8284 3.17157C18.6569 2 16.7712 2 13 2H11C7.22876 2 5.34315 2 4.17157 3.17157C3 4.34315 3 6.22876 3 10V14C3 17.7712 3 19.6569 4.17157 20.8284C5.34315 22 7.22876 22 11 22Z"/><path d="M8 12H16"/><path d="M8 8H16"/><path d="M8 16H13"/></g></svg>
       Rokovi
     </button>
+    <button class="mebtn" id="meBtn" aria-label="Moj profil" title="Profil"></button>
   </header>
 
   <div id="bannerArea"></div>
@@ -570,6 +627,13 @@ svg { flex: none; }
 </div>
 
 <dialog id="setupDlg" aria-labelledby="wizTitle"><div class="wiz" id="wiz"></div></dialog>
+
+<dialog id="friendsDlg" aria-labelledby="friendsTitle">
+  <div class="dlg">
+    <header><h2 id="friendsTitle">Prijatelji</h2><button class="iconbtn" data-close aria-label="Zatvori"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M19.0068 5L5.00684 19"/><path d="M19 19L5 5"/></g></svg></button></header>
+    <div class="body" id="friendsBody"></div>
+  </div>
+</dialog>
 
 <dialog id="conflictDlg" aria-labelledby="cfxTitle"><div class="cfx" id="cfx"></div></dialog>
 
@@ -957,7 +1021,7 @@ const Me = {
   async load() {
     if (this.mode === 'db') { const s = await withTimeout(this.ref().get(), 10000); this.data = s.exists ? JSON.parse(JSON.stringify(s.data())) : null; }
     else if (this.mode === 'local') { try { this.data = JSON.parse(lsGet(LS_ME) || 'null'); } catch { this.data = null; } }
-    if (this.data) { this.data.remaining = this.data.remaining || {}; this.data.plan = this.data.plan || {}; }
+    if (this.data) { this.data.remaining = this.data.remaining || {}; this.data.plan = this.data.plan || {}; this.data.friends = this.data.friends || []; this.data.ignored = this.data.ignored || []; }
     return this.data;
   },
   save() { this.dirty = true; clearTimeout(this.timer); this.timer = setTimeout(() => this.flush(), 350); },
@@ -966,7 +1030,7 @@ const Me = {
     this.saving = true; this.dirty = false;
     const body = JSON.parse(JSON.stringify({ ...this.data, updatedAt: new Date().toISOString() }));
     try {
-      if (this.mode === 'db') await this.ref().set(body);
+      if (this.mode === 'db') { await this.ref().set(body); if (body.onboarded) await this.db.doc(`people/${this.uid}`).set(publicBody(body)); }
       else if (this.mode === 'local') lsSet(LS_ME, JSON.stringify(body));
     } catch (e) { toast('Plan trenutno nije sačuvan. Proveri vezu, izmene ostaju dok je stranica otvorena.'); }
     this.saving = false;
@@ -980,14 +1044,15 @@ const S = {
   rokovi: [], exams: [], rokColor: {},
   f: { q: '', rok: new Set() },
   scope: 'moji', view: 'plan', y: new Date().getFullYear(), m: new Date().getMonth(), selDay: null,
-  pick: null, tab: 'todo', listLimit: 300, loaded: false
+  pick: null, tab: 'todo', listLimit: 300, loaded: false, showFriends: true
 };
 try {
   const ui = JSON.parse(lsGet(LS_UI) || '{}');
   if (['plan', 'mesec', 'godina', 'lista'].includes(ui.view)) S.view = ui.view;
   if (['moji', 'svi'].includes(ui.scope)) S.scope = ui.scope;
+  if (ui.showFriends === false) S.showFriends = false;
 } catch {}
-const saveUi = () => lsSet(LS_UI, JSON.stringify({ view: S.view, scope: S.scope }));
+const saveUi = () => lsSet(LS_UI, JSON.stringify({ view: S.view, scope: S.scope, showFriends: S.showFriends }));
 
 function rebuild() {
   S.rokovi.sort((a, b) => (a.meta.od || '').localeCompare(b.meta.od || ''));
@@ -1107,7 +1172,7 @@ function profileSummary(p) {
 function renderSide() {
   const p = prof();
   $('#profileBox').innerHTML = p
-    ? `<div class="profile"><span class="pic"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M3.0916 10.3634L9.78281 13.5004C11.2038 14.1665 12.7963 14.1665 14.2173 13.5004L20.9084 10.3634C22.3639 9.68105 22.3639 7.31899 20.9084 6.63664L14.2172 3.49965C12.7962 2.83345 11.2037 2.83345 9.78272 3.49965L3.0916 6.63659C1.63614 7.31895 1.63613 9.68101 3.0916 10.3634Z"/><path d="M2 8.5V14"/><path d="M19 11.5V16.6254C19 17.6334 18.4965 18.5772 17.6147 19.0656C16.1463 19.8787 13.796 21 12 21C10.204 21 7.8537 19.8787 6.38533 19.0656C5.5035 18.5772 5 17.6334 5 16.6254V11.5"/></g></svg></span><div class="pi"><div class="pt">${esc(p.nivo)} · ${p.godina}. godina</div><div class="ps" title="${esc(NIVO_NAZIV[p.nivo] || '')}">${esc([p.modul ? 'modul ' + p.modul : 'zajednički predmeti', 'ak. ' + p.akred].join(' · '))}</div></div><button class="iconbtn sm" data-open-settings aria-label="Izmeni profil" title="Izmeni profil"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M14.3601 4.07866L15.2869 3.15178C16.8226 1.61607 19.3125 1.61607 20.8482 3.15178C22.3839 4.68748 22.3839 7.17735 20.8482 8.71306L19.9213 9.63993M14.3601 4.07866C14.3601 4.07866 14.4759 6.04828 16.2138 7.78618C17.9517 9.52407 19.9213 9.63993 19.9213 9.63993M19.9213 9.63993L11.4001 18.1612C10.8229 18.7383 10.5344 19.0269 10.2162 19.2751C9.84082 19.5679 9.43469 19.8189 9.00498 20.0237C8.6407 20.1973 8.25352 20.3263 7.47918 20.5844L4.19792 21.6782L3.39584 21.9456C3.01478 22.0726 2.59466 21.9734 2.31063 21.6894C2.0266 21.4053 1.92743 20.9852 2.05445 20.6042L2.32181 19.8021L3.41556 16.5208C3.67368 15.7465 3.80273 15.3593 3.97634 14.995C4.18114 14.5653 4.43213 14.1592 4.7249 13.7838C4.97308 13.4656 5.26166 13.1771 5.83882 12.5999L14.3601 4.07866M4.19792 21.6782L2.32181 19.8021"/></svg></button></div>`
+    ? `<div class="profile">${p.ime ? avatarHtml({ uid: Me.uid, ...p }, 40) : '<span class="pic"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M3.0916 10.3634L9.78281 13.5004C11.2038 14.1665 12.7963 14.1665 14.2173 13.5004L20.9084 10.3634C22.3639 9.68105 22.3639 7.31899 20.9084 6.63664L14.2172 3.49965C12.7962 2.83345 11.2037 2.83345 9.78272 3.49965L3.0916 6.63659C1.63614 7.31895 1.63613 9.68101 3.0916 10.3634Z"/><path d="M2 8.5V14"/><path d="M19 11.5V16.6254C19 17.6334 18.4965 18.5772 17.6147 19.0656C16.1463 19.8787 13.796 21 12 21C10.204 21 7.8537 19.8787 6.38533 19.0656C5.5035 18.5772 5 17.6334 5 16.6254V11.5"/></g></svg></span>'}<div class="pi"><div class="pt">${p.ime ? esc(fullName(p)) : `${esc(p.nivo)} · ${p.godina}. godina`}</div><div class="ps" title="${esc(NIVO_NAZIV[p.nivo] || '')}">${esc([p.ime ? `${p.nivo} · ${p.godina}. godina` : null, p.modul ? 'modul ' + p.modul : 'zajednički predmeti', p.ime ? null : 'ak. ' + p.akred].filter(Boolean).join(' · '))}</div></div><button class="iconbtn sm" data-open-settings aria-label="Izmeni profil" title="Izmeni profil"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M14.3601 4.07866L15.2869 3.15178C16.8226 1.61607 19.3125 1.61607 20.8482 3.15178C22.3839 4.68748 22.3839 7.17735 20.8482 8.71306L19.9213 9.63993M14.3601 4.07866C14.3601 4.07866 14.4759 6.04828 16.2138 7.78618C17.9517 9.52407 19.9213 9.63993 19.9213 9.63993M19.9213 9.63993L11.4001 18.1612C10.8229 18.7383 10.5344 19.0269 10.2162 19.2751C9.84082 19.5679 9.43469 19.8189 9.00498 20.0237C8.6407 20.1973 8.25352 20.3263 7.47918 20.5844L4.19792 21.6782L3.39584 21.9456C3.01478 22.0726 2.59466 21.9734 2.31063 21.6894C2.0266 21.4053 1.92743 20.9852 2.05445 20.6042L2.32181 19.8021L3.41556 16.5208C3.67368 15.7465 3.80273 15.3593 3.97634 14.995C4.18114 14.5653 4.43213 14.1592 4.7249 13.7838C4.97308 13.4656 5.26166 13.1771 5.83882 12.5999L14.3601 4.07866M4.19792 21.6782L2.32181 19.8021"/></svg></button></div>`
     : `<div class="profile"><div class="pi"><div class="pt">Podesi profil</div><div class="ps">Studije, godina, modul i ispiti koji su ti ostali.</div></div><button class="btn primary sm" data-open-settings>Podesi</button></div>`;
 
   const box = $('#myBox');
@@ -1129,7 +1194,8 @@ function renderSide() {
           ? `<b>${fmtShort(s.plan.datum)} ${s.plan.vreme}</b>${s.conf ? ` · <span style="color:var(--${s.conf === 'major' ? 'bad' : 'warn'})">${s.conf === 'major' ? 'isto vreme' : 'isti dan'}</span>` : ''}`
           : s.stale ? 'Termin više ne postoji, izaberi ponovo'
           : s.inst.length ? termina(s.inst.length) + ' u rokovima' : 'nema termina u učitanim rokovima';
-        items += `<button class="mi${S.pick === s.sifra ? ' on' : ''}" data-pick="${esc(s.sifra)}"><span class="st ${st}"></span><span class="mt"><span class="mn">${esc(s.predmet)}</span><span class="mm">${meta}</span></span></button>`;
+        const fw = S.showFriends ? friendsWithSubject(s) : [];
+        items += `<button class="mi${S.pick === s.sifra ? ' on' : ''}" data-pick="${esc(s.sifra)}"><span class="st ${st}"></span><span class="mt"><span class="mn">${esc(s.predmet)}</span><span class="mm">${meta}</span></span>${fw.length ? avatarStack(fw, 20, 2) : ''}</button>`;
       }
     }
     box.innerHTML = `
@@ -1144,6 +1210,7 @@ function renderSide() {
 
   let vo = '';
   if (p) vo += `<label class="switch" for="scopeSw">Prikaži i ostale ispite<input type="checkbox" id="scopeSw" ${S.scope === 'svi' ? 'checked' : ''}></label>`;
+  if (p && FR.friends.length) vo += `<label class="switch" for="friendsSw">Prikaži ispite prijatelja<input type="checkbox" id="friendsSw" ${S.showFriends ? 'checked' : ''}></label>`;
   if (S.rokovi.length > 1) {
     vo += `<div class="flabel" style="margin-top:6px">Rokovi <button data-clear-rok ${S.f.rok.size ? '' : 'hidden'}>poništi</button></div><div class="chips">` +
       S.rokovi.map(r => `<button class="chip" data-rok="${esc(r.meta.id)}" aria-pressed="${S.f.rok.has(r.meta.id)}" style="--c:${S.rokColor[r.meta.id]}"><span class="dot"></span>${esc(rokName(r.meta.id))}</button>`).join('') + '</div>';
@@ -1162,6 +1229,7 @@ $('#filters').addEventListener('click', e => {
 });
 $('#filters').addEventListener('change', e => {
   if (e.target.id === 'scopeSw') { S.scope = e.target.checked ? 'svi' : 'moji'; saveUi(); refresh(); }
+  if (e.target.id === 'friendsSw') { S.showFriends = e.target.checked; saveUi(); refresh(); }
 });
 $('#filtersToggle').addEventListener('click', e => {
   const f = $('#filters'); const open = f.classList.toggle('collapsed') === false; e.currentTarget.setAttribute('aria-expanded', open);
@@ -1304,6 +1372,7 @@ function openConfirm(sifra, inst) {
     </div>
     ${s.plan && !isCur ? `<p class="muted" style="font-size:13.5px">Trenutno zakazan termin, ${fmtShort(s.plan.datum)} u ${s.plan.vreme}, biće zamenjen ovim.</p>` : ''}
     ${conf}
+    ${(() => { const fw = friendsOnTerm(s, inst); return fw.length ? `<div class="cstate friends">${avatarStack(fw, 24, 4)}<span><b>${esc(fw.map(f => f.ime || fullName(f)).join(', '))}</b> ${fw.length === 1 ? 'polaže' : 'polažu'} ovaj ispit u istom terminu.</span></div>` : ''; })()}
     <div class="actions"><button class="btn" data-cfx="cancel">Odustani</button>${isCur ? '' : `<button class="btn ${lvl === 'major' ? 'danger-solid' : 'primary'}" data-cfx="ok">${lvl === 'major' ? 'Zakaži svejedno' : s.plan ? 'Prebaci termin' : 'Zakaži ispit'}</button>`}</div>`;
   if (!$('#conflictDlg').open) $('#conflictDlg').showModal();
   setTimeout(() => { const b = $(lvl === 'major' ? '[data-cfx="cancel"]' : '[data-cfx="ok"]') || $('[data-cfx="cancel"]'); b && b.focus(); }, 30);
@@ -1375,7 +1444,7 @@ function renderPlan() {
       h += `<div class="titem">
         <div class="dbadge ${s.conf || ''}${past ? ' past' : ''}"><span>${DANI_KRATKO[d.getDay()]}</span><b>${d.getDate()}</b><span>${MES_KRATKO[d.getMonth()]}</span></div>
         <div class="tinfo"><div class="tn">${esc(s.predmet)}</div>
-          <div class="tm"><span class="mono"><b style="color:var(--ink)">${s.plan.vreme}</b></span><span>${s.sem}. sem.</span>${rokTag(s.plan.rokId)}<span>${countdown(s.plan.datum)}</span></div>
+          <div class="tm"><span class="mono"><b style="color:var(--ink)">${s.plan.vreme}</b></span><span>${s.sem}. sem.</span>${rokTag(s.plan.rokId)}<span>${countdown(s.plan.datum)}</span>${(() => { const fw = friendsOnTerm(s, s.plan); return fw.length ? `<span class="fwith">${avatarStack(fw, 20, 3)} sa ${esc(fw.map(f => f.ime || fullName(f)).join(', '))}</span>` : ''; })()}</div>
           ${s.conf ? `<div class="note ${s.conf}" style="font-size:12.5px;margin-top:4px;font-weight:600">${s.conf === 'major' ? 'Konflikt' : 'Upozorenje'}: ${esc(conflictText(s.confWith).replace(/^I/, 'i'))}</div>` : ''}
         </div>
         <div class="tact"><button class="btn sm" data-pick="${esc(s.sifra)}">Promeni</button><button class="iconbtn" style="width:36px;height:36px" data-unplan="${esc(s.sifra)}" aria-label="Ukloni termin" title="Ukloni termin"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="M10 21.75H14C17.7712 21.75 19.6569 21.75 20.8284 20.5784C22 19.4069 22 17.5212 22 13.75V11.75C22 7.97876 22 6.09315 20.8284 4.92157C19.6569 3.75 17.7712 3.75 14 3.75H10C6.22876 3.75 4.34315 3.75 3.17157 4.92157C2 6.09315 2 7.97876 2 11.75V13.75C2 17.5212 2 19.4069 3.17157 20.5784C4.34315 21.75 6.22876 21.75 10 21.75Z"/><path d="M2.03516 8.75H21.965"/><path d="M7 3.78496V2.25"/><path d="M17 3.78496V2.25"/><path d="M10 17.25L12 15.25M12 15.25L14 13.25M12 15.25L14 17.25M12 15.25L10 13.25"/></g></svg></button></div>
@@ -1438,6 +1507,11 @@ function renderMonth() {
         for (const [t, n] of Object.entries(slots).sort()) inner += `<div class="slot"><b>${t}</b>${n}</div>`;
       }
       clickable = list.length || pl.length;
+    }
+    if (S.showFriends && FEX_BY_DATE[k]) {
+      const fx = FEX_BY_DATE[k], rel = pick ? fx.filter(x => sameSubject(pick, x.sifra, x.n)) : fx;
+      const people = uniq(rel.map(x => x.f));
+      if (people.length) { inner += `<div class="favs">${avatarStack(people, 20, 3)}${pick ? '<span>isti ispit</span>' : ''}</div>`; if (!pick) { clickable = true; if (!cls.includes('has')) cls.push('has'); } }
     }
     const c = cls.filter(Boolean).join(' ');
     h += clickable ? `<button class="${c}" ${attr} aria-label="${fmtDay(k)}">${inner}</button>` : `<div class="${c}">${inner}</div>`;
@@ -1515,6 +1589,7 @@ function schedRow(s, inst, opts = {}) {
   return `<div class="xrow ${isCur ? 'mine' : ''} ${(isCur ? s.conf : lvl) || ''}"><div class="xi">
     <div class="xn">${opts.dateTitle ? `${cap(fmtShort(inst.datum))} · ${inst.vreme}` : esc(s.predmet)}</div>
     <div class="xm">${opts.dateTitle ? '' : `<span class="tag mono">${inst.vreme}</span>`}<span class="tag">${s.sem}. sem.</span>${rokTag(inst.rokId)}${opts.dateTitle ? `<span class="tag">${countdown(inst.datum)}</span>` : ''}</div>
+    ${(() => { const fw = S.showFriends ? friendsOnTerm(s, inst) : []; return fw.length ? `<div class="fnote">${avatarStack(fw, 18, 3)}<span>${esc(fw.map(f => f.ime || fullName(f)).join(', '))} ${fw.length === 1 ? 'polaže' : 'polažu'} tada</span></div>` : ''; })()}
     ${!isCur && s.plan && !opts.dateTitle ? `<div class="note muted">Sada zakazano: ${fmtShort(s.plan.datum)} u ${s.plan.vreme}</div>` : ''}
     ${(isCur ? s.confWith.length : cs.length) ? `<div class="note ${isCur ? s.conf : lvl}">${esc(conflictText(isCur ? s.confWith : cs))}</div>` : ''}
   </div>${btn}</div>`;
@@ -1557,7 +1632,19 @@ function renderDay() {
       }
       h += '</div>';
     }
-  } else if (!pl.length) h += `<div class="empty">Nema ispita ovog dana.</div>`;
+  }
+  const fx = S.showFriends ? (FEX_BY_DATE[k] || []) : [];
+  if (fx.length) {
+    h += `<div class="dsec"><h4>Prijatelji ovog dana</h4>`;
+    for (const x of fx.slice().sort((a, b) => a.vreme.localeCompare(b.vreme))) {
+      const m = myInstFor(x);
+      const together = m && m.s && m.s.plan && m.s.plan.datum === x.datum && m.s.plan.vreme === x.vreme;
+      const act = together ? `<span class="pill ok">Zajedno</span>` : m && m.inst ? `<button class="btn primary sm" data-fjoin2="${esc(m.inst.id)}" data-fsifra="${esc(m.s.sifra)}">Pridruži se</button>` : '';
+      h += `<div class="xrow">${avatarHtml(x.f, 34)}<div class="xi"><div class="xn">${esc(x.n)}</div><div class="xm"><span class="tag mono">${x.vreme}</span><span class="tag">${esc(fullName(x.f))}</span></div></div>${act}</div>`;
+    }
+    h += '</div>';
+  }
+  if (!list.length && !pl.length && !fx.length) h += `<div class="empty">Nema ispita ovog dana.</div>`;
   p.innerHTML = h;
 }
 
@@ -1583,6 +1670,8 @@ function refresh() {
   renderView();
   renderDay();
   storeInfo();
+  renderMeBtn();
+  renderFriendsUi();
 }
 
 document.querySelector('.toolbar .seg').addEventListener('click', e => {
@@ -1613,6 +1702,8 @@ document.addEventListener('click', e => {
     return;
   }
   const d = t.closest('[data-day]'); if (d) { selectDay(d.dataset.day); return; }
+  const fj = t.closest('[data-fjoin2]'); if (fj) { const ex = examById(fj.dataset.fjoin2); if (ex) schedule(fj.dataset.fsifra, ex); return; }
+  const fo = t.closest('[data-fopen-main]'); if (fo) { openFriends(fo.dataset.fopenMain); return; }
   const sc = t.closest('[data-sched]');
   if (sc) { const ex = examById(sc.dataset.sched); if (ex && MYMAP.has(ex.sifra)) schedule(ex.sifra, ex); return; }
   const pk = t.closest('[data-pick]'); if (pk && !t.closest('#filters')) { startPick(pk.dataset.pick); return; }
@@ -1635,9 +1726,12 @@ document.addEventListener('keydown', e => {
 });
 $('#settingsBtn').addEventListener('click', () => openWizard(false, null));
 
-// ================= Čarobnjak za podešavanje =================
-const W = { step: 0, d: null, first: false, q: '', origin: null };
-const STEP_LABEL = { nivo: 'Studije', akred: 'Akreditacija', godina: 'Godina', modul: 'Modul', ispiti: 'Ispiti', kraj: 'Gotovo' };
+// ================= Čarobnjak (prvi put) i podešavanja (kasnije) =================
+// mode 'onboard': koraci profil → studije → … → gotovo. mode 'settings': tabovi Profil / Studije / Ispiti / Privatnost.
+const W = { step: 0, d: null, first: false, q: '', mode: 'onboard', tab: 'profil', note: '' };
+const STEP_LABEL = { profil: 'Profil', nivo: 'Studije', akred: 'Akreditacija', godina: 'Godina', modul: 'Modul', ispiti: 'Ispiti', kraj: 'Gotovo' };
+const TAB_LABEL = { profil: 'Profil', studije: 'Studije', ispiti: 'Ispiti', privatnost: 'Privatnost' };
+const FAKULTET_DEFAULT = 'Elektronski fakultet u Nišu';
 const keyOf = d => [d.nivo, d.akred, d.godina, d.modul].join('|');
 function uniqSubjects(fn) { const m = new Map(); for (const e of S.exams) if (fn(e) && !m.has(e.sifra)) m.set(e.sifra, e); return [...m.values()]; }
 function nivoOpts() {
@@ -1665,38 +1759,42 @@ function modulOpts(nivo, akred, godina) {
   });
 }
 function wizSteps() {
-  const d = W.d, st = ['nivo', 'akred'];
+  const d = W.d, st = ['profil', 'nivo', 'akred'];
   if (!(d.nivo && d.akred) || godinaOpts(d.nivo, d.akred).length > 1) st.push('godina');
   if (!(d.nivo && d.akred && d.godina) || modulOpts(d.nivo, d.akred, d.godina).length) st.push('modul');
   st.push('ispiti', 'kraj');
   return st;
 }
+const needsModul = d => !!(d.nivo && d.akred && d.godina && modulOpts(d.nivo, d.akred, d.godina).length);
 function wizValid(step) {
   const d = W.d;
+  if (step === 'profil') return !!(d.ime.trim() && d.prezime.trim());
   if (step === 'nivo') return !!d.nivo;
   if (step === 'akred') return !!d.akred;
   if (step === 'godina') return !!d.godina;
   if (step === 'modul') return !!d.modul;
+  if (step === 'studije') return !!(d.nivo && d.akred && d.godina && (d.modul || !needsModul(d)));
   return true;
 }
-// pametni podrazumevani izbor: obavezni i završni predmeti iz tekuće godine; ranije označeni ostaju
-function defaultRemaining(cat, prev) {
+// pametni podrazumevani izbor: obavezni i završni predmeti iz tekuće godine
+function defaultRemaining(cat) {
   const g = W.d.godina, set = new Set();
-  for (const s of cat.values()) {
-    if (prev) { if (prev.has(s.sifra)) set.add(s.sifra); }
-    else if (Math.ceil(s.sem / 2) === g && s.tip !== 'I') set.add(s.sifra);
-  }
+  for (const s of cat.values()) if (Math.ceil(s.sem / 2) === g && s.tip !== 'I') set.add(s.sifra);
   return set;
 }
 function openWizard(first, startAt) {
   if (!S.exams.length) { toast('Prvo dodaj bar jedan ispitni rok (PDF).'); openUpload(); return; }
   const p = prof();
-  W.first = first; W.q = '';
-  W.d = p ? { nivo: p.nivo, akred: p.akred, godina: p.godina, modul: p.modul || null, remaining: new Set(Object.keys(p.remaining || {})), remKey: keyOf(p) }
-    : { nivo: null, akred: null, godina: null, modul: null, remaining: null, remKey: null };
-  const steps = wizSteps();
-  W.step = startAt && steps.includes(startAt) ? steps.indexOf(startAt) : 0;
-  W.origin = startAt;
+  W.first = first; W.q = ''; W.note = '';
+  W.mode = first ? 'onboard' : 'settings';
+  W.d = {
+    ime: (p && p.ime) || '', prezime: (p && p.prezime) || '', indeks: (p && p.indeks) || '', fakultet: (p && p.fakultet) || FAKULTET_DEFAULT,
+    foto: (p && p.foto) || '', share: !p || p.share !== false,
+    nivo: p ? p.nivo || null : null, akred: p ? p.akred || null : null, godina: p ? p.godina || null : null, modul: p ? p.modul || null : null,
+    remaining: p ? new Set(Object.keys(p.remaining || {})) : null, remKey: p && p.nivo ? keyOf(p) : null
+  };
+  if (W.mode === 'onboard') { const steps = wizSteps(); W.step = startAt && steps.includes(startAt) ? steps.indexOf(startAt) : 0; }
+  else W.tab = startAt === 'ispiti' ? 'ispiti' : startAt === 'studije' ? 'studije' : startAt === 'privatnost' ? 'privatnost' : 'profil';
   renderWizard();
   if (!$('#setupDlg').open) $('#setupDlg').showModal();
 }
@@ -1710,14 +1808,13 @@ function choose(field, value) {
     if (field === 'akred') { d.godina = null; d.modul = null; }
     if (field === 'godina' && d.modul && !modulOpts(d.nivo, d.akred, d.godina).some(o => o.v === d.modul)) d.modul = null;
   }
-  // automatski izbori kad postoji samo jedna mogućnost
   if (d.nivo && d.akred && !d.godina) { const g = godinaOpts(d.nivo, d.akred); if (g.length === 1) d.godina = g[0]; }
   if (d.nivo && d.akred && d.godina) {
     const mo = modulOpts(d.nivo, d.akred, d.godina);
     if (!mo.length) d.modul = null; else if (mo.length === 1 && !d.modul) d.modul = mo[0].v;
   }
   renderWizard();
-  if (changed) setTimeout(() => wizGo(1), 240);
+  if (changed && W.mode === 'onboard') setTimeout(() => wizGo(1), 240);
 }
 function wizGo(delta) {
   const steps = wizSteps();
@@ -1731,63 +1828,113 @@ function wizCatalog() {
   const d = W.d, cat = buildCatalog(d);
   if (W.d.remKey !== keyOf(d) || !W.d.remaining) {
     // promenjen profil: zadrži ranije označene koji i dalje važe + obavezni iz tekuće godine
-    const set = defaultRemaining(cat, null);
+    const set = defaultRemaining(cat);
     if (W.d.remaining) for (const s of W.d.remaining) if (cat.has(s)) set.add(s);
     W.d.remaining = set;
     W.d.remKey = keyOf(d);
   }
   return cat;
 }
+
+// ---- delovi forme ----
+const choiceBtn = (field, v, big, sub, extra) => `<button type="button" class="choice" data-choose="${field}" data-v="${esc(v)}" aria-pressed="${String(W.d[field]) === String(v)}"><span class="ck"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13L9 17L19 7"/></svg></span><span class="cb">${big}</span>${sub ? `<span class="cs">${sub}</span>` : ''}${extra ? `<span class="cx">${extra}</span>` : ''}</button>`;
+const chipBtn = (field, v, label, title) => `<button type="button" class="chip" data-choose="${field}" data-v="${esc(v)}" aria-pressed="${String(W.d[field]) === String(v)}"${title ? ` title="${esc(title)}"` : ''}>${label}</button>`;
+function profileFormHtml() {
+  const d = W.d;
+  return `<div class="pform">
+    <div class="photo">${avatarHtml({ uid: Me.uid, ime: d.ime, prezime: d.prezime, foto: d.foto }, 84)}
+      <div class="pbtns"><div class="row"><label class="btn sm" for="fFoto"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="13" r="3"/><path d="M14.2222 21H9.77778C6.65675 21 5.09624 21 3.97524 20.2646C3.48995 19.9462 3.07328 19.5371 2.74902 19.0607C2 17.9601 2 16.4279 2 13.3636C2 10.2994 2 8.76721 2.74902 7.6666C3.07328 7.19014 3.48995 6.78104 3.97524 6.46268C4.69555 5.99013 5.59733 5.82123 6.978 5.76086C7.63685 5.76086 8.20412 5.27068 8.33333 4.63636C8.52715 3.68489 9.37805 3 10.3663 3H13.6337C14.6219 3 15.4728 3.68489 15.6667 4.63636C15.7959 5.27068 16.3631 5.76086 17.022 5.76086C18.4027 5.82123 19.3044 5.99013 20.0248 6.46268C20.51 6.78104 20.9267 7.19014 21.251 7.6666C22 8.76721 22 10.2994 22 13.3636C22 16.4279 22 17.9601 21.251 19.0607C20.9267 19.5371 20.51 19.9462 20.0248 20.2646C18.9038 21 17.3433 21 14.2222 21Z"/><path d="M19 10H18"/></g></svg> ${d.foto ? 'Promeni sliku' : 'Dodaj sliku'}</label>${d.foto ? '<button type="button" class="btn ghost sm" data-foto-del>Ukloni</button>' : ''}</div>
+        <span class="muted">Opciono. Bez slike prikazujemo inicijale.</span><input type="file" id="fFoto" accept="image/*" hidden></div></div>
+    <div class="form-row">
+      <label class="field" for="fIme">Ime<input id="fIme" data-pf="ime" value="${esc(d.ime)}" autocomplete="given-name" maxlength="40" required></label>
+      <label class="field" for="fPrezime">Prezime<input id="fPrezime" data-pf="prezime" value="${esc(d.prezime)}" autocomplete="family-name" maxlength="40" required></label>
+    </div>
+    <div class="form-row">
+      <label class="field" for="fIndeks">Broj indeksa<input id="fIndeks" data-pf="indeks" value="${esc(d.indeks)}" placeholder="npr. 18452" maxlength="20" autocomplete="off"></label>
+      <label class="field" for="fFak">Fakultet<input id="fFak" data-pf="fakultet" value="${esc(d.fakultet)}" list="fakList" maxlength="80" autocomplete="organization"></label>
+    </div>
+    <datalist id="fakList"><option value="${FAKULTET_DEFAULT}"></option></datalist>
+  </div>`;
+}
+function studijeHtml() {
+  const d = W.d;
+  let h = `<div class="sgroup"><h3 class="sec">Studije</h3><div class="chips">${nivoOpts().map(o => chipBtn('nivo', o.v, `${o.v}`, NIVO_NAZIV[o.v])).join('')}</div></div>`;
+  if (d.nivo) h += `<div class="sgroup"><h3 class="sec">Akreditacija</h3><div class="chips">${akredOpts(d.nivo).map(o => chipBtn('akred', o.v, `${o.v} <span class="n">šifre ${esc(o.pref)}…</span>`)).join('')}</div></div>`;
+  if (d.nivo && d.akred) h += `<div class="sgroup"><h3 class="sec">Godina</h3><div class="chips">${godinaOpts(d.nivo, d.akred).map(g => chipBtn('godina', g, `${g}. godina`)).join('')}</div></div>`;
+  if (needsModul(d)) h += `<div class="sgroup"><h3 class="sec">Modul</h3><div class="chips">${modulOpts(d.nivo, d.akred, d.godina).map(o => chipBtn('modul', o.v, `${o.v} <span class="n">${o.n}</span>`, o.ex.join(' · '))).join('')}</div></div>`;
+  if (!wizValid('studije')) h += `<div class="muted">Izaberi sve stavke da bi mogao/la da sačuvaš.</div>`;
+  else if (W.d.remKey && W.d.remKey !== keyOf(d)) h += `<div class="hint"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 17V11"/><path stroke-linejoin="round" d="M12 8H12.0001"/></g></svg><span>Promenio/la si studije. U kartici „Ispiti" smo zadržali ispite koji i dalje važe i dodali obavezne iz ${d.godina}. godine.</span></div>`;
+  return h;
+}
+function ispitiToolsHtml() {
+  return `<div class="picktools"><div class="search">${SEARCH_ICON}<input id="wq" type="search" placeholder="Pronađi predmet" autocomplete="off" aria-label="Pronađi predmet" value="${esc(W.q)}"></div>
+    <button type="button" class="btn sm" data-wbulk="cur">Samo tekuća godina</button><button type="button" class="btn sm" data-wbulk="none">Poništi sve</button></div>
+    <div id="wizList"></div>`;
+}
+function privatnostHtml() {
+  const d = W.d;
+  return `<label class="switch big" for="fShare"><span><b>Deli moj plan sa prijateljima</b><br><span class="muted">Prijatelji vide koje ispite planiraš i kada, pa možete da se dogovorite da polažete zajedno.</span></span><input type="checkbox" id="fShare" ${d.share ? 'checked' : ''}></label>
+    <div class="hint"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M8 22H16C18.8284 22 20.2426 22 21.1213 21.1213C22 20.2426 22 18.8284 22 16C22 13.1716 22 11.7574 21.1213 10.8787C20.2426 10 18.8284 10 16 10H8C5.17157 10 3.75736 10 2.87868 10.8787C2 11.7574 2 13.1716 2 16C2 18.8284 2 20.2426 2.87868 21.1213C3.75736 22 5.17157 22 8 22Z"/><path d="M12 14V18"/><path d="M6 10V8C6 4.68629 8.68629 2 12 2C15.3137 2 18 4.68629 18 8V10"/></g></svg><span>Ime, prezime, broj indeksa, fakultet, slika i (ako je deljenje uključeno) tvoj plan čuvaju se u zajedničkoj bazi aplikacije, da bi te prijatelji pronašli i videli tvoje ispite. U aplikaciji se tuđi planovi prikazuju samo prijateljima, ali podatke tehnički mogu da pročitaju svi koji imaju pristup aplikaciji. Zato ne upisuj ništa što ne želiš da deliš.</span></div>
+    ${Me.mode !== 'db' ? `<div class="banner">Prijatelji rade samo kad je aplikacija otvorena na claude.ai, sa nalogom. Ovde se sve čuva samo u ovom pregledaču.</div>` : ''}`;
+}
+
 function renderWizard() {
-  const steps = wizSteps(), cur = steps[W.step], d = W.d;
-  const stepper = steps.map((s, i) => `<button type="button" class="${i < W.step ? 'done' : ''}${i === W.step ? ' cur' : ''}" ${i < W.step ? `data-wstep="${i}"` : 'tabindex="-1"'}><i></i><span>${STEP_LABEL[s]}</span></button>`).join('');
-  let body = '';
-  const choiceBtn = (field, v, big, sub, extra) => `<button type="button" class="choice" data-choose="${field}" data-v="${esc(v)}" aria-pressed="${String(d[field]) === String(v)}"><span class="ck">${ICON_CHECK}</span><span class="cb">${big}</span>${sub ? `<span class="cs">${sub}</span>` : ''}${extra ? `<span class="cx">${extra}</span>` : ''}</button>`;
-  if (cur === 'nivo') {
-    body = `<h2 id="wizTitle">${W.first ? 'Dobro došao/la! ' : ''}Koje studije pohađaš?</h2><p class="lead">Na osnovu toga prikazujemo samo tvoje predmete i termine. Sve možeš kasnije da promeniš u podešavanjima.</p>
-      <div class="choices big">${nivoOpts().map(o => choiceBtn('nivo', o.v, o.v, esc(NIVO_NAZIV[o.v] || o.v), `${o.n} predmeta u učitanim rokovima`)).join('')}</div>`;
-  } else if (cur === 'akred') {
-    body = `<h2 id="wizTitle">Po kojoj akreditaciji studiraš?</h2><p class="lead">Akreditacija je verzija studijskog programa po kojoj si upisan/a. Lako je prepoznaš po šifri predmeta: svaka akreditacija ima svoju početnu cifru.</p>
-      <div class="choices">${akredOpts(d.nivo).map(o => choiceBtn('akred', o.v, o.v, `šifre počinju sa <b>${esc(o.pref)}…</b>`, o.ex ? `npr. ${esc(o.ex.predmet)} · ${esc(o.ex.sifra)}<br>${o.n} predmeta` : `${o.n} predmeta`)).join('')}</div>`;
-  } else if (cur === 'godina') {
-    body = `<h2 id="wizTitle">Koja si godina?</h2><p class="lead">Prikazaćemo ispite iz ove i svih prethodnih godina, da možeš da označiš i one koje prenosiš.</p>
-      <div class="choices">${godinaOpts(d.nivo, d.akred).map(g => choiceBtn('godina', g, `${g}. godina`, `${2 * g - 1}. i ${2 * g}. semestar`)).join('')}</div>`;
-  } else if (cur === 'modul') {
-    const mo = modulOpts(d.nivo, d.akred, d.godina);
-    body = `<h2 id="wizTitle">Koji je tvoj modul?</h2><p class="lead">Zajednički predmeti svih modula se uvek prikazuju. Ispod oznake modula su primeri njegovih obaveznih predmeta.</p>
-      <div class="choices">${mo.map(o => choiceBtn('modul', o.v, o.v, `${o.n} predmeta`, o.ex.map(esc).join(' · '))).join('')}</div>`;
-  } else if (cur === 'ispiti') {
-    wizCatalog();
-    body = `<h2 id="wizTitle">Koji su ti ispiti ostali?</h2><p class="lead">Unapred smo označili obavezne predmete iz ${d.godina}. godine. Dodaj ispite koje prenosiš iz ranijih godina i izborne predmete koje slušaš.</p>
-      <div class="picktools"><div class="search">${SEARCH_ICON}<input id="wq" type="search" placeholder="Pronađi predmet" autocomplete="off" aria-label="Pronađi predmet" value="${esc(W.q)}"></div>
-        <button type="button" class="btn sm" data-wbulk="cur">Samo tekuća godina</button><button type="button" class="btn sm" data-wbulk="none">Poništi sve</button></div>
-      <div id="wizList"></div>`;
-  } else if (cur === 'kraj') {
-    const cat = wizCatalog();
-    const rem = [...d.remaining].filter(s => cat.has(s));
-    const withT = rem.filter(s => cat.get(s).inst.length).length;
-    body = `<h2 id="wizTitle">Sve je spremno</h2><p class="lead">Tvoj plan se čuva ${Me.mode === 'db' ? 'na tvom nalogu i vidiš ga samo ti' : 'u ovom pregledaču'}.</p>
-      <div class="sumgrid">
-        <div><b>${esc(d.nivo)} · ak. ${d.akred}</b>studije</div>
-        <div><b>${d.godina}. godina</b>${d.modul ? `modul ${esc(d.modul)}` : 'zajednički predmeti'}</div>
-        <div><b>${rem.length}</b>ispita za planiranje</div>
-        <div><b>${withT}</b>ima termin u učitanim rokovima</div>
-      </div>
-      <div class="hint"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 17V11"/><path stroke-linejoin="round" d="M12 8H12.0001"/></g></svg><span>Kako se planira: klikni na ispit u listi „Moji ispiti", pa izaberi jedan od označenih dana u kalendaru. Ako se dva ispita poklope istog dana, dobićeš upozorenje.</span></div>`;
-  }
-  const last = W.step === steps.length - 1, valid = wizValid(cur);
-  $('#wiz').innerHTML = `
-    <div class="wiz-top"><div class="row"><span class="eyebrow">${W.first ? 'Podešavanje profila' : 'Podešavanja'} · korak ${W.step + 1} od ${steps.length}</span>${W.first ? '' : `<button class="iconbtn" data-close aria-label="Zatvori">${ICON_X}</button>`}</div><div class="stepper">${stepper}</div></div>
-    <div class="wiz-body">${body}</div>
-    <div class="wiz-foot">${W.step > 0 ? '<button type="button" class="btn" data-wnav="-1">Nazad</button>' : ''}<span class="grow"></span>
+  const d = W.d;
+  let top = '', body = '', foot = '', cur;
+  if (W.mode === 'onboard') {
+    const steps = wizSteps(); cur = steps[W.step];
+    const stepper = steps.map((s, i) => `<button type="button" class="${i < W.step ? 'done' : ''}${i === W.step ? ' cur' : ''}" ${i < W.step ? `data-wstep="${i}"` : 'tabindex="-1"'}><i></i><span>${STEP_LABEL[s]}</span></button>`).join('');
+    top = `<div class="row"><span class="eyebrow">Podešavanje · korak ${W.step + 1} od ${steps.length}</span></div><div class="stepper">${stepper}</div>`;
+    if (cur === 'profil') {
+      body = `<h2 id="wizTitle">Dobro došao/la! Ko si ti?</h2><p class="lead">Ime i prezime vide tvoji prijatelji u aplikaciji. Broj indeksa i slika nisu obavezni.</p>${profileFormHtml()}`;
+    } else if (cur === 'nivo') {
+      body = `<h2 id="wizTitle">Koje studije pohađaš?</h2><p class="lead">Na osnovu toga prikazujemo samo tvoje predmete i termine. Sve možeš kasnije da promeniš u podešavanjima.</p>
+        <div class="choices big">${nivoOpts().map(o => choiceBtn('nivo', o.v, o.v, esc(NIVO_NAZIV[o.v] || o.v), `${o.n} predmeta u učitanim rokovima`)).join('')}</div>`;
+    } else if (cur === 'akred') {
+      body = `<h2 id="wizTitle">Po kojoj akreditaciji studiraš?</h2><p class="lead">Akreditacija je verzija studijskog programa po kojoj si upisan/a. Lako je prepoznaš po šifri predmeta: svaka akreditacija ima svoju početnu cifru.</p>
+        <div class="choices">${akredOpts(d.nivo).map(o => choiceBtn('akred', o.v, o.v, `šifre počinju sa <b>${esc(o.pref)}…</b>`, o.ex ? `npr. ${esc(o.ex.predmet)} · ${esc(o.ex.sifra)}<br>${o.n} predmeta` : `${o.n} predmeta`)).join('')}</div>`;
+    } else if (cur === 'godina') {
+      body = `<h2 id="wizTitle">Koja si godina?</h2><p class="lead">Prikazaćemo ispite iz ove i svih prethodnih godina, da možeš da označiš i one koje prenosiš.</p>
+        <div class="choices">${godinaOpts(d.nivo, d.akred).map(g => choiceBtn('godina', g, `${g}. godina`, `${2 * g - 1}. i ${2 * g}. semestar`)).join('')}</div>`;
+    } else if (cur === 'modul') {
+      body = `<h2 id="wizTitle">Koji je tvoj modul?</h2><p class="lead">Zajednički predmeti svih modula se uvek prikazuju. Ispod oznake modula su primeri njegovih obaveznih predmeta.</p>
+        <div class="choices">${modulOpts(d.nivo, d.akred, d.godina).map(o => choiceBtn('modul', o.v, o.v, `${o.n} predmeta`, o.ex.map(esc).join(' · '))).join('')}</div>`;
+    } else if (cur === 'ispiti') {
+      wizCatalog();
+      body = `<h2 id="wizTitle">Koji su ti ispiti ostali?</h2><p class="lead">Unapred smo označili obavezne predmete iz ${d.godina}. godine. Dodaj ispite koje prenosiš iz ranijih godina i izborne predmete koje slušaš.</p>${ispitiToolsHtml()}`;
+    } else if (cur === 'kraj') {
+      const cat = wizCatalog(), rem = [...d.remaining].filter(s => cat.has(s)), withT = rem.filter(s => cat.get(s).inst.length).length;
+      body = `<h2 id="wizTitle">Sve je spremno, ${esc(d.ime.trim())}</h2><p class="lead">Tvoj plan se čuva ${Me.mode === 'db' ? 'na tvom nalogu' : 'u ovom pregledaču'}. Prijatelje dodaješ preko dugmeta „Prijatelji" u zaglavlju.</p>
+        <div class="sumgrid">
+          <div><b>${esc(d.nivo)} · ak. ${d.akred}</b>studije</div>
+          <div><b>${d.godina}. godina</b>${d.modul ? `modul ${esc(d.modul)}` : 'zajednički predmeti'}</div>
+          <div><b>${rem.length}</b>ispita za planiranje</div>
+          <div><b>${withT}</b>ima termin u učitanim rokovima</div>
+        </div>
+        <div class="hint"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 17V11"/><path stroke-linejoin="round" d="M12 8H12.0001"/></g></svg><span>Kako se planira: klikni na ispit u listi „Moji ispiti", pa izaberi jedan od označenih dana u kalendaru. Pre zakazivanja vidiš da li se termin poklapa sa nekim drugim ispitom.</span></div>`;
+    }
+    const last = W.step === steps.length - 1, valid = wizValid(cur);
+    foot = `${W.step > 0 ? '<button type="button" class="btn" data-wnav="-1">Nazad</button>' : ''}<span class="grow"></span>
       ${cur === 'ispiti' ? `<span class="muted" id="wcount"></span>` : ''}
-      ${!W.first && W.step < steps.length - 1 && valid && steps.slice(W.step).every(s => wizValid(s)) ? '<button type="button" class="btn" data-wfinish>Sačuvaj</button>' : ''}
-      ${last ? '<button type="button" class="btn primary" data-wfinish>Počni planiranje</button>' : `<button type="button" class="btn primary" data-wnav="1" ${valid ? '' : 'disabled'}>Dalje</button>`}</div>`;
-  if (cur === 'ispiti') {
-    renderWizList();
-    $('#wq').addEventListener('input', e => { W.q = e.target.value; renderWizList(); });
+      ${last ? '<button type="button" class="btn primary" data-wfinish>Počni planiranje</button>' : `<button type="button" class="btn primary" data-wnav="1" id="wNext" ${valid ? '' : 'disabled'}>Dalje</button>`}`;
+  } else {
+    cur = W.tab;
+    top = `<div class="row"><h2 id="wizTitle" style="margin:0;font-size:24px">Podešavanja</h2><button class="iconbtn" data-close aria-label="Zatvori"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M19.0068 5L5.00684 19"/><path d="M19 19L5 5"/></g></svg></button></div>
+      <div class="seg tabs" role="tablist">${Object.keys(TAB_LABEL).map(t => `<button type="button" role="tab" data-wtab="${t}" aria-pressed="${t === cur}" aria-selected="${t === cur}">${TAB_LABEL[t]}</button>`).join('')}</div>`;
+    if (W.note) body += `<div class="banner">${esc(W.note)}</div>`;
+    if (cur === 'profil') body += profileFormHtml();
+    else if (cur === 'studije') body += studijeHtml();
+    else if (cur === 'ispiti') { wizCatalog(); body += wizValid('studije') ? ispitiToolsHtml() : `<div class="empty">Prvo izaberi studije u kartici „Studije".</div>`; }
+    else body += privatnostHtml();
+    const ok = wizValid('profil') && wizValid('studije');
+    foot = `<span class="muted" id="wcount"></span><span class="grow"></span>${!wizValid('profil') ? '<span class="warn" style="font-size:13px">Upiši ime i prezime.</span>' : ''}<button type="button" class="btn" data-close>Otkaži</button><button type="button" class="btn primary" data-wfinish id="wSave" ${ok ? '' : 'disabled'}>Sačuvaj</button>`;
   }
-  setTimeout(() => { const f = $('#wiz [aria-pressed="true"]') || $('#wiz .choice') || $('#wq') || $('#wiz [data-wnav="1"], #wiz [data-wfinish]'); f && f.focus({ preventScroll: true }); }, 20);
+  $('#wiz').innerHTML = `<div class="wiz-top">${top}</div><div class="wiz-body">${body}</div><div class="wiz-foot">${foot}</div>`;
+  if ($('#wizList')) { renderWizList(); $('#wq').addEventListener('input', e => { W.q = e.target.value; renderWizList(); }); }
+  setTimeout(() => {
+    const f = (cur === 'profil' && !d.ime ? $('#fIme') : null) || $('#wiz .wiz-body [aria-pressed="true"]') || $('#wiz .choice') || $('#wq') || $('#wiz [data-wnav="1"], #wiz [data-wfinish]');
+    f && f.focus({ preventScroll: true });
+  }, 20);
 }
 function renderWizList() {
   const cat = wizCatalog(), d = W.d, q = fold(W.q || '');
@@ -1802,40 +1949,282 @@ function renderWizList() {
     const list = items.filter(s => s.sem === sem).sort((a, b) => ({ O: 0, Z: 1, I: 2 }[a.tip] - { O: 0, Z: 1, I: 2 }[b.tip]) || a.predmet.localeCompare(b.predmet, 'sr'));
     const allOn = list.every(s => d.remaining.has(s.sifra));
     h += `<div class="semgroup"><div class="sh"><div><b>${sem}. semestar</b><span>${Math.ceil(sem / 2)}. godina${Math.ceil(sem / 2) === d.godina ? ' · tekuća' : ''}</span></div><button type="button" class="linkbtn" data-wsem="${sem}" data-on="${allOn ? 0 : 1}">${allOn ? 'Poništi sve' : 'Označi sve'}</button></div><div class="subjgrid">` +
-      list.map(s => `<button type="button" class="sopt" data-wsub="${esc(s.sifra)}" aria-pressed="${d.remaining.has(s.sifra)}"><span class="box">${ICON_CHECK}</span><span><span class="sn2">${esc(s.predmet)}</span><span class="sm2"><span>${esc(s.sifra)}</span><span>${TIP_NAZIV[s.tip]}</span><span>${s.inst.length ? termina(s.inst.length) : 'bez termina'}</span></span></span></button>`).join('') + '</div></div>';
+      list.map(s => `<button type="button" class="sopt" data-wsub="${esc(s.sifra)}" aria-pressed="${d.remaining.has(s.sifra)}"><span class="box"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13L9 17L19 7"/></svg></span><span><span class="sn2">${esc(s.predmet)}</span><span class="sm2"><span>${esc(s.sifra)}</span><span>${TIP_NAZIV[s.tip]}</span><span>${s.inst.length ? termina(s.inst.length) : 'bez termina'}</span></span></span></button>`).join('') + '</div></div>';
   }
   $('#wizList').innerHTML = h || `<div class="empty">Nema predmeta${words.length ? ' za ovu pretragu' : ' za izabrani profil u učitanim rokovima'}.</div>`;
   const n = [...d.remaining].filter(s => cat.has(s)).length;
-  const c = $('#wcount'); if (c) c.textContent = `Izabrano: ${n}`;
+  const c = $('#wcount'); if (c) c.textContent = `Izabrano ispita: ${n}`;
 }
+function syncWizButtons() {
+  const nx = $('#wNext'); if (nx) nx.disabled = !wizValid(wizSteps()[W.step]);
+  const sv = $('#wSave'); if (sv) sv.disabled = !(wizValid('profil') && wizValid('studije'));
+}
+// sliku smanjujemo na 192×192 (JPEG) da stane u profil
+async function fileToAvatar(file) {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = new Image();
+    await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = url; });
+    const size = 192, c = document.createElement('canvas'); c.width = c.height = size;
+    const m = Math.min(img.naturalWidth, img.naturalHeight);
+    c.getContext('2d').drawImage(img, (img.naturalWidth - m) / 2, (img.naturalHeight - m) / 2, m, m, 0, 0, size, size);
+    return c.toDataURL('image/jpeg', 0.85);
+  } finally { URL.revokeObjectURL(url); }
+}
+$('#wiz').addEventListener('input', e => {
+  const f = e.target.dataset && e.target.dataset.pf; if (!f) return;
+  W.d[f] = e.target.value;
+  if (f === 'ime' || f === 'prezime') { const av = $('#wiz .photo .av'); if (av && !W.d.foto) av.outerHTML = avatarHtml({ uid: Me.uid, ime: W.d.ime, prezime: W.d.prezime }, 84); }
+  syncWizButtons();
+});
+$('#wiz').addEventListener('change', async e => {
+  if (e.target.id === 'fShare') { W.d.share = e.target.checked; return; }
+  if (e.target.id === 'fFoto' && e.target.files[0]) {
+    try { W.d.foto = await fileToAvatar(e.target.files[0]); renderWizard(); }
+    catch { toast('Ovu sliku nije moguće učitati. Probaj JPG ili PNG.'); }
+  }
+});
 $('#wiz').addEventListener('click', e => {
   const t = e.target;
   const ch = t.closest('[data-choose]'); if (ch) { const f = ch.dataset.choose; choose(f, f === 'godina' || f === 'akred' ? +ch.dataset.v : ch.dataset.v); return; }
   const nv = t.closest('[data-wnav]'); if (nv) { wizGo(+nv.dataset.wnav); return; }
   const ws = t.closest('[data-wstep]'); if (ws) { W.step = +ws.dataset.wstep; renderWizard(); return; }
+  const tb = t.closest('[data-wtab]'); if (tb) { W.tab = tb.dataset.wtab; W.q = ''; renderWizard(); return; }
+  if (t.closest('[data-foto-del]')) { W.d.foto = ''; renderWizard(); return; }
   const sub = t.closest('[data-wsub]'); if (sub) { const r = W.d.remaining, k = sub.dataset.wsub; r.has(k) ? r.delete(k) : r.add(k); renderWizList(); return; }
   const sm = t.closest('[data-wsem]'); if (sm) { const cat = wizCatalog(), on = sm.dataset.on === '1'; for (const s of cat.values()) if (s.sem === +sm.dataset.wsem) on ? W.d.remaining.add(s.sifra) : W.d.remaining.delete(s.sifra); renderWizList(); return; }
-  const bk = t.closest('[data-wbulk]'); if (bk) { const cat = wizCatalog(); W.d.remaining = bk.dataset.wbulk === 'cur' ? defaultRemaining(cat, null) : new Set(); renderWizList(); return; }
+  const bk = t.closest('[data-wbulk]'); if (bk) { const cat = wizCatalog(); W.d.remaining = bk.dataset.wbulk === 'cur' ? defaultRemaining(cat) : new Set(); renderWizList(); return; }
   if (t.closest('[data-wfinish]')) { finishWizard(); return; }
 });
 $('#wiz').addEventListener('keydown', e => {
-  if (e.key === 'Enter' && e.target.id !== 'wq' && !e.target.closest('button')) { e.preventDefault(); const steps = wizSteps(); W.step === steps.length - 1 ? finishWizard() : wizGo(1); }
+  if (e.key !== 'Enter' || e.target.id === 'wq' || e.target.closest('button') || e.target.type === 'checkbox') return;
+  e.preventDefault();
+  if (W.mode === 'settings') { if (wizValid('profil') && wizValid('studije')) finishWizard(); return; }
+  const steps = wizSteps(); W.step === steps.length - 1 ? finishWizard() : wizGo(1);
 });
 function finishWizard() {
-  const d = W.d, cat = wizCatalog(), old = prof();
+  const d = W.d;
+  if (!wizValid('profil') || !wizValid('studije')) return;
+  const cat = wizCatalog(), old = prof() || {};
   const remaining = {}, plan = {};
   for (const s of d.remaining) { const c = cat.get(s); if (c) remaining[s] = { n: c.predmet, s: c.sem }; }
-  if (old && old.plan) for (const k of Object.keys(remaining)) if (old.plan[k]) plan[k] = old.plan[k];
-  Me.data = { v: 1, nivo: d.nivo, akred: d.akred, godina: d.godina, modul: d.modul, remaining, plan, onboarded: true };
+  if (old.plan) for (const k of Object.keys(remaining)) if (old.plan[k]) plan[k] = old.plan[k];
+  Me.data = {
+    v: 2, ime: d.ime.trim(), prezime: d.prezime.trim(), indeks: d.indeks.trim(), fakultet: d.fakultet.trim(), foto: d.foto || '', share: d.share,
+    nivo: d.nivo, akred: d.akred, godina: d.godina, modul: d.modul, remaining, plan,
+    friends: old.friends || [], ignored: old.ignored || [], onboarded: true
+  };
   Me.save();
   const wasFirst = W.first;
   W.first = false;
   $('#setupDlg').close();
-  S.pick = null; S.scope = 'moji'; S.tab = 'todo';
-  if (wasFirst) S.view = 'plan';
-  saveUi(); derive(); refresh();
-  toast(wasFirst ? `Profil je podešen. ${ispita(Object.keys(remaining).length)} čeka planiranje.` : 'Podešavanja su sačuvana.');
+  S.pick = null; S.scope = 'moji';
+  if (wasFirst) { S.view = 'plan'; S.tab = 'todo'; }
+  saveUi(); derive(); deriveFriends(); refresh();
+  toast(wasFirst ? `Zdravo, ${Me.data.ime}! ${ispita(Object.keys(remaining).length)} čeka planiranje.` : 'Podešavanja su sačuvana.');
 }
+
+// ================= Prijatelji =================
+// Javna kartica svakog korisnika: people/<uid> (piše samo on). Prijateljstvo = oboje imaju jedno drugo u `friends`.
+const F = { people: new Map(), mine: null, ready: false, err: null, view: 'list', tab: 'friends', q: '', detail: null, confirmRemove: null };
+let FR = { friends: [], outgoing: [], incoming: [] }, FEX = [], FEX_BY_DATE = {};
+
+// ---- avatari ----
+const FOTO_RE = /^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/;
+function hueOf(str) { let h = 0; for (const ch of String(str || '?')) h = (h * 31 + ch.charCodeAt(0)) % 360; return h; }
+function initials(p) { const a = (p.ime || '').trim(), b = (p.prezime || '').trim(); return ((a[0] || '') + (b[0] || '')).toUpperCase() || '?'; }
+const fullName = p => [p.ime, p.prezime].filter(Boolean).join(' ').trim() || 'Bez imena';
+function avatarHtml(p, size = 28, title) {
+  const st = `width:${size}px;height:${size}px;font-size:${Math.max(9, Math.round(size * 0.38))}px`;
+  const t = title ? ` title="${esc(title)}"` : '';
+  if (p.foto && FOTO_RE.test(p.foto)) return `<img class="av" src="${p.foto}" alt=""${t} style="${st}">`;
+  return `<span class="av" style="${st};--h:${hueOf(p.uid || fullName(p))}"${t} aria-hidden="true">${esc(initials(p))}</span>`;
+}
+function avatarStack(people, size = 22, max = 3) {
+  if (!people.length) return '';
+  const shown = people.slice(0, max).map(p => avatarHtml(p, size, fullName(p))).join('');
+  return `<span class="avs" title="${esc(people.map(fullName).join(', '))}">${shown}${people.length > max ? `<span class="av more" style="width:${size}px;height:${size}px;font-size:${Math.round(size * 0.4)}px">+${people.length - max}</span>` : ''}</span>`;
+}
+
+// ---- tuđi podaci su nepouzdani: uzimamo samo očekivana polja ----
+const str = (v, n) => (typeof v === 'string' ? v.slice(0, n) : '');
+function sanitizePerson(uid, v) {
+  const plan = {}, remaining = {};
+  if (v && typeof v.plan === 'object' && v.plan) for (const [k, e] of Object.entries(v.plan).slice(0, 200)) {
+    if (e && /^\d{4}-\d{2}-\d{2}$/.test(e.datum) && /^\d{2}:\d{2}$/.test(e.vreme)) plan[str(k, 20)] = { n: str(e.n, 120) || k, s: +e.s || 0, rokId: str(e.rokId, 80), datum: e.datum, vreme: e.vreme };
+  }
+  if (v && typeof v.remaining === 'object' && v.remaining) for (const [k, n] of Object.entries(v.remaining).slice(0, 300)) remaining[str(k, 20)] = str(n, 120) || k;
+  return {
+    uid, ime: str(v.ime, 40), prezime: str(v.prezime, 40), indeks: str(v.indeks, 20), fakultet: str(v.fakultet, 80),
+    foto: FOTO_RE.test(v.foto || '') && v.foto.length < 120000 ? v.foto : '',
+    nivo: str(v.nivo, 4), akred: +v.akred || null, godina: +v.godina || null, modul: str(v.modul, 6),
+    friends: Array.isArray(v.friends) ? v.friends.filter(x => typeof x === 'string').slice(0, 500) : [],
+    share: v.share !== false, plan, remaining
+  };
+}
+function publicBody(p) {
+  const share = p.share !== false, plan = {}, remaining = {};
+  if (share) {
+    for (const [k, e] of Object.entries(p.plan || {})) plan[k] = { ...e, n: (p.remaining[k] || {}).n || k, s: (p.remaining[k] || {}).s || 0 };
+    for (const [k, e] of Object.entries(p.remaining || {})) remaining[k] = e.n;
+  }
+  return { uid: Me.uid, ime: p.ime || '', prezime: p.prezime || '', indeks: p.indeks || '', fakultet: p.fakultet || '', foto: p.foto || '',
+    nivo: p.nivo || '', akred: p.akred || 0, godina: p.godina || 0, modul: p.modul || '', friends: p.friends || [], share, plan, remaining, updatedAt: new Date().toISOString() };
+}
+
+function subscribePeople() {
+  if (Me.mode !== 'db') return;
+  const timer = setTimeout(() => { if (!F.ready) { F.err = 'timeout'; renderFriendsUi(); } }, 10000);
+  Store.db.collection('people').onSnapshot(snap => {
+    clearTimeout(timer); F.ready = true; F.err = null;
+    F.people = new Map(); F.mine = null;
+    for (const d of snap.docs) { const v = d.data() || {}; if (d.id === Me.uid) F.mine = v; else F.people.set(d.id, sanitizePerson(d.id, v)); }
+    deriveFriends(); refresh(); renderFriendsUi();
+    const p = prof();
+    if (p && p.onboarded && !snap.metadata.fromCache && (!F.mine || F.mine.ime !== p.ime || (F.mine.friends || []).length !== (p.friends || []).length)) Me.save();
+  }, err => { clearTimeout(timer); F.err = err && err.code || 'unavailable'; renderFriendsUi(); });
+}
+
+function deriveFriends() {
+  const p = prof(), my = new Set((p && p.friends) || []), ignored = new Set((p && p.ignored) || []);
+  const isMutual = u => { const o = F.people.get(u); return o && o.friends.includes(Me.uid); };
+  FR.friends = [...my].filter(isMutual).map(u => F.people.get(u)).sort((a, b) => fullName(a).localeCompare(fullName(b), 'sr'));
+  FR.outgoing = [...my].filter(u => !isMutual(u)).map(u => F.people.get(u) || { uid: u, ime: 'Nepoznat', prezime: 'korisnik', friends: [], plan: {}, remaining: {} });
+  FR.incoming = [...F.people.values()].filter(o => o.friends.includes(Me.uid) && !my.has(o.uid) && !ignored.has(o.uid));
+  FEX = [];
+  for (const f of FR.friends) for (const [sifra, e] of Object.entries(f.plan)) FEX.push({ f, sifra, n: e.n, key: fold(e.n), datum: e.datum, vreme: e.vreme, rokId: e.rokId });
+  FEX_BY_DATE = byDay(FEX);
+}
+const sameSubject = (s, sifra, name) => sifra === s.sifra || fold(name) === fold(s.predmet);
+// prijatelji koji imaju isti predmet (zakazan ili na listi)
+function friendsWithSubject(s) {
+  return FR.friends.filter(f => Object.entries(f.plan).some(([k, e]) => sameSubject(s, k, e.n)) || Object.entries(f.remaining).some(([k, n]) => sameSubject(s, k, n)));
+}
+// prijatelji koji su isti predmet zakazali u istom terminu
+function friendsOnTerm(s, inst) {
+  return uniq(FEX.filter(x => x.datum === inst.datum && x.vreme === inst.vreme && sameSubject(s, x.sifra, x.n)).map(x => x.f));
+}
+function myInstFor(x) {
+  const s = MY.find(s => sameSubject(s, x.sifra, x.n)); if (!s) return null;
+  const inst = s.inst.find(i => i.datum === x.datum && i.vreme === x.vreme) || s.inst.find(i => i.rokId === x.rokId && i.datum === x.datum);
+  return inst ? { s, inst } : { s, inst: null };
+}
+
+// ---- izmene prijateljstva (pišemo samo svoj profil) ----
+function setFriends(fn, msg) {
+  const p = prof(); if (!p) { toast('Prvo podesi svoj profil.'); return; }
+  p.friends = fn(new Set(p.friends || []));
+  p.friends = [...p.friends];
+  Me.save(); deriveFriends(); refresh(); renderFriendsUi();
+  if (msg) toast(msg);
+}
+function addFriend(uid) { const o = F.people.get(uid); setFriends(s => s.add(uid), o && o.friends.includes(Me.uid) ? `${fullName(o)} je sada tvoj prijatelj.` : `Zahtev je poslat: ${o ? fullName(o) : ''}.`); }
+function removeFriend(uid) { const o = F.people.get(uid); setFriends(s => (s.delete(uid), s), `${o ? fullName(o) : 'Korisnik'} je uklonjen iz prijatelja.`); }
+function ignoreRequest(uid) { const p = prof(); if (!p) return; p.ignored = uniq([...(p.ignored || []), uid]); Me.save(); deriveFriends(); renderFriendsUi(); refresh(); }
+
+// ---- dijalog Prijatelji ----
+function openFriends(uid) {
+  F.view = uid ? 'detail' : 'list'; F.detail = uid || null; F.confirmRemove = null;
+  if (!uid && FR.incoming.length) F.tab = 'requests';
+  renderFriendsUi();
+  if (!$('#friendsDlg').open) $('#friendsDlg').showModal();
+}
+function personSub(o) {
+  return [o.indeks && `indeks ${o.indeks}`, o.nivo && o.godina ? `${o.nivo} · ${o.godina}. godina` : o.nivo, o.modul].filter(Boolean).join(' · ') || o.fakultet || '';
+}
+function commonCount(o) { return MY.filter(s => Object.entries(o.plan).some(([k, e]) => sameSubject(s, k, e.n)) || Object.entries(o.remaining).some(([k, n]) => sameSubject(s, k, n))).length; }
+function renderFriendsUi() {
+  const n = FR.incoming.length;
+  const badge = $('#friendsBadge'); if (badge) { badge.textContent = n; badge.hidden = !n; }
+  if (!$('#friendsDlg').open && F.view !== '__force') { /* i dalje osveži sadržaj ako se otvori */ }
+  const b = $('#friendsBody'); if (!b) return;
+  if (Me.mode !== 'db') { b.innerHTML = `<div class="empty"><strong>Prijatelji rade na claude.ai</strong>Otvori aplikaciju na claude.ai sa svojim nalogom da bi dodao/la prijatelje i video/la njihove ispite.</div>`; return; }
+  if (!prof()) { b.innerHTML = `<div class="empty"><strong>Prvo podesi profil</strong><button class="btn primary" data-open-settings>Podesi profil</button></div>`; return; }
+  if (!F.ready) { b.innerHTML = F.err ? `<div class="empty"><strong>Prijatelji trenutno nisu dostupni</strong>Proveri vezu i pokušaj ponovo za koji trenutak.</div>` : `<div class="empty"><span class="spinner"></span><div style="margin-top:8px">Učitavanje…</div></div>`; return; }
+  if (F.view === 'detail') { renderFriendDetail(b); return; }
+  const tabs = `<div class="seg tabs">
+    <button type="button" data-ftab="friends" aria-pressed="${F.tab === 'friends'}">Prijatelji<span class="n">${FR.friends.length}</span></button>
+    <button type="button" data-ftab="requests" aria-pressed="${F.tab === 'requests'}">Zahtevi${n ? `<span class="dotn">${n}</span>` : ''}</button>
+    <button type="button" data-ftab="find" aria-pressed="${F.tab === 'find'}">Pronađi</button></div>`;
+  let h = tabs;
+  const row = (o, actions, sub) => `<div class="prow">${avatarHtml(o, 44)}<div class="pi"><div class="pn">${esc(fullName(o))}</div><div class="ps">${esc(sub != null ? sub : personSub(o))}</div></div><div class="pa">${actions}</div></div>`;
+  if (F.tab === 'friends') {
+    if (!FR.friends.length) h += `<div class="empty"><strong>Još nemaš prijatelja</strong>Pronađi kolege po imenu ili broju indeksa i pošalji im zahtev. Kad te i oni dodaju, videćete ispite jedni drugih.<div><button class="btn primary" data-ftab="find"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="6" r="4"/><path stroke-linejoin="round" d="M17 16.6666V19.3333"/><path stroke-linejoin="round" d="M15.666 18L18.3327 18"/><path d="M21 18C21 20.2091 19.2091 22 17 22C15.8869 22 14.8799 21.5453 14.1548 20.8115C13.4408 20.089 13 19.096 13 18C13 15.8976 14.6221 14.174 16.683 14.0124C16.7876 14.0042 16.8933 14 17 14C19.2091 14 21 15.7909 21 18Z"/><path d="M16.683 14.0124C15.4431 13.3838 13.8093 13.002 12.019 13.002C8.14253 13.002 5 14.7924 5 17.001C5 19.2096 8.14253 21 12.019 21C12.7637 21 13.4813 20.934 14.1548 20.8115"/></g></svg> Pronađi prijatelje</button></div></div>`;
+    else h += '<div class="plist">' + FR.friends.map(o => {
+      const c = commonCount(o), np = Object.keys(o.plan).length;
+      const sub = `${personSub(o)}${personSub(o) ? ' · ' : ''}${o.share ? `${np} zakazano` : 'plan nije deljen'}`;
+      const act = F.confirmRemove === o.uid
+        ? `<button class="btn sm" data-fcancel>Otkaži</button><button class="btn danger solid sm" data-fremove="${esc(o.uid)}">Ukloni</button>`
+        : `${c ? `<span class="pill planned">${c} zajedničkih</span>` : ''}<button class="btn sm" data-fopen="${esc(o.uid)}">Plan</button><button class="iconbtn sm" data-fask="${esc(o.uid)}" aria-label="Ukloni prijatelja" title="Ukloni prijatelja"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="6" r="4"/><path stroke-linejoin="round" d="M15.666 16.6667L16.9995 18.0002M16.9995 18.0002L18.3327 19.3333M16.9995 18.0002L18.333 16.6667M16.9995 18.0002L15.6663 19.3333"/><path d="M21 18C21 20.2091 19.2091 22 17 22C15.8869 22 14.8799 21.5453 14.1548 20.8115C13.4408 20.089 13 19.096 13 18C13 15.8976 14.6221 14.174 16.683 14.0124C16.7876 14.0042 16.8933 14 17 14C19.2091 14 21 15.7909 21 18Z"/><path d="M16.683 14.0124C15.4431 13.3838 13.8093 13.0019 12.019 13.0019C8.14253 13.0019 5 14.7924 5 17.001C5 19.2096 8.14253 21 12.019 21C12.7637 21 13.4813 20.9339 14.1548 20.8115"/></g></svg></button>`;
+      return row(o, act, sub);
+    }).join('') + '</div>';
+  } else if (F.tab === 'requests') {
+    if (!FR.incoming.length && !FR.outgoing.length) h += `<div class="empty"><strong>Nema zahteva</strong>Kad te neko doda, zahtev će se pojaviti ovde.</div>`;
+    if (FR.incoming.length) h += `<h3 class="sec">Žele da ti budu prijatelji</h3><div class="plist">` + FR.incoming.map(o => row(o, `<button class="btn sm" data-fignore="${esc(o.uid)}">Odbij</button><button class="btn primary sm" data-fadd="${esc(o.uid)}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="6" r="4"/><path d="M21 18C21 20.2091 19.2091 22 17 22C15.8869 22 14.8799 21.5453 14.1548 20.8115C13.4408 20.089 13 19.096 13 18C13 15.8976 14.6221 14.174 16.683 14.0124C16.7876 14.0042 16.8933 14 17 14C19.2091 14 21 15.7909 21 18Z"/><path stroke-linejoin="round" d="M15.666 18L16.4995 19L18.3327 17.1111"/><path d="M16.683 14.0124C15.4431 13.3838 13.8093 13.0019 12.019 13.0019C8.14253 13.0019 5 14.7924 5 17.001C5 19.2096 8.14253 21 12.019 21C12.7637 21 13.4813 20.9339 14.1548 20.8115"/></g></svg> Prihvati</button>`)).join('') + '</div>';
+    if (FR.outgoing.length) h += `<h3 class="sec">Poslati zahtevi</h3><div class="plist">` + FR.outgoing.map(o => row(o, `<span class="pill none">čeka potvrdu</span><button class="btn sm" data-fremove="${esc(o.uid)}">Povuci</button>`)).join('') + '</div>';
+  } else {
+    const my = new Set(prof().friends || []);
+    const words = fold(F.q).split(/\s+/).filter(Boolean);
+    const all = [...F.people.values()].filter(o => (o.ime || o.prezime) && !my.has(o.uid));
+    const list = all.filter(o => !words.length || words.every(w => fold(fullName(o) + ' ' + o.indeks + ' ' + o.modul).includes(w)))
+      .sort((a, b) => commonCount(b) - commonCount(a) || fullName(a).localeCompare(fullName(b), 'sr')).slice(0, 50);
+    h += `<div class="search">${SEARCH_ICON}<input id="fq" type="search" placeholder="Ime, prezime ili broj indeksa" autocomplete="off" aria-label="Pronađi korisnika" value="${esc(F.q)}"></div>`;
+    h += `<div class="plist" id="fFindList">` + (list.length ? list.map(o => {
+      const c = commonCount(o);
+      return row(o, `${c ? `<span class="pill planned">${c} zajedničkih</span>` : ''}${o.friends.includes(Me.uid) ? `<button class="btn primary sm" data-fadd="${esc(o.uid)}">Prihvati</button>` : `<button class="btn sm" data-fadd="${esc(o.uid)}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="6" r="4"/><path stroke-linejoin="round" d="M17 16.6666V19.3333"/><path stroke-linejoin="round" d="M15.666 18L18.3327 18"/><path d="M21 18C21 20.2091 19.2091 22 17 22C15.8869 22 14.8799 21.5453 14.1548 20.8115C13.4408 20.089 13 19.096 13 18C13 15.8976 14.6221 14.174 16.683 14.0124C16.7876 14.0042 16.8933 14 17 14C19.2091 14 21 15.7909 21 18Z"/><path d="M16.683 14.0124C15.4431 13.3838 13.8093 13.002 12.019 13.002C8.14253 13.002 5 14.7924 5 17.001C5 19.2096 8.14253 21 12.019 21C12.7637 21 13.4813 20.934 14.1548 20.8115"/></g></svg> Dodaj</button>`}`);
+    }).join('') : `<div class="empty">${all.length ? 'Nema korisnika za ovu pretragu.' : 'Još niko drugi ne koristi aplikaciju. Podeli link sa kolegama (Share meni na claude.ai), pa će se pojaviti ovde.'}</div>`) + '</div>';
+  }
+  b.innerHTML = h;
+  const fq = $('#fq'); if (fq) { fq.addEventListener('input', e => { F.q = e.target.value; const pos = e.target.selectionStart; renderFriendsUi(); const n2 = $('#fq'); n2.focus(); n2.setSelectionRange(pos, pos); }); }
+}
+function renderFriendDetail(b) {
+  const o = F.people.get(F.detail);
+  if (!o) { F.view = 'list'; renderFriendsUi(); return; }
+  const mutual = FR.friends.includes(o);
+  let h = `<button class="btn ghost sm" data-fback><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 12H4M10 18L4 12L10 6"/></svg> Svi prijatelji</button>
+    <div class="phead">${avatarHtml(o, 72)}<div><h3>${esc(fullName(o))}</h3><div class="muted">${esc([o.indeks && 'indeks ' + o.indeks, o.fakultet].filter(Boolean).join(' · '))}</div><div class="muted">${esc([o.nivo, o.akred && 'ak. ' + o.akred, o.godina && o.godina + '. godina', o.modul && 'modul ' + o.modul].filter(Boolean).join(' · '))}</div></div></div>`;
+  if (!mutual) { b.innerHTML = h + `<div class="empty">Plan vidiš kad oboje potvrdite prijateljstvo.</div>`; return; }
+  if (!o.share) { b.innerHTML = h + `<div class="empty">${esc(o.ime || 'Ovaj korisnik')} ne deli svoj plan.</div>`; return; }
+  const plan = Object.entries(o.plan).map(([k, e]) => ({ sifra: k, ...e })).sort((a, b) => a.datum.localeCompare(b.datum) || a.vreme.localeCompare(b.vreme));
+  const common = plan.filter(x => MY.some(s => sameSubject(s, x.sifra, x.n)));
+  const other = plan.filter(x => !common.includes(x));
+  const commonUnplanned = Object.entries(o.remaining).filter(([k, n]) => !o.plan[k] && MY.some(s => sameSubject(s, k, n)));
+  const xrow = x => {
+    const m = myInstFor(x), d = parseIso(x.datum);
+    let act = '', note = '';
+    if (m && m.s) {
+      if (m.s.plan && m.s.plan.datum === x.datum && m.s.plan.vreme === x.vreme) act = `<span class="pill ok"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M8.78355 22C7.09836 21.2479 5.70641 20.0759 4.7915 18.5069"/><path d="M14.8252 2.18595C16.5021 1.70882 18.2333 2.16305 19.4417 3.39724"/><path stroke-linejoin="round" d="M8.18595 11.7548L6.50218 8.86743C6.03722 8.0701 4.9217 7.84584 4.0106 8.36655C3.0995 8.88725 2.73784 9.95573 3.2028 10.7531L6.99128 17.2497C8.85112 20.4391 13.3132 21.3361 16.9576 19.2533C20.602 17.1705 22.0487 12.8965 20.1888 9.7072L17.6632 5.37608C17.1982 4.57875 16.0827 4.35449 15.1716 4.8752C14.2605 5.3959 13.8988 6.46438 14.3638 7.26172M6.50218 8.86743L4.39747 5.25817C3.93251 4.46083 4.29417 3.39235 5.20527 2.87164C6.11637 2.35094 7.23189 2.57519 7.69685 3.37253L8.53873 4.81624M11.0644 9.14736L8.53873 4.81624C8.07377 4.0189 8.43544 2.95042 9.34654 2.42971C10.2576 1.90901 11.3732 2.13326 11.8381 2.9306L14.3638 7.26172M14.3638 7.26172L16.0475 10.1491C14.2253 11.1905 13.502 13.3275 14.4319 14.9222"/></g></svg> Zajedno</span>`;
+      else if (m.inst) { act = `<button class="btn primary sm" data-fjoin="${esc(m.inst.id)}" data-fsifra="${esc(m.s.sifra)}">Pridruži se</button>`; note = m.s.plan ? `Ti: ${fmtShort(m.s.plan.datum)} u ${m.s.plan.vreme}` : 'Ti: bez termina'; }
+      else note = 'Ovaj termin nije u tvojim rokovima';
+    }
+    return `<div class="xrow ${m && m.s ? 'mine' : ''}"><div class="dbadge sm"><span>${DANI_KRATKO[d.getDay()]}</span><b>${d.getDate()}</b><span>${MES_KRATKO[d.getMonth()]}</span></div><div class="xi"><div class="xn">${esc(x.n)}</div><div class="xm"><span class="tag mono">${x.vreme}</span>${x.rokId ? rokTag(x.rokId) : ''}<span class="tag">${countdown(x.datum)}</span></div>${note ? `<div class="note muted">${esc(note)}</div>` : ''}</div>${act}</div>`;
+  };
+  h += `<div class="dsec"><h4>Zajednički ispiti${common.length ? ` · ${common.length}` : ''}</h4>${common.length ? common.map(xrow).join('') : '<div class="muted" style="padding:4px 8px">Nemate zajedničkih zakazanih ispita.</div>'}</div>`;
+  if (commonUnplanned.length) h += `<div class="dsec"><h4>I ${esc(o.ime || 'prijatelj')} još bira termin</h4>${commonUnplanned.map(([k, n]) => `<div class="xrow"><div class="xi"><div class="xn">${esc(n)}</div><div class="note muted">Oboje imate ovaj ispit. Dogovorite termin.</div></div></div>`).join('')}</div>`;
+  if (other.length) h += `<div class="dsec"><h4>Ostali ispiti</h4>${other.map(xrow).join('')}</div>`;
+  if (!plan.length && !commonUnplanned.length) h += `<div class="empty">${esc(o.ime || 'Prijatelj')} još nije zakazao/la nijedan ispit.</div>`;
+  b.innerHTML = h;
+}
+$('#friendsBody').addEventListener('click', e => {
+  const t = e.target;
+  const tb = t.closest('[data-ftab]'); if (tb) { F.tab = tb.dataset.ftab; F.confirmRemove = null; renderFriendsUi(); if (F.tab === 'find') setTimeout(() => $('#fq') && $('#fq').focus(), 20); return; }
+  const op = t.closest('[data-fopen]'); if (op) { F.view = 'detail'; F.detail = op.dataset.fopen; renderFriendsUi(); return; }
+  if (t.closest('[data-fback]')) { F.view = 'list'; renderFriendsUi(); return; }
+  const ad = t.closest('[data-fadd]'); if (ad) { addFriend(ad.dataset.fadd); return; }
+  const ask = t.closest('[data-fask]'); if (ask) { F.confirmRemove = ask.dataset.fask; renderFriendsUi(); return; }
+  if (t.closest('[data-fcancel]')) { F.confirmRemove = null; renderFriendsUi(); return; }
+  const rm = t.closest('[data-fremove]'); if (rm) { F.confirmRemove = null; removeFriend(rm.dataset.fremove); return; }
+  const ig = t.closest('[data-fignore]'); if (ig) { ignoreRequest(ig.dataset.fignore); return; }
+  const jn = t.closest('[data-fjoin]'); if (jn) { const ex = examById(jn.dataset.fjoin); if (ex) { $('#friendsDlg').close(); schedule(jn.dataset.fsifra, ex); } return; }
+});
+$('#friendsBtn').addEventListener('click', () => openFriends());
+$('#meBtn').addEventListener('click', () => openWizard(!(prof() && prof().onboarded), 'profil'));
+function renderMeBtn() {
+  const p = prof();
+  $('#meBtn').innerHTML = p && p.ime ? avatarHtml({ uid: Me.uid, ...p }, 34) : `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="6" r="4"/><ellipse cx="12" cy="17" rx="7" ry="4"/></g></svg>`;
+  $('#meBtn').title = p && p.ime ? `${fullName(p)} · profil` : 'Profil';
+}
+
 // ================= Upload =================
 let pdfLibPromise = null;
 function loadScript(src) { return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = () => rej(new Error('Ne mogu da učitam ' + src)); document.head.appendChild(s); }); }
@@ -2008,8 +2397,10 @@ function pickInitialMonth() {
   }
   try { await Me.load(); }
   catch (err) { $('#bannerArea').insertAdjacentHTML('beforeend', `<div class="banner err" style="margin-bottom:14px">Tvoj plan trenutno nije dostupan. Osveži stranicu za koji trenutak.</div>`); Me.loadFailed = true; }
-  rebuild(); derive(); applyFilters(); pickInitialMonth(); S.loaded = true; refresh();
+  rebuild(); derive(); deriveFriends(); applyFilters(); pickInitialMonth(); S.loaded = true; refresh();
+  subscribePeople();
   if (!Me.loadFailed && (!prof() || !prof().onboarded) && S.exams.length) openWizard(true, null);
+  else if (prof() && prof().onboarded && !prof().ime) { openWizard(false, 'profil'); W.note = 'Novo: dopuni profil imenom, a po želji i brojem indeksa i slikom, da bi te prijatelji pronašli.'; renderWizard(); }
 })();
 window.addEventListener('pagehide', () => { if (Me.dirty) Me.flush(); });
 })();
