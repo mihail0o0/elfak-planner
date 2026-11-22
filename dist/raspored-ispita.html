@@ -496,6 +496,7 @@ h3.sec { font-size: 12px; font-weight: 600; letter-spacing: .07em; text-transfor
 .cfx h2 { margin: 0; font-size: 22px; }
 .cfx p { margin: 0; color: var(--ink-2); }
 .cfx .xrow { background: var(--tile); }
+.cfx .xrow .btn { flex: none; }
 .cfx .ic.minor { background: var(--warn-soft); color: var(--warn); }
 .cfx .ic.ok { background: var(--brand-soft); color: var(--brand-fg); }
 .ccard { display: flex; gap: 14px; align-items: center; background: var(--tile); border-radius: var(--rad-lg); padding: 12px; }
@@ -1286,7 +1287,7 @@ function openConfirm(sifra, inst) {
   const isCur = s.plan && s.plan.rokId === inst.rokId;
   pendingConfirm = { sifra, inst };
   const icon = lvl === 'major' ? '<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M11.6363 21H12.3637C17.7864 21 20.4978 21 21.5937 19.428C22.6897 17.856 21.4771 15.7061 19.0519 11.4063L18.6883 10.7615C15.7699 5.58716 14.3107 3 12 3C9.68925 3 8.23007 5.58716 5.31171 10.7615L4.94805 11.4063C2.52291 15.7061 1.31034 17.856 2.40626 19.428C3.50217 21 6.21356 21 11.6363 21Z"/><path d="M12 8V13"/><path stroke-linejoin="round" d="M12 16H12.0001"/></g></svg>' : lvl === 'minor' ? '<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 7V13"/><path stroke-linejoin="round" d="M12 16H12.0001"/></g></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M18 15.75H16M16 15.75L14 15.75M16 15.75L16 13.75M16 15.75L16 17.75"/><path d="M10 21.75H14C17.7712 21.75 19.6569 21.75 20.8284 20.5784C22 19.4069 22 17.5212 22 13.75V11.75C22 7.97876 22 6.09315 20.8284 4.92157C19.6569 3.75 17.7712 3.75 14 3.75H10C6.22876 3.75 4.34315 3.75 3.17157 4.92157C2 6.09315 2 7.97876 2 11.75V13.75C2 17.5212 2 19.4069 3.17157 20.5784C4.34315 21.75 6.22876 21.75 10 21.75Z"/><path d="M2.03516 8.75H21.965"/><path d="M7 3.78496V2.25"/></g></svg>';
-  const crow = c => `<div class="xrow ${c.lvl}"><div class="xi"><div class="xn">${esc(c.s.predmet)}</div><div class="xm"><span class="pill ${c.lvl}">${c.s.plan.vreme}</span><span class="tag">${c.s.sem}. sem.</span>${rokTag(c.s.plan.rokId)}</div></div></div>`;
+  const crow = c => `<div class="xrow ${c.lvl}"><div class="xi"><div class="xn">${esc(c.s.predmet)}</div><div class="xm"><span class="pill ${c.lvl}">${c.s.plan.vreme}</span><span class="tag">${c.s.sem}. sem.</span>${rokTag(c.s.plan.rokId)}</div></div><button class="btn sm" data-cfx-unplan="${esc(c.s.sifra)}" title="Ukloni termin ispita ${esc(c.s.predmet)}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="M10 21.75H14C17.7712 21.75 19.6569 21.75 20.8284 20.5784C22 19.4069 22 17.5212 22 13.75V11.75C22 7.97876 22 6.09315 20.8284 4.92157C19.6569 3.75 17.7712 3.75 14 3.75H10C6.22876 3.75 4.34315 3.75 3.17157 4.92157C2 6.09315 2 7.97876 2 11.75V13.75C2 17.5212 2 19.4069 3.17157 20.5784C4.34315 21.75 6.22876 21.75 10 21.75Z"/><path d="M2.03516 8.75H21.965"/><path d="M7 3.78496V2.25"/><path d="M17 3.78496V2.25"/><path d="M10 17.25L12 15.25M12 15.25L14 13.25M12 15.25L14 17.25M12 15.25L10 13.25"/></g></svg> Otkaži termin</button></div>`;
   let conf = '';
   if (lvl === 'ok') conf = `<div class="cstate ok"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path stroke-linejoin="round" d="M8.5 12.5L10.5 14.5L15.5 9.5"/></g></svg><span><b>Nema konflikata.</b> Tog dana nemaš drugih zakazanih ispita.</span></div>`;
   if (major.length) conf += `<div class="cstate major"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M11.6363 21H12.3637C17.7864 21 20.4978 21 21.5937 19.428C22.6897 17.856 21.4771 15.7061 19.0519 11.4063L18.6883 10.7615C15.7699 5.58716 14.3107 3 12 3C9.68925 3 8.23007 5.58716 5.31171 10.7615L4.94805 11.4063C2.52291 15.7061 1.31034 17.856 2.40626 19.428C3.50217 21 6.21356 21 11.6363 21Z"/><path d="M12 8V13"/><path stroke-linejoin="round" d="M12 16H12.0001"/></g></svg><span><b>Veći konflikt: isto vreme.</b> U ${inst.vreme} već imaš zakazano:</span></div>${major.map(crow).join('')}`;
@@ -1304,10 +1305,20 @@ function openConfirm(sifra, inst) {
     ${s.plan && !isCur ? `<p class="muted" style="font-size:13.5px">Trenutno zakazan termin, ${fmtShort(s.plan.datum)} u ${s.plan.vreme}, biće zamenjen ovim.</p>` : ''}
     ${conf}
     <div class="actions"><button class="btn" data-cfx="cancel">Odustani</button>${isCur ? '' : `<button class="btn ${lvl === 'major' ? 'danger-solid' : 'primary'}" data-cfx="ok">${lvl === 'major' ? 'Zakaži svejedno' : s.plan ? 'Prebaci termin' : 'Zakaži ispit'}</button>`}</div>`;
-  $('#conflictDlg').showModal();
+  if (!$('#conflictDlg').open) $('#conflictDlg').showModal();
   setTimeout(() => { const b = $(lvl === 'major' ? '[data-cfx="cancel"]' : '[data-cfx="ok"]') || $('[data-cfx="cancel"]'); b && b.focus(); }, 30);
 }
 $('#cfx').addEventListener('click', e => {
+  // otkaži ispit koji pravi konflikt, pa osveži isti dijalog
+  const un = e.target.closest('[data-cfx-unplan]');
+  if (un && pendingConfirm) {
+    const p = prof(), k = un.dataset.cfxUnplan, prev = p && p.plan[k] ? { ...p.plan[k] } : null; if (!prev) return;
+    const name = (MYMAP.get(k) || {}).predmet || k, pc = pendingConfirm;
+    delete p.plan[k]; Me.save(); derive(); refresh();
+    openConfirm(pc.sifra, pc.inst);
+    toast(`Otkazan termin: ${name}.`, { label: 'Poništi', fn: () => { p.plan[k] = prev; Me.save(); derive(); refresh(); if ($('#conflictDlg').open && pendingConfirm) openConfirm(pendingConfirm.sifra, pendingConfirm.inst); } });
+    return;
+  }
   const b = e.target.closest('[data-cfx]'); if (!b) return;
   $('#conflictDlg').close();
   if (b.dataset.cfx === 'ok' && pendingConfirm) schedule(pendingConfirm.sifra, pendingConfirm.inst, true);
