@@ -29,7 +29,8 @@ na latinicu i prikazuje u kalendaru (plan, mesečni, godišnji i tabelarni prika
 - Zajedničko planiranje: avatari prijatelja u kalendaru i listi ispita, „Prijatelji ovog dana",
   plan prijatelja sa „Pridruži se" (isti termin) i podatak u dijalogu potvrde ko polaže u istom terminu.
 
-- `index.html` – samostalna aplikacija; otvori je u pregledaču. Podaci se čuvaju u localStorage.
+- `index.html` / `site/` – samostalna verzija za GitHub Pages sa prijavom (Google, Facebook, email) preko Supabase-a. Uputstvo: [SETUP.md](SETUP.md).
+- `dist/raspored-ispita.html` – verzija za claude.ai Artifact.
 - `src/core.js` – transliteracija i parser PDF redova (koristi pdf.js 3.11.174 sa cdnjs).
 - `src/app.html` – interfejs; `python3 build.py` spaja `core.js` u `dist/`.
 

@@ -1,4 +1,4 @@
-import base64, json, pathlib, re
+import base64, json, os, pathlib, re
 root = pathlib.Path(__file__).parent
 src = root / 'src'
 core = (src / 'core.js').read_text()
@@ -26,5 +26,17 @@ std = ('<!doctype html>\n<html lang="sr-Latn">\n<head>\n<meta charset="utf-8">\n
        '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
        + app[:i] + '\n</head>\n<body>\n' + app[i:] + '\n</body>\n</html>\n')
 (root / 'dist/index.html').write_text(std)
-(root / 'index.html').write_text(std)
+
+# Samostalna verzija (GitHub Pages + Supabase): prijava, baza, poruke uživo, fajlovi.
+# Ključevi dolaze iz promenljivih okruženja (u GitHub Actions: Settings → Variables).
+cfg = {'supabaseUrl': os.environ.get('SUPABASE_URL', ''), 'supabaseKey': os.environ.get('SUPABASE_ANON_KEY', '')}
+hosted_head = ('<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>\n'
+               f'<script>window.PLANER_CONFIG = {json.dumps(cfg)};</script>\n'
+               '<script>\n' + (src / 'backend.js').read_text() + '\n</script>\n')
+marker = '<script>\n' + core
+assert marker in std
+hosted = std.replace(marker, hosted_head + marker, 1)
+site = root / 'site'; site.mkdir(exist_ok=True)
+(site / 'index.html').write_text(hosted)
+(root / 'index.html').write_text(hosted)
 print('ok', len(app))

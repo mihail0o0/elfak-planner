@@ -22,6 +22,7 @@ const rid = (n = 12) => b64(crypto.getRandomValues(new Uint8Array(n))).replace(/
 const enc = new TextEncoder(), dec = new TextDecoder();
 const fmtTime = ts => { const d = new Date(ts); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
 const fmtSize = n => n > 1048576 ? `${(n / 1048576).toFixed(1)} MB` : n > 1024 ? `${Math.round(n / 1024)} KB` : `${n} B`;
+const blobUrl = id => window.__blobUrl ? window.__blobUrl(id) : '/_blob/' + encodeURIComponent(id);
 const slug = s => fold(s).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'fakultet';
 function linkify(text) {
   return esc(text).replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)\]"'])/g, u => `<a href="${u}" target="_blank" rel="noopener noreferrer">${u}</a>`).replace(/\n/g, '<br>');
@@ -278,7 +279,7 @@ function markRead() {
 }
 function dayLabel(ts) { const d = iso(new Date(ts)); return d === todayIso ? 'Danas' : daysBetween(d, todayIso) === 1 ? 'Juče' : cap(fmtDay(d)); }
 function attHtml(att) {
-  const url = '/_blob/' + encodeURIComponent(att.id);
+  const url = blobUrl(att.id);
   if (/^image\//.test(att.type)) return `<button class="att img" data-preview="${esc(att.id)}" data-ptype="${esc(att.type)}" data-pname="${esc(att.name)}"><img src="${url}" alt="${esc(att.name)}" loading="lazy"></button>`;
   if (/^video\//.test(att.type)) return `<video class="att vid" src="${url}" controls preload="metadata"></video>`;
   const icon = att.type === 'application/pdf' ? 'PDF' : (att.name.split('.').pop() || 'fajl').slice(0, 4).toUpperCase();
@@ -383,7 +384,7 @@ async function paintConv(root, c, where) {
 
 // ---------- mali prozor (dole desno) ----------
 async function openMini(cid) {
-  if (!C.on) { toast('Poruke rade kad je aplikacija otvorena na claude.ai, sa nalogom.'); return; }
+  if (!C.on) { toast(NEED.chatText); return; }
   if (C.full) { C.active = cid; renderFull(); return; }
   C.mini = cid; C.active = cid; C.reply = C.edit = C.pollDraft = null;
   const w = $('#miniChat'); w.hidden = false; w.innerHTML = ''; delete w.dataset.cid;
@@ -409,7 +410,7 @@ async function renderMini() {
 // ---------- ceo ekran ----------
 function openFull(cid) {
   if (route !== 'poruke') { C.pendingCid = cid || C.mini || null; go('poruke'); return; }
-  if (!C.on) { $('#chatFull').innerHTML = `<div class="card pagecard"><div class="empty"><strong>Poruke rade na claude.ai</strong>Otvori aplikaciju na claude.ai sa svojim nalogom${prof() && prof().onboarded ? '' : ' i podesi profil'} da bi slao/la poruke prijateljima.</div></div>`; return; }
+  if (!C.on) { $('#chatFull').innerHTML = `<div class="card pagecard"><div class="empty"><strong>${NEED.chatTitle}</strong>${NEED.chatText}${NEED.loginBtn}</div></div>`; return; }
   if (C.mini && !cid) cid = C.mini;
   if (C.mini) { C.mini = null; $('#miniChat').hidden = true; }
   C.full = true;
@@ -578,7 +579,7 @@ async function sendFiles(c, files) {
   }
 }
 async function openPreview(id, type, name) {
-  const url = '/_blob/' + encodeURIComponent(id);
+  const url = blobUrl(id);
   const dlg = $('#previewDlg'), body = $('#previewBody');
   $('#previewTitle').textContent = name || 'Pregled';
   $('#previewOpen').href = url;
