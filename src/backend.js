@@ -55,7 +55,7 @@
         <div class="arow">${reg ? '<span>Već imaš nalog?</span><button class="linkbtn" data-a="tologin">Prijavi se</button>' : '<button class="linkbtn" data-a="toreset">Zaboravljena šifra?</button><span class="grow"></span><button class="linkbtn" data-a="toregister">Napravi nalog</button>'}</div>
         <div class="aguest"><button class="btn ghost ablock" data-a="guest">Nastavi kao gost</button><span>Gost može da planira ispite na ovom uređaju. Prijatelji i poruke traže nalog.</span></div>`;
     }
-    g.innerHTML = `<div class="acard" role="dialog" aria-modal="true" aria-label="Prijava">${body}</div>`;
+    g.innerHTML = `<div class="agrid"><div class="aside"><div class="acard" role="dialog" aria-modal="true" aria-label="Prijava">${body}</div></div><div class="avisual" id="authVisual" aria-hidden="true"></div></div>`;
     const f = g.querySelector('input'); if (f) setTimeout(() => f.focus(), 30);
   }
   function hideGate() { const g = document.getElementById('authGate'); if (g) g.hidden = true; document.body.classList.remove('gate-open'); }
@@ -250,12 +250,15 @@
     }
   };
 
+  // administrator (tabela admins u bazi); baza svakako odbija izmene rokova svima ostalima
+  let adminP = null;
+  const isAdmin = () => (adminP = adminP || (A.mode !== 'user' ? Promise.resolve(false) : sb.rpc('is_admin').then(r => r.data === true, () => false)));
   window.claude = {
     async use(name) {
       await READY;
       const full = A.mode === 'user';
       if (name === 'db') return DB;
-      if (name === 'user') return { id: async () => (full ? A.user.id : null), isOwner: async () => false, canEdit: async () => full, me: async () => ({ id: full ? A.user.id : null, name: '' }) };
+      if (name === 'user') return { id: async () => (full ? A.user.id : null), isOwner: isAdmin, canEdit: isAdmin, me: async () => ({ id: full ? A.user.id : null, name: '' }) };
       if (name === 'room') return full ? room(A.user.id) : null;
       if (name === 'assets') return full ? ASSETS : null;
       return null;

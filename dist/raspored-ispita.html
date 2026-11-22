@@ -762,8 +762,15 @@ header.top .ptitle h1 { font-size: 30px; }
 
 /* ================= Prijava (samostalna verzija) ================= */
 body.gate-open { overflow: hidden; }
-.authgate { position: fixed; inset: 0; z-index: 100; overflow: auto; display: grid; place-items: center; padding: calc(env(safe-area-inset-top, 0px) + 24px) max(16px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 24px) max(16px, env(safe-area-inset-left, 0px));
-  background: radial-gradient(1200px 600px at 10% -10%, var(--brand-soft), transparent 60%), radial-gradient(900px 500px at 110% 110%, color-mix(in srgb, var(--orange) 16%, transparent), transparent 60%), var(--bg); }
+.authgate { position: fixed; inset: 0; z-index: 100; overflow: auto; background: var(--bg); }
+.agrid { min-height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.aside { display: grid; place-items: center; padding: calc(env(safe-area-inset-top, 0px) + 32px) 24px calc(env(safe-area-inset-bottom, 0px) + 32px) max(24px, env(safe-area-inset-left, 0px)); }
+.aside .acard { box-shadow: none; background: transparent; padding: 8px 4px; }
+/* desna strana: mesto za vizual (dizajn stiže kasnije) */
+.avisual { margin: 16px max(16px, env(safe-area-inset-right, 0px)) 16px 0; border-radius: var(--rad-xl); background: #e4e5e8; min-height: calc(100vh - 32px); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .avisual { background: #1e2026; } }
+:root[data-theme="dark"] .avisual { background: #1e2026; }
+@media (max-width: 900px) { .agrid { grid-template-columns: minmax(0, 1fr); } .avisual { display: none; } .aside { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); } }
 .authgate[hidden] { display: none; }
 .acard { width: min(420px, 100%); background: var(--surface); border-radius: var(--rad-xl); box-shadow: var(--shadow-pop); padding: 28px 26px 22px; display: flex; flex-direction: column; gap: 12px; }
 .acard h2 { margin: 2px 0 0; font-size: 28px; }
@@ -799,7 +806,7 @@ body.gate-open { overflow: hidden; }
       <a href="#kalendar" data-route="kalendar" class="ritem"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M10 21.75H14C17.7712 21.75 19.6569 21.75 20.8284 20.5784C22 19.4069 22 17.5212 22 13.75V11.75C22 7.97876 22 6.09315 20.8284 4.92157C19.6569 3.75 17.7712 3.75 14 3.75H10C6.22876 3.75 4.34315 3.75 3.17157 4.92157C2 6.09315 2 7.97876 2 11.75V13.75C2 17.5212 2 19.4069 3.17157 20.5784C4.34315 21.75 6.22876 21.75 10 21.75Z"/><path d="M2.03516 8.75H21.965"/><path stroke-linejoin="round" d="M17 12.75H17.0001"/><path stroke-linejoin="round" d="M12 12.75H12.0001"/><path stroke-linejoin="round" d="M7 12.75H7.0001"/><path stroke-linejoin="round" d="M17 16.7734H17.0001"/><path stroke-linejoin="round" d="M12 16.7734H12.0001"/><path stroke-linejoin="round" d="M7 16.7734H7.0001"/><path d="M7 3.78496V2.25"/><path d="M17 3.78496V2.25"/></g></svg><span>Kalendar</span></a>
       <a href="#poruke" data-route="poruke" class="ritem"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M22 12C22 17.5228 17.5228 22 12 22C10.4003 22 8.88837 21.6244 7.54753 20.9565C7.19121 20.7791 6.78393 20.72 6.39939 20.8229L4.17335 21.4185C3.20701 21.677 2.32295 20.793 2.58151 19.8267L3.17712 17.6006C3.28001 17.2161 3.22094 16.8088 3.04346 16.4525C2.37562 15.1116 2 13.5997 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/><path stroke-linejoin="round" d="M8 12H8.009M11.991 12H12M15.991 12H16"/></g></svg><span>Poruke</span><b class="nbadge" id="chatBadge" hidden></b></a>
       <a href="#prijatelji" data-route="prijatelji" class="ritem"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="9" cy="6" r="4"/><path d="M15 9C16.6569 9 18 7.65685 18 6C18 4.34315 16.6569 3 15 3"/><ellipse cx="9" cy="17" rx="7" ry="4"/><path d="M18 14C19.7542 14.3847 21 15.3589 21 16.5C21 17.5293 19.9863 18.4229 18.5 18.8704"/></g></svg><span>Prijatelji</span><b class="nbadge" id="friendsBadge" hidden></b><i class="nonl" id="onlineCount" hidden></i></a>
-      <a href="#rokovi" data-route="rokovi" class="ritem"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M11 22H13C16.7712 22 18.6569 22 19.8284 20.8284C21 19.6569 21 17.7712 21 14V10C21 6.22876 21 4.34315 19.8284 3.17157C18.6569 2 16.7712 2 13 2H11C7.22876 2 5.34315 2 4.17157 3.17157C3 4.34315 3 6.22876 3 10V14C3 17.7712 3 19.6569 4.17157 20.8284C5.34315 22 7.22876 22 11 22Z"/><path d="M8 12H16"/><path d="M8 8H16"/><path d="M8 16H13"/></g></svg><span>Rokovi</span></a>
+      <a href="#admin" data-route="admin" class="ritem" id="adminNav" hidden><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M21 11.9914C21 11.4234 21 10.8996 21 10.4167C21 7.21907 21 5.62028 20.6225 5.08241C20.245 4.54454 18.7417 4.02996 15.7351 3.00079L15.1623 2.80472C13.595 2.26824 12.8114 2 12 2C11.1886 2 10.405 2.26824 8.83772 2.80472L8.26491 3.00079C5.25832 4.02996 3.75503 4.54454 3.37752 5.08241C3 5.62028 3 7.21907 3 10.4167C3 10.8996 3 11.4234 3 11.9914C3 17.6294 7.23896 20.3655 9.89856 21.5273C10.62 21.8424 10.9807 22 12 22C13.0193 22 13.38 21.8424 14.1014 21.5273C16.761 20.3655 21 17.6294 21 11.9914Z"/><circle cx="12" cy="9" r="2"/><path d="M16 15C16 16.1046 16 17 12 17C8 17 8 16.1046 8 15C8 13.8954 9.79086 13 12 13C14.2091 13 16 13.8954 16 15Z"/></g></svg><span>Admin</span></a>
     </div>
     <div class="rfoot">
       <button class="iconbtn flat" id="themeBtn" aria-label="Tema" title="Tema"></button>
@@ -845,7 +852,7 @@ body.gate-open { overflow: hidden; }
 
     <section class="page" id="sec-poruke" hidden><div id="chatFull" class="chatfull"></div></section>
     <section class="page narrow" id="sec-prijatelji" hidden><div class="card pagecard" id="friendsBody"></div></section>
-    <section class="page narrow" id="sec-rokovi" hidden><div class="card pagecard" id="manageBody"></div></section>
+    <section class="page narrow" id="sec-admin" hidden><div class="card pagecard" id="manageBody"></div></section>
   </div>
 </div>
 
@@ -1689,7 +1696,7 @@ function renderPlan() {
     for (const s of unplanned) {
       const n = s.inst.length;
       h += `<div class="ucard"><div class="un">${esc(s.predmet)}</div><div class="um">${s.sem}. sem. · ${TIP_NAZIV[s.tip]}${s.stale ? ' · stari termin više ne postoji' : ''}<br>${n ? termina(n) + ': ' + s.inst.slice(0, 3).map(i => fmtShort(i.datum)).join(', ') + (n > 3 ? '…' : '') : 'nema termina u učitanim rokovima'}</div>
-        ${n ? `<button class="btn primary sm" data-pick="${esc(s.sifra)}">Izaberi termin</button>` : `<button class="btn sm" data-manage>Dodaj rok</button>`}</div>`;
+        ${n ? `<button class="btn primary sm" data-pick="${esc(s.sifra)}">Izaberi termin</button>` : (S.isAdmin ? `<button class="btn sm" data-manage>Dodaj rok</button>` : '')}</div>`;
     }
     h += '</div></div>';
   }
@@ -1831,7 +1838,7 @@ function renderDay() {
   const pick = S.pick ? MYMAP.get(S.pick) : null;
   if (pick) {
     let h = `<div class="dh"><h2>${esc(pick.predmet)}</h2><div class="dsub">${pick.sem}. semestar · ${termina(pick.inst.length)}</div></div><div class="dsec">`;
-    if (!pick.inst.length) h += `<div class="empty">Nema termina u učitanim rokovima.<br><button class="btn sm" data-manage>Dodaj rok</button></div>`;
+    if (!pick.inst.length) h += `<div class="empty">Nema termina u objavljenim rokovima.${S.isAdmin ? '<br><button class="btn sm" data-manage>Dodaj rok</button>' : ''}</div>`;
     for (const i of pick.inst) h += schedRow(pick, i, { dateTitle: true });
     h += `<div class="actions" style="margin-top:8px;justify-content:space-between"><button class="btn ghost sm" data-passed="${esc(pick.sifra)}">Položen, ukloni sa liste</button><button class="btn sm" data-cancel-pick>Gotovo</button></div></div>`;
     p.innerHTML = h; return;
@@ -1890,7 +1897,8 @@ function renderView() {
   $('#navbtns').hidden = $('#todayBtn').hidden = S.view === 'lista' || S.view === 'plan';
   if (!S.loaded) { $('#viewArea').innerHTML = `<div class="empty"><span class="spinner"></span><div style="margin-top:8px">Učitavanje rasporeda…</div></div>`; $('#period').textContent = ''; return; }
   if (!S.exams.length) {
-    $('#viewArea').innerHTML = `<div class="hero-empty"><h2>Još nema učitanih rokova</h2><p>Dodaj PDF raspored ispita za jedan rok (npr. decembarski). Podaci se izvlače automatski, prevode na latinicu i prikazuju u kalendaru.</p><button class="btn primary" data-open-upload>Dodaj rok (PDF)</button></div>`;
+    $('#viewArea').innerHTML = S.isAdmin ? `<div class="hero-empty"><h2>Još nema učitanih rokova</h2><p>Dodaj PDF raspored ispita za jedan rok (npr. decembarski). Podaci se izvlače automatski, prevode na latinicu i prikazuju u kalendaru.</p><button class="btn primary" data-open-upload>Dodaj rok (PDF)</button></div>`
+      : `<div class="hero-empty"><h2>Rokovi još nisu objavljeni</h2><p>Administrator još nije objavio ispitne rokove. Kad ih objavi, ovde ćeš moći da biraš termine za svoje ispite.</p></div>`;
     $('#period').textContent = ''; return;
   }
   if (S.view === 'plan') renderPlan(); else if (S.view === 'mesec') renderMonth(); else if (S.view === 'godina') renderYear(); else renderList();
@@ -1956,7 +1964,7 @@ document.addEventListener('click', e => {
   const mo = t.closest('[data-month]');
   if (mo) { const [y, m] = mo.dataset.month.split('-').map(Number); S.y = y; S.m = m; S.view = 'mesec'; renderView(); return; }
   if (t.closest('#moreBtn')) { S.listLimit += 500; renderList(); return; }
-  if (t.closest('[data-open-upload]')) { openUpload(); return; }
+  if (t.closest('[data-open-upload]')) { if (S.isAdmin) openUpload(); return; }
   const close = t.closest('[data-close]'); if (close) close.closest('dialog').close();
 });
 document.addEventListener('keydown', e => {
@@ -2024,7 +2032,7 @@ function defaultRemaining(cat) {
   return set;
 }
 function openWizard(first, startAt) {
-  if (!S.exams.length) { toast('Prvo dodaj bar jedan ispitni rok (PDF).'); openUpload(); return; }
+  if (!S.exams.length) { if (S.isAdmin) { toast('Prvo dodaj bar jedan ispitni rok (PDF).'); openUpload(); } else toast('Ispitni rokovi još nisu objavljeni. Podešavanje će biti moguće kad ih administrator doda.'); return; }
   const p = prof();
   W.first = first; W.q = ''; W.note = '';
   W.mode = first ? 'onboard' : 'settings';
@@ -3311,7 +3319,7 @@ function loadPdfJs() {
 }
 
 let UP = null; // {fileName, rows, bad, rok, godina}
-function openUpload() { UP = null; renderUpload(); $('#uploadDlg').showModal(); }
+function openUpload() { if (!S.isAdmin) return; UP = null; renderUpload(); $('#uploadDlg').showModal(); }
 
 function renderUpload(state) {
   const b = $('#uploadBody');
@@ -3412,7 +3420,7 @@ async function saveUpload() {
     const code = err && err.code;
     showUpErr(code === 'quota_exceeded' ? 'Baza je puna. Obriši neki stari rok pa pokušaj ponovo.'
       : code === 'local_full' ? 'Pregledač nema više mesta za čuvanje. Obriši neki stari rok pa pokušaj ponovo.'
-      : code === 'not_granted' || code === 'revoked' ? (HOSTED ? 'Rokove mogu da dodaju samo prijavljeni korisnici sa potvrđenim email-om.' : 'Nemaš dozvolu za čuvanje u ovoj aplikaciji. Zamoli vlasnika da ti da pristup za izmene.')
+      : code === 'not_granted' || code === 'revoked' ? (HOSTED ? 'Rokove može da dodaje samo administrator.' : 'Nemaš dozvolu za čuvanje u ovoj aplikaciji. Zamoli vlasnika da ti da pristup za izmene.')
       : 'Čuvanje nije uspelo (' + (err && (err.message || code) || 'greška') + '). Pokušaj ponovo.');
   }
 }
@@ -3423,7 +3431,7 @@ let confirmId = null;
 function renderManage() {
   const b = $('#manageBody');
   if (!S.rokovi.length) { b.innerHTML = `<div class="empty"><strong>Nema učitanih rokova</strong>Dodaj prvi PDF raspored.</div><div class="actions"><button class="btn primary" data-open-upload>Dodaj rok (PDF)</button></div>`; return; }
-  b.innerHTML = `<p class="muted" style="margin:0">Rokovi su zajednički za sve koji koriste aplikaciju. Tvoj profil i plan su lični.</p><div class="doclist">` + S.rokovi.map(({ meta }) => `
+  b.innerHTML = `<div class="hint"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M21 11.9914C21 11.4234 21 10.8996 21 10.4167C21 7.21907 21 5.62028 20.6225 5.08241C20.245 4.54454 18.7417 4.02996 15.7351 3.00079L15.1623 2.80472C13.595 2.26824 12.8114 2 12 2C11.1886 2 10.405 2.26824 8.83772 2.80472L8.26491 3.00079C5.25832 4.02996 3.75503 4.54454 3.37752 5.08241C3 5.62028 3 7.21907 3 10.4167C3 10.8996 3 11.4234 3 11.9914C3 17.6294 7.23896 20.3655 9.89856 21.5273C10.62 21.8424 10.9807 22 12 22C13.0193 22 13.38 21.8424 14.1014 21.5273C16.761 20.3655 21 17.6294 21 11.9914Z"/><circle cx="12" cy="9" r="2"/><path d="M16 15C16 16.1046 16 17 12 17C8 17 8 16.1046 8 15C8 13.8954 9.79086 13 12 13C14.2091 13 16 13.8954 16 15Z"/></g></svg><span>Samo administrator vidi ovu stranicu. Rokovi i termini koje ovde dodaš važe za sve korisnike, a oni mogu samo da biraju termine.</span></div><div class="doclist">` + S.rokovi.map(({ meta }) => `
     <div class="doc" style="--c:${S.rokColor[meta.id]}">
       <span class="sw"></span>
       <div class="info"><b>${esc(rokLabel(meta.rok))} rok ${esc(meta.godina)}</b>
@@ -3434,7 +3442,7 @@ function renderManage() {
     </div>`).join('') + `</div>
     <div class="actions"><button class="btn primary" data-open-upload><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M18.18 8.03933L18.6435 7.57589C19.4113 6.80804 20.6563 6.80804 21.4241 7.57589C22.192 8.34374 22.192 9.58868 21.4241 10.3565L20.9607 10.82M18.18 8.03933C18.18 8.03933 18.238 9.02414 19.1069 9.89309C19.9759 10.762 20.9607 10.82 20.9607 10.82M20.9607 10.82L16.7001 15.0806C16.4115 15.3692 16.2672 15.5135 16.1081 15.6376C15.9204 15.7839 15.7173 15.9094 15.5025 16.0118C15.3203 16.0986 15.1268 16.1632 14.7396 16.2922L13.5 16.7054L13.099 16.8391L12.6979 16.9728C12.5074 17.0363 12.2973 16.9867 12.1553 16.8447C12.0133 16.7027 11.9637 16.4926 12.0272 16.3021L12.1609 15.901L12.2946 15.5L12.7078 14.2604C12.8368 13.8732 12.9014 13.6797 12.9882 13.4975C13.0906 13.2827 13.2161 13.0796 13.3624 12.8919C13.4865 12.7328 13.6308 12.5885 13.9194 12.2999L18.18 8.03933M13.099 16.8391L12.1609 15.901"/><path d="M8 13H10.5"/><path d="M8 9H14.5"/><path d="M8 17H9.5"/><path d="M19.8284 3.17157C18.6569 2 16.7712 2 13 2H11C7.22876 2 5.34315 2 4.17157 3.17157C3 4.34315 3 6.22876 3 10V14C3 17.7712 3 19.6569 4.17157 20.8284C5.34315 22 7.22876 22 11 22H13C16.7712 22 18.6569 22 19.8284 20.8284C20.7715 19.8853 20.9554 18.4796 20.9913 16"/></g></svg> Dodaj rok (PDF)</button></div>`;
 }
-function openManage() { confirmId = null; go('rokovi'); renderManage(); }
+function openManage() { if (!S.isAdmin) return; confirmId = null; go('admin'); renderManage(); }
 $('#manageBody').addEventListener('click', async e => {
   const ask = e.target.closest('[data-ask]'); if (ask) { confirmId = ask.dataset.ask; renderManage(); return; }
   if (e.target.closest('[data-cancel]')) { confirmId = null; renderManage(); return; }
@@ -3458,7 +3466,7 @@ const ROUTES = {
   kalendar: { title: 'Kalendar', sec: 'planer', sub: () => '' },
   poruke: { title: 'Poruke', sec: 'poruke', sub: () => 'Privatne poruke i grupe su šifrovane' },
   prijatelji: { title: 'Prijatelji', sec: 'prijatelji', sub: () => { const n = FR.friends.length, on = FR.friends.filter(f => C.online.has(f.uid)).length; return `${num(n, 'prijatelj', 'prijatelja', 'prijatelja')}${on ? ` · ${on} online` : ''}`; } },
-  rokovi: { title: 'Ispitni rokovi', sec: 'rokovi', sub: () => 'Zajednički rasporedi za sve korisnike' }
+  admin: { title: 'Administracija', sec: 'admin', sub: () => 'Ispitni rokovi i termini koje vide svi korisnici' }
 };
 let route = ROUTES[location.hash.slice(1)] ? location.hash.slice(1) : (S.view === 'plan' ? 'plan' : 'kalendar');
 if (route === 'plan') S.view = 'plan'; else if (route === 'kalendar' && S.view === 'plan') S.view = 'mesec';
@@ -3472,7 +3480,8 @@ function setRouteUi() {
   $('#filtersToggle').hidden = sec !== 'planer';
 }
 function applyRoute() {
-  const r = ROUTES[location.hash.slice(1)] ? location.hash.slice(1) : 'plan';
+  let r = ROUTES[location.hash.slice(1)] ? location.hash.slice(1) : 'plan';
+  if (r === 'admin' && S.loaded && !S.isAdmin) { location.hash = 'plan'; return; }
   const changed = r !== route; route = r;
   if (r === 'plan') S.view = 'plan';
   if (r === 'kalendar' && S.view === 'plan') S.view = S.calView || 'mesec';
@@ -3480,11 +3489,18 @@ function applyRoute() {
   if (r === 'poruke') openFull(C.pendingCid || null); else if (C.full) closeFull();
   C.pendingCid = null;
   if (r === 'prijatelji') { if (changed && !F.keep) { F.view = 'list'; if (FR.incoming.length) F.tab = 'requests'; } F.keep = false; renderFriendsUi(); }
-  if (r === 'rokovi') renderManage();
+  if (r === 'admin') { if (!S.isAdmin) { location.hash = 'plan'; return; } renderManage(); }
   saveUi(); refresh();
   if (changed) window.scrollTo(0, 0);
 }
 window.addEventListener('hashchange', applyRoute);
+
+// ---- administrator: samo on menja ispitne rokove i termine ----
+// claude.ai: vlasnik artifakta. Supabase: email iz tabele `admins`. Bez baze (lokalno): korisnik sam sebi.
+async function resolveAdmin() {
+  if (Store.mode !== 'db') return true;
+  try { const u = await window.claude.use('user'); return !!(u && typeof u.isOwner === 'function' && await u.isOwner()); } catch { return false; }
+}
 
 // ================= Start =================
 function pickInitialMonth() {
@@ -3504,11 +3520,13 @@ function pickInitialMonth() {
   }
   try { await Me.load(); }
   catch (err) { $('#bannerArea').insertAdjacentHTML('beforeend', `<div class="banner err" style="margin-bottom:14px">Tvoj plan trenutno nije dostupan. Osveži stranicu za koji trenutak.</div>`); Me.loadFailed = true; }
+  S.isAdmin = await resolveAdmin();
+  $('#adminNav').hidden = !S.isAdmin;
   rebuild(); derive(); deriveFriends(); applyFilters(); pickInitialMonth(); S.loaded = true;
   setRouteUi(); refresh();
   subscribePeople();
   await initChat();
-  if (route === 'poruke') openFull(); else if (route === 'rokovi') renderManage();
+  if (route === 'poruke') openFull(); else if (route === 'admin') { if (S.isAdmin) renderManage(); else go('plan'); }
   if (!Me.loadFailed && (!prof() || !prof().onboarded) && S.exams.length) openWizard(true, null);
   else if (prof() && prof().onboarded && !prof().ime) { openWizard(false, 'profil'); W.note = 'Novo: dopuni profil imenom, a po želji i brojem indeksa i slikom, da bi te prijatelji pronašli.'; renderWizard(); }
 })();

@@ -1,6 +1,6 @@
 -- Planer ispita – šema za Supabase (pokreni jednom u SQL Editor-u).
 -- Aplikacija čuva podatke kao dokumente (putanja → JSON), isto kao u claude.ai verziji.
---   rokovi/<id>, ispiti/<id>__<n>      zajednički rasporedi (čitaju svi, pišu potvrđeni korisnici)
+--   rokovi/<id>, ispiti/<id>__<n>      zajednički rasporedi (čitaju svi, menja samo administrator)
 --   people/<uid>                        javna kartica korisnika (čitaju potvrđeni, piše samo vlasnik)
 --   box/<uid>/c/<chatId>                poruke korisnika (čitaju potvrđeni, piše samo vlasnik; privatni četovi su šifrovani)
 --   data/users/<uid>/...                lični profil i plan (samo vlasnik)
@@ -22,6 +22,20 @@ language sql stable security definer set search_path = public, auth as $$
     where u.id = auth.uid() and u.email_confirmed_at is not null and coalesce(u.is_anonymous, false) = false
   );
 $$;
+
+-- administratori: samo oni dodaju i menjaju ispitne rokove i termine.
+-- Posle pokretanja ove skripte upiši svoj email:
+--   insert into public.admins (email) values ('tvoj@email.com');
+create table if not exists public.admins (email text primary key);
+alter table public.admins enable row level security;  -- bez politika: niko ih ne čita direktno
+
+create or replace function public.is_admin() returns boolean
+language sql stable security definer set search_path = public, auth as $$
+  select public.is_verified() and exists (
+    select 1 from public.admins a join auth.users u on lower(u.email) = lower(a.email) where u.id = auth.uid()
+  );
+$$;
+grant execute on function public.is_admin() to anon, authenticated;
 
 -- vlasnik dela baze određen putanjom
 create or replace function public.path_owner(p text) returns text
@@ -54,22 +68,23 @@ create policy docs_read on public.docs for select using (
 
 drop policy if exists docs_insert on public.docs;
 create policy docs_insert on public.docs for insert with check (
-  public.is_verified() and (
-    parent in ('rokovi', 'ispiti')
-    or public.path_owner(path) = auth.uid()::text
-  )
+  (parent in ('rokovi', 'ispiti') and public.is_admin())
+  or (public.is_verified() and public.path_owner(path) = auth.uid()::text)
 );
 
 drop policy if exists docs_update on public.docs;
 create policy docs_update on public.docs for update using (
-  public.is_verified() and (parent in ('rokovi', 'ispiti') or public.path_owner(path) = auth.uid()::text)
+  (parent in ('rokovi', 'ispiti') and public.is_admin())
+  or (public.is_verified() and public.path_owner(path) = auth.uid()::text)
 ) with check (
-  public.is_verified() and (parent in ('rokovi', 'ispiti') or public.path_owner(path) = auth.uid()::text)
+  (parent in ('rokovi', 'ispiti') and public.is_admin())
+  or (public.is_verified() and public.path_owner(path) = auth.uid()::text)
 );
 
 drop policy if exists docs_delete on public.docs;
 create policy docs_delete on public.docs for delete using (
-  public.is_verified() and (parent in ('rokovi', 'ispiti') or public.path_owner(path) = auth.uid()::text)
+  (parent in ('rokovi', 'ispiti') and public.is_admin())
+  or (public.is_verified() and public.path_owner(path) = auth.uid()::text)
 );
 
 -- izmene uživo (poruke, prijatelji)

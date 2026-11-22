@@ -7,7 +7,10 @@ Aplikacija je statička stranica (GitHub Pages). Prijava, baza, poruke uživo i 
 1. Napravi nalog na supabase.com → **New project** (region: Frankfurt / Central EU).
 2. **SQL Editor** → nalepi ceo sadržaj `supabase/schema.sql` → **Run**.
    Ovo pravi tabelu, pravila pristupa (RLS), izmene uživo i bucket `attachments` za fajlove.
-3. **Project Settings → API**: zapiši **Project URL** i **anon public** ključ (javan je, zaštitu daju pravila u bazi).
+3. **Administrator** (samo on dodaje ispitne rokove i termine) – u SQL Editor-u pokreni:
+   `insert into public.admins (email) values ('tvoj@email.com');`
+   Email se čuva samo u bazi, ne u kodu. Admin u aplikaciji vidi stavku **Admin** u navigaciji.
+4. **Project Settings → API**: zapiši **Project URL** i **anon public** ključ (javan je, zaštitu daju pravila u bazi).
 
 ## 2. Prijava
 U **Authentication**:
@@ -23,12 +26,12 @@ U **Authentication**:
 
 ## 3. GitHub
 1. Repo → **Settings → Secrets and variables → Actions → Variables**: dodaj
-   `SUPABASE_URL` i `SUPABASE_ANON_KEY` (vrednosti iz koraka 1.3).
+   `SUPABASE_URL` i `SUPABASE_ANON_KEY` (vrednosti iz koraka 1.4).
 2. Repo → **Settings → Pages → Source: GitHub Actions**.
 3. Spoji granu u `main` → workflow „Objavi na GitHub Pages" gradi `site/` i objavljuje stranicu.
 
 ## 4. Prvi koraci u aplikaciji
-- Prijavi se, potvrdi email i dodaj prvi ispitni rok (PDF) u sekciji **Rokovi**.
+- Prijavi se kao administrator i dodaj prvi ispitni rok (PDF) u sekciji **Admin**. Ostali korisnici samo biraju termine.
 - Gosti mogu da koriste planer bez naloga (plan ostaje na uređaju). Kad naprave nalog, plan se prenosi.
 
 ## Lokalno
