@@ -1,8 +1,20 @@
-# Raspored ispita (elfak-planner)
+# Planer ispita (elfak-planner)
 
-Web aplikacija koja iz PDF rasporeda ispita (ćirilica) izvlači ispite, prebacuje ih na latinicu
-i prikazuje u kalendaru (mesečni, godišnji i tabelarni prikaz) sa filterima po roku, nivou,
-semestru, modulu, akreditaciji, datumu i nazivu predmeta.
+Web aplikacija za planiranje ispita. Iz PDF rasporeda ispita (ćirilica) izvlači ispite, prebacuje ih
+na latinicu i prikazuje u kalendaru (plan, mesečni, godišnji i tabelarni prikaz).
+
+## Planiranje
+
+- **Profil** (čarobnjak pri prvom otvaranju, kasnije „Podešavanja"): nivo (OAS/MAS), akreditacija,
+  godina i modul. Prikazuju se samo predmeti iz tekuće i prethodnih godina, modula i zajednički (SVI).
+  Koraci se sami preskaču kad postoji samo jedna mogućnost (npr. master ima jednu godinu, prva godina nema modul).
+- **Preostali ispiti**: unapred su označeni obavezni (`…O01`) i završni predmeti tekuće godine;
+  izborni (`…A01`, `…B01`…) i ispiti iz ranijih godina se dodaju ručno.
+- **Zakazivanje**: klik na ispit u „Moji ispiti" → kalendar označava dane kada taj predmet ima ispit → klik na dan.
+- **Konflikti**: manji = isti dan, drugo vreme (narandžasto); veći = isti dan i isto vreme (crveno,
+  uz upozorenje pre zakazivanja, sa opcijom „Zakaži svejedno").
+- Profil i plan su lični (`data/users/<id>/profile` u bazi artifakta, ili localStorage van njega);
+  rokovi su zajednički.
 
 - `index.html` – samostalna aplikacija; otvori je u pregledaču. Podaci se čuvaju u localStorage.
 - `src/core.js` – transliteracija i parser PDF redova (koristi pdf.js 3.11.174 sa cdnjs).

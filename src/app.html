@@ -1,4 +1,4 @@
-<title>Raspored ispita</title>
+<title>Planer ispita</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap">
@@ -202,7 +202,9 @@ header.top .grow { flex: 1; }
   .mcell { min-height: 60px; padding: 6px 3px; align-items: center; border-radius: var(--rad-sm); }
   .mcell .dn { flex-direction: column; gap: 3px; font-size: 15px; }
   .mcell .total { padding: 0 6px; font-size: 11px; }
-  .slot, .mini, .rokdots { display: none !important; }
+  .slot, .mini, .rokdots, .opts, .ot, .cw { display: none !important; }
+  .pchip { font-size: 0; padding: 0; height: 6px; width: 70%; border-radius: 3px; }
+  .mcell .dn { width: 100%; align-items: center; }
 }
 .rokdots { display: flex; gap: 4px; margin-top: auto; }
 .rokdots i { width: 8px; height: 8px; border-radius: 3px; background: var(--c); }
@@ -309,58 +311,221 @@ h3.sec { font-size: 12px; font-weight: 600; letter-spacing: .07em; text-transfor
   .iconbtn { width: 40px; height: 40px; }
   .period { font-size: 22px; flex-basis: 100%; margin-left: 0; }
 }
+
+/* ================= Planer ================= */
+:root { --warn: #c26a00; --warn-soft: #fff3e0; --bad: #d93a2f; --bad-soft: #fdecea; --ok: #12924f; --ok-soft: #e6f6ed; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --warn: #f5b04a; --warn-soft: rgb(245 176 74 / .13); --bad: #ff7b6e; --bad-soft: rgb(255 123 110 / .14); --ok: #4fd18b; --ok-soft: rgb(79 209 139 / .13); } }
+:root[data-theme="dark"] { --warn: #f5b04a; --warn-soft: rgb(245 176 74 / .13); --bad: #ff7b6e; --bad-soft: rgb(255 123 110 / .14); --ok: #4fd18b; --ok-soft: rgb(79 209 139 / .13); }
+
+/* profil u bočnom meniju */
+.side { display: flex; flex-direction: column; gap: 14px; }
+.profile { background: var(--tile); border-radius: var(--rad-lg); padding: 14px 14px 14px 16px; display: flex; align-items: center; gap: 12px; }
+.profile .pi { flex: 1; min-width: 0; }
+.profile .pt { font-family: var(--f-head); font-weight: 500; font-size: 17px; line-height: 1.2; }
+.profile .ps { font-size: 13px; color: var(--ink-3); margin-top: 2px; }
+.seg.sm { padding: 3px; box-shadow: none; background: var(--tile); width: 100%; }
+.seg.sm button { flex: 1 1 auto; min-height: 32px; padding: 4px 8px; font-size: 13px; white-space: nowrap; }
+.seg.sm button .n { font-family: var(--f-body); font-size: 12px; opacity: .6; margin-left: 3px; }
+.mylist { display: flex; flex-direction: column; gap: 4px; margin: 0 -6px; }
+.mi { display: flex; align-items: flex-start; gap: 10px; width: 100%; text-align: left; border: 1px solid transparent; background: transparent; padding: 9px 10px; border-radius: var(--rad-sm); color: var(--ink); transition: background-color .15s; }
+.mi:hover { background: var(--tile); }
+.mi.on { background: var(--brand-soft); border-color: var(--brand-line); }
+.mi .st { width: 10px; height: 10px; border-radius: 4px; margin-top: 5px; flex: none; background: transparent; box-shadow: inset 0 0 0 1.5px var(--line-strong); }
+.mi .st.planned { background: var(--brand); box-shadow: none; }
+.mi .st.minor { background: var(--warn); box-shadow: none; }
+.mi .st.major { background: var(--bad); box-shadow: none; }
+.mi .mt { flex: 1; min-width: 0; }
+.mi .mn { display: block; font-weight: 500; font-size: 14.5px; line-height: 1.3; }
+.mi .mm { display: block; font-size: 12.5px; color: var(--ink-3); margin-top: 2px; font-variant-numeric: tabular-nums; }
+.mi .mm b { color: var(--ink-2); font-weight: 600; }
+.semhead { font-size: 11.5px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); padding: 10px 10px 2px; }
+.muted { color: var(--ink-3); font-size: 13.5px; }
+.linkbtn { border: 0; background: none; color: var(--brand-fg); font-weight: 600; font-size: 13.5px; padding: 4px 6px; border-radius: 8px; }
+.linkbtn:hover { background: var(--brand-soft); }
+.switch { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 14px; color: var(--ink-2); cursor: pointer; }
+.switch input { appearance: none; -webkit-appearance: none; width: 40px; height: 24px; border-radius: 999px; background: var(--line-strong); position: relative; cursor: pointer; transition: background-color .15s; flex: none; margin: 0; }
+.switch input::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgb(0 0 0 / .25); transition: transform .15s; }
+.switch input:checked { background: var(--brand); }
+.switch input:checked::after { transform: translateX(16px); }
+
+/* pill oznake stanja */
+.pill { display: inline-flex; align-items: center; gap: 5px; border-radius: 8px; padding: 2px 8px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.pill.major { background: var(--bad-soft); color: var(--bad); }
+.pill.minor { background: var(--warn-soft); color: var(--warn); }
+.pill.ok { background: var(--ok-soft); color: var(--ok); }
+.pill.planned { background: var(--brand-soft); color: var(--brand-fg); }
+.pill.none { background: var(--tile); color: var(--ink-3); }
+
+/* traka za biranje termina */
+.pickbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--brand-soft); border: 1px solid var(--brand-line); border-radius: var(--rad-lg); padding: 10px 10px 10px 16px; }
+.pickbar .pk { flex: 1; min-width: 200px; font-size: 14px; color: var(--ink-2); }
+.pickbar .pk b { color: var(--ink); font-family: var(--f-head); font-weight: 500; font-size: 16px; }
+
+/* kalendar: moj plan i biranje */
+.pchip { font-size: 12px; line-height: 1.25; border-radius: 8px; padding: 3px 7px; background: var(--brand); color: var(--on-brand); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-weight: 500; word-break: break-word; }
+.pchip b { font-weight: 700; }
+.mcell.sel .pchip:not(.minor):not(.major) { background: rgb(255 255 255 / .2); }
+.mcell.sel .opts { color: var(--on-brand); opacity: .8; }
+.pchip.minor { background: var(--warn); color: #fff; }
+.pchip.major { background: var(--bad); color: #fff; }
+.opts { font-size: 12.5px; color: var(--ink-3); margin-top: auto; }
+.mcell.mine-has { background: var(--tile); }
+.mcell.dim { opacity: .38; }
+.mcell.opt { background: var(--surface); border: 2px solid var(--brand); cursor: pointer; }
+.mcell.opt:hover { background: var(--brand-soft); }
+.mcell.opt.major-c { border-color: var(--bad); }
+.mcell.opt.minor-c { border-color: var(--warn); }
+.mcell .ot { font-size: 13px; font-weight: 600; color: var(--brand-fg); font-variant-numeric: tabular-nums; }
+.mcell .cw { font-size: 11.5px; font-weight: 600; line-height: 1.25; }
+.mcell .cw.major { color: var(--bad); }
+.mcell .cw.minor { color: var(--warn); }
+.mcell.sel.opt { border-color: var(--brand); }
+.yd.planned { box-shadow: inset 0 0 0 2px var(--brand); color: var(--ink); font-weight: 700; }
+.yd.planned.cmajor { box-shadow: inset 0 0 0 2px var(--bad); }
+
+/* pregled plana */
+.planv { display: flex; flex-direction: column; gap: 18px; padding: 6px; }
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+@media (max-width: 700px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.stat2 { background: var(--tile); border-radius: var(--rad-md); padding: 12px 14px; font-size: 13px; color: var(--ink-3); }
+.stat2 b { display: block; font-family: var(--f-head); font-weight: 500; font-size: 28px; line-height: 1.15; color: var(--ink); font-variant-numeric: tabular-nums; }
+.stat2.bad b { color: var(--bad); }
+.nextcard { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; background: var(--brand); color: var(--on-brand); border-radius: var(--rad-lg); padding: 16px 18px; box-shadow: var(--shadow-btn); }
+.nextcard .nl { font-size: 12px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; opacity: .75; }
+.nextcard .nn { font-family: var(--f-head); font-weight: 500; font-size: 21px; line-height: 1.2; }
+.nextcard .nd { font-size: 14px; opacity: .85; }
+.nextcard .cd { margin-left: auto; text-align: right; font-family: var(--f-head); font-weight: 500; font-size: 30px; line-height: 1; }
+.nextcard .cd small { display: block; font-family: var(--f-body); font-size: 12.5px; font-weight: 500; opacity: .8; margin-top: 4px; }
+.sechead { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.sechead h3 { margin: 0; font-size: 19px; }
+.timeline { display: flex; flex-direction: column; }
+.titem { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 10px; border-radius: var(--rad-md); }
+.titem:hover { background: var(--tile); }
+.dbadge { width: 64px; height: 64px; border-radius: var(--rad-md); background: var(--tile); display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.05; }
+.titem:hover .dbadge { background: var(--surface); }
+.dbadge b { font-family: var(--f-head); font-weight: 500; font-size: 24px; }
+.dbadge span { font-size: 11.5px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: .04em; }
+.dbadge.minor { background: var(--warn-soft); } .dbadge.major { background: var(--bad-soft); }
+.dbadge.past { opacity: .5; }
+.tinfo { min-width: 0; }
+.tinfo .tn { font-weight: 600; font-size: 15.5px; }
+.tinfo .tm { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 5px; font-size: 13px; color: var(--ink-3); }
+.tact { display: flex; gap: 6px; }
+.gap { display: flex; align-items: center; gap: 10px; padding: 0 10px 0 41px; font-size: 12.5px; color: var(--ink-3); height: 22px; }
+.gap::before { content: ""; width: 2px; height: 100%; background: var(--line); border-radius: 2px; }
+.gap.tight { color: var(--warn); font-weight: 600; }
+.ucards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; }
+.ucard { background: var(--tile); border-radius: var(--rad-md); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.ucard .un { font-weight: 600; line-height: 1.3; }
+.ucard .um { font-size: 13px; color: var(--ink-3); }
+.ucard .btn { align-self: flex-start; }
+
+/* panel dana: redovi sa akcijom */
+.xrow { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--tile); border-radius: var(--rad-md); }
+.xrow .xi { flex: 1; min-width: 0; }
+.xrow .xn { font-weight: 600; font-size: 14.5px; line-height: 1.3; }
+.xrow .xm { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; align-items: center; }
+.xrow.mine { background: var(--brand-soft); }
+.xrow.major { box-shadow: inset 3px 0 0 var(--bad); } .xrow.minor { box-shadow: inset 3px 0 0 var(--warn); }
+.xrow .note { font-size: 12.5px; margin-top: 4px; }
+.note.major { color: var(--bad); } .note.minor { color: var(--warn); }
+.dsec { padding: 6px 6px 2px; display: flex; flex-direction: column; gap: 6px; }
+.dsec h4 { margin: 8px 8px 2px; font-size: 12px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); }
+
+/* čarobnjak */
+#setupDlg { width: min(860px, calc(100vw - 24px)); }
+.wiz { display: flex; flex-direction: column; max-height: calc(100vh - 50px); }
+.wiz-top { padding: 20px 24px 6px; display: flex; flex-direction: column; gap: 16px; }
+.wiz-top .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.wiz-top .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); }
+.stepper { display: flex; gap: 6px; }
+.stepper button { flex: 1; border: 0; background: none; padding: 0; display: flex; flex-direction: column; gap: 7px; text-align: left; color: var(--ink-3); font-size: 12.5px; font-weight: 600; cursor: default; }
+.stepper button i { display: block; height: 5px; border-radius: 3px; background: var(--tile-hover); }
+.stepper button.done { color: var(--ink-2); cursor: pointer; }
+.stepper button.done i { background: var(--brand); opacity: .45; }
+.stepper button.cur { color: var(--ink); }
+.stepper button.cur i { background: var(--brand); }
+@media (max-width: 600px) { .stepper button span { display: none; } }
+.wiz-body { padding: 14px 24px 8px; overflow: auto; display: flex; flex-direction: column; gap: 16px; min-height: 280px; }
+.wiz-body h2 { margin: 0; font-size: 28px; line-height: 1.15; }
+.wiz-body .lead { margin: -6px 0 0; color: var(--ink-2); max-width: 60ch; }
+.wiz-foot { padding: 14px 24px 22px; display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--line); }
+.wiz-foot .grow { flex: 1; }
+.choices { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+.choice { text-align: left; border: 2px solid transparent; background: var(--tile); color: var(--ink); border-radius: var(--rad-lg); padding: 16px 16px 14px; display: flex; flex-direction: column; gap: 6px; min-height: 112px; transition: background-color .15s, border-color .15s, transform .15s; }
+.choice:hover { background: var(--tile-hover); }
+.choice:active { transform: translateY(1px); }
+.choice[aria-pressed="true"] { border-color: var(--brand); background: var(--brand-soft); }
+.choice .cb { font-family: var(--f-head); font-weight: 500; font-size: 24px; line-height: 1.1; }
+.choice .cs { font-size: 13.5px; color: var(--ink-2); }
+.choice .cx { font-size: 12.5px; color: var(--ink-3); margin-top: auto; line-height: 1.35; }
+.choice .ck { align-self: flex-end; margin-top: -4px; width: 22px; height: 22px; border-radius: 8px; display: grid; place-items: center; background: var(--brand); color: var(--on-brand); visibility: hidden; }
+.choice[aria-pressed="true"] .ck { visibility: visible; }
+.choices.big .choice { min-height: 150px; }
+.choices.big .choice .cb { font-size: 26px; }
+.picktools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.picktools .search { flex: 1; min-width: 200px; }
+.picktools .count { font-family: var(--f-head); font-weight: 500; font-size: 16px; margin-left: auto; }
+.semgroup { display: flex; flex-direction: column; gap: 4px; }
+.semgroup .sh { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 4px 2px; }
+.semgroup .sh b { font-family: var(--f-head); font-weight: 500; font-size: 16px; }
+.semgroup .sh span { font-size: 13px; color: var(--ink-3); margin-left: 6px; }
+.subjgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 6px; }
+.sopt { display: flex; align-items: flex-start; gap: 10px; text-align: left; border: 1px solid transparent; background: var(--tile); color: var(--ink); border-radius: var(--rad-sm); padding: 10px 12px; transition: background-color .15s, border-color .15s; }
+.sopt:hover { background: var(--tile-hover); }
+.sopt[aria-pressed="true"] { background: var(--brand-soft); border-color: var(--brand-line); }
+.sopt .box { width: 20px; height: 20px; border-radius: 7px; flex: none; margin-top: 1px; box-shadow: inset 0 0 0 1.5px var(--line-strong); display: grid; place-items: center; color: transparent; background: var(--surface); }
+.sopt[aria-pressed="true"] .box { background: var(--brand); box-shadow: none; color: var(--on-brand); }
+.sopt .sn2 { font-weight: 500; font-size: 14px; line-height: 1.3; }
+.sopt .sm2 { font-size: 12px; color: var(--ink-3); margin-top: 2px; display: flex; gap: 6px; flex-wrap: wrap; }
+.sumgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+.sumgrid > div { background: var(--tile); border-radius: var(--rad-md); padding: 12px 14px; font-size: 13px; color: var(--ink-3); }
+.sumgrid b { display: block; font-family: var(--f-head); font-weight: 500; font-size: 20px; color: var(--ink); line-height: 1.25; }
+.hint { display: flex; gap: 10px; align-items: flex-start; background: var(--tile); border-radius: var(--rad-md); padding: 12px 14px; font-size: 13.5px; color: var(--ink-2); }
+.hint svg { flex: none; margin-top: 1px; color: var(--brand-fg); }
+
+/* konflikt dijalog */
+#conflictDlg { width: min(480px, calc(100vw - 32px)); }
+.cfx { padding: 24px; display: flex; flex-direction: column; gap: 14px; }
+.cfx .ic { width: 48px; height: 48px; border-radius: var(--rad-md); background: var(--bad-soft); color: var(--bad); display: grid; place-items: center; }
+.cfx h2 { margin: 0; font-size: 22px; }
+.cfx p { margin: 0; color: var(--ink-2); }
+.cfx .xrow { background: var(--tile); }
+.btn.danger-solid { --b-bg: var(--bad); color: #fff; border-color: var(--bad); box-shadow: inset 0 4px 4px rgb(255 255 255 / .2), 3px 4px 11px rgb(150 150 150 / .1); }
+.toast { display: flex; align-items: center; gap: 14px; }
+.toast button { border: 0; background: none; color: inherit; font-weight: 700; text-decoration: underline; padding: 0; }
 </style>
 
 <div class="wrap">
   <header class="top">
     <div class="brand">
-      <div class="logo" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="4"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/><path d="M8 14h3M8 17h6" opacity=".8"/></svg></div>
+      <div class="logo" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="4"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/><path d="m8.5 14.5 2.2 2.2 4.8-4.7"/></svg></div>
       <div>
-        <h1>Raspored ispita</h1>
+        <h1>Planer ispita</h1>
         <div class="sub" id="storeInfo">Učitavanje…</div>
       </div>
     </div>
     <div class="grow"></div>
-    <button class="btn filters-toggle" id="filtersToggle" aria-expanded="false">Filteri <span id="fcount" class="mono"></span></button>
+    <button class="btn filters-toggle" id="filtersToggle" aria-expanded="false">Moji ispiti <span id="fcount" class="mono"></span></button>
     <button class="iconbtn" id="themeBtn" aria-label="Tema" title="Tema"></button>
-    <button class="btn" id="manageBtn">Učitani rokovi</button>
-    <button class="btn primary" id="uploadBtn">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M6 10l6-6 6 6M4 20h16"/></svg>
-      Dodaj rok
+    <button class="iconbtn" id="settingsBtn" aria-label="Podešavanja" title="Podešavanja"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
+    <button class="btn" id="manageBtn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V9z"/><path d="M14 3v6h6"/></svg>
+      Rokovi
     </button>
   </header>
 
   <div id="bannerArea"></div>
 
   <div class="layout">
-    <aside class="card filters collapsed" id="filters" aria-label="Filteri">
-      <div class="fgroup">
-        <div class="flabel">Pretraga</div>
-        <div class="search">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <input id="q" type="search" placeholder="Naziv predmeta ili šifra" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sugg">
-          <ul class="sugg" id="sugg" role="listbox" hidden></ul>
-        </div>
-      </div>
-      <div class="fgroup"><div class="flabel">Rok <button data-clear="rok">poništi</button></div><div class="chips" id="f-rok"></div></div>
-      <div class="fgroup"><div class="flabel">Nivo <button data-clear="nivo">poništi</button></div><div class="chips" id="f-nivo"></div></div>
-      <div class="fgroup"><div class="flabel">Semestar <button data-clear="sem">poništi</button></div><div class="chips" id="f-sem"></div></div>
-      <div class="fgroup"><div class="flabel">Modul <button data-clear="modul">poništi</button></div><div class="chips" id="f-modul"></div></div>
-      <div class="fgroup"><div class="flabel">Akreditacija <button data-clear="akred">poništi</button></div><div class="chips" id="f-akred"></div></div>
-      <div class="fgroup">
-        <div class="flabel">Datum <button data-clear="datum">obriši</button></div>
-        <div class="dates">
-          <label for="od"><span>od</span><input type="date" id="od"></label>
-          <label for="do"><span>do</span><input type="date" id="do"></label>
-        </div>
-      </div>
-      <div class="fsummary"><span id="resultCount">0 ispita</span><button class="btn ghost sm" id="resetAll">Poništi sve</button></div>
-    </aside>
+    <aside class="card filters side collapsed" id="filters" aria-label="Moji ispiti"></aside>
 
     <section class="main">
+      <div id="pickArea"></div>
       <div class="toolbar">
         <div class="seg" role="group" aria-label="Prikaz">
-          <button data-view="mesec" aria-pressed="true">Mesec</button>
+          <button data-view="plan" aria-pressed="true">Plan</button>
+          <button data-view="mesec" aria-pressed="false">Mesec</button>
           <button data-view="godina" aria-pressed="false">Godina</button>
           <button data-view="lista" aria-pressed="false">Lista</button>
         </div>
@@ -378,6 +543,10 @@ h3.sec { font-size: 12px; font-weight: 600; letter-spacing: .07em; text-transfor
   </div>
 </div>
 
+<dialog id="setupDlg" aria-labelledby="wizTitle"><div class="wiz" id="wiz"></div></dialog>
+
+<dialog id="conflictDlg" aria-labelledby="cfxTitle"><div class="cfx" id="cfx"></div></dialog>
+
 <dialog id="uploadDlg" aria-labelledby="uploadTitle">
   <div class="dlg">
     <header><h2 id="uploadTitle">Dodaj rok iz PDF-a</h2><button class="iconbtn" data-close aria-label="Zatvori"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></header>
@@ -387,7 +556,7 @@ h3.sec { font-size: 12px; font-weight: 600; letter-spacing: .07em; text-transfor
 
 <dialog id="manageDlg" aria-labelledby="manageTitle">
   <div class="dlg">
-    <header><h2 id="manageTitle">Učitani rokovi</h2><button class="iconbtn" data-close aria-label="Zatvori"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></header>
+    <header><h2 id="manageTitle">Ispitni rokovi</h2><button class="iconbtn" data-close aria-label="Zatvori"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></header>
     <div class="body" id="manageBody"></div>
   </div>
 </dialog>
@@ -400,16 +569,19 @@ h3.sec { font-size: 12px; font-weight: 600; letter-spacing: .07em; text-transfor
 </script>
 <script>
 (() => {
-// ================= Konstante =================
+// ================= Konstante i pomoćne funkcije =================
 const PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
 const NIVO_NAZIV = { OAS: 'Osnovne akademske studije', MAS: 'Master akademske studije', DAS: 'Doktorske akademske studije', OSS: 'Osnovne strukovne studije', MSS: 'Master strukovne studije', SAS: 'Specijalističke akademske studije' };
 const DANI = ['Pon', 'Uto', 'Sre', 'Čet', 'Pet', 'Sub', 'Ned'];
 const DANI_PUNO = ['nedelja', 'ponedeljak', 'utorak', 'sreda', 'četvrtak', 'petak', 'subota'];
+const DANI_KRATKO = ['ned', 'pon', 'uto', 'sre', 'čet', 'pet', 'sub'];
 const MESECI = ['januar', 'februar', 'mart', 'april', 'maj', 'jun', 'jul', 'avgust', 'septembar', 'oktobar', 'novembar', 'decembar'];
+const MES_KRATKO = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'avg', 'sep', 'okt', 'nov', 'dec'];
 const ROK_COLORS = ['var(--r1)', 'var(--r2)', 'var(--r3)', 'var(--r4)', 'var(--r5)', 'var(--r6)'];
 const CHUNK = 600;
 const LS_KEY = 'raspored-ispita:v1';
 const LS_UI = 'raspored-ispita:ui';
+const LS_ME = 'raspored-ispita:profil';
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const pad = n => String(n).padStart(2, '0');
@@ -418,14 +590,25 @@ const parseIso = s => { const [y, m, d] = s.split('-').map(Number); return new D
 const todayIso = iso(new Date());
 const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 const fmtDay = s => { const d = parseIso(s); return `${DANI_PUNO[d.getDay()]}, ${d.getDate()}. ${MESECI[d.getMonth()]} ${d.getFullYear()}.`; };
+const fmtShort = s => { const d = parseIso(s); return `${DANI_KRATKO[d.getDay()]} ${d.getDate()}.${d.getMonth() + 1}.`; };
+const daysBetween = (a, b) => Math.round((parseIso(b) - parseIso(a)) / 86400000);
 const num = (n, one, few, many) => { const a = n % 10, b = n % 100; return `${n} ${a === 1 && b !== 11 ? one : (a >= 2 && a <= 4 && (b < 12 || b > 14) ? few : many)}`; };
 const ispita = n => num(n, 'ispit', 'ispita', 'ispita');
+const termina = n => num(n, 'termin', 'termina', 'termina');
+const dana = n => num(n, 'dan', 'dana', 'dana');
+const uniq = arr => [...new Set(arr)];
 const lsGet = k => { try { return localStorage.getItem(k); } catch { return null; } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); return true; } catch { return false; } };
+const ICON_CHECK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>';
+const ICON_X = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
 
-function toast(msg) {
-  const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t);
-  setTimeout(() => t.remove(), 3200);
+function toast(msg, action) {
+  document.querySelectorAll('.toast').forEach(t => t.remove());
+  const t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status');
+  const sp = document.createElement('span'); sp.textContent = msg; t.appendChild(sp);
+  if (action) { const b = document.createElement('button'); b.textContent = action.label; b.addEventListener('click', () => { t.remove(); action.fn(); }); t.appendChild(b); }
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), action ? 7000 : 3400);
 }
 function withTimeout(p, ms) {
   return Promise.race([p, new Promise((_, rej) => setTimeout(() => rej({ code: 'timeout' }), ms))]);
@@ -453,9 +636,8 @@ $('#themeBtn').addEventListener('click', () => {
 });
 applyTheme();
 
-// ================= Skladište =================
-// U artifaktu: deljena baza (rokovi/{id} = metapodaci, ispiti/{id}__{n} = delovi sa redovima).
-// Van artifakta: localStorage u ovom pregledaču.
+// ================= Skladište rokova (deljeno) =================
+// U artifaktu: baza (rokovi/{id} = metapodaci, ispiti/{id}__{n} = delovi sa redovima). Van njega: localStorage.
 const Store = {
   mode: 'memory', db: null, mem: {},
   async init() {
@@ -509,16 +691,51 @@ const Store = {
   }
 };
 
+// ================= Moj profil i plan (privatno) =================
+// Baza: data/users/<id>/profile — vidi samo taj korisnik. Bez naloga: localStorage.
+// { nivo, akred, godina, modul, remaining: {sifra: {n: naziv, s: semestar}}, plan: {sifra: {rokId, datum, vreme}}, onboarded }
+const Me = {
+  mode: 'memory', db: null, uid: null, data: null, timer: 0, saving: false, dirty: false,
+  async init(db) {
+    this.db = db;
+    if (db) { try { const u = await window.claude.use('user'); this.uid = u ? await u.id() : null; } catch { this.uid = null; } }
+    this.mode = db && this.uid ? 'db' : (lsSet('raspored-ispita:test', '1') ? 'local' : 'memory');
+  },
+  ref() { return this.db.doc(`data/users/${this.uid}/profile`); },
+  async load() {
+    if (this.mode === 'db') { const s = await withTimeout(this.ref().get(), 10000); this.data = s.exists ? JSON.parse(JSON.stringify(s.data())) : null; }
+    else if (this.mode === 'local') { try { this.data = JSON.parse(lsGet(LS_ME) || 'null'); } catch { this.data = null; } }
+    if (this.data) { this.data.remaining = this.data.remaining || {}; this.data.plan = this.data.plan || {}; }
+    return this.data;
+  },
+  save() { this.dirty = true; clearTimeout(this.timer); this.timer = setTimeout(() => this.flush(), 350); },
+  async flush() {
+    if (this.saving || !this.dirty || !this.data) return;
+    this.saving = true; this.dirty = false;
+    const body = JSON.parse(JSON.stringify({ ...this.data, updatedAt: new Date().toISOString() }));
+    try {
+      if (this.mode === 'db') await this.ref().set(body);
+      else if (this.mode === 'local') lsSet(LS_ME, JSON.stringify(body));
+    } catch (e) { toast('Plan trenutno nije sačuvan. Proveri vezu, izmene ostaju dok je stranica otvorena.'); }
+    this.saving = false;
+    if (this.dirty) this.flush();
+  }
+};
+const prof = () => Me.data;
+
 // ================= Stanje =================
 const S = {
-  rokovi: [],      // [{meta, rows}]
-  exams: [],       // normalizovani objekti
-  rokColor: {},
-  f: { q: '', rok: new Set(), nivo: new Set(), sem: new Set(), modul: new Set(), akred: new Set(), od: '', do: '' },
-  view: 'mesec', y: new Date().getFullYear(), m: new Date().getMonth(), selDay: null,
-  listLimit: 300, loaded: false, error: null
+  rokovi: [], exams: [], rokColor: {},
+  f: { q: '', rok: new Set() },
+  scope: 'moji', view: 'plan', y: new Date().getFullYear(), m: new Date().getMonth(), selDay: null,
+  pick: null, tab: 'todo', listLimit: 300, loaded: false
 };
-try { const ui = JSON.parse(lsGet(LS_UI) || '{}'); if (['mesec', 'godina', 'lista'].includes(ui.view)) S.view = ui.view; } catch {}
+try {
+  const ui = JSON.parse(lsGet(LS_UI) || '{}');
+  if (['plan', 'mesec', 'godina', 'lista'].includes(ui.view)) S.view = ui.view;
+  if (['moji', 'svi'].includes(ui.scope)) S.scope = ui.scope;
+} catch {}
+const saveUi = () => lsSet(LS_UI, JSON.stringify({ view: S.view, scope: S.scope }));
 
 function rebuild() {
   S.rokovi.sort((a, b) => (a.meta.od || '').localeCompare(b.meta.od || ''));
@@ -532,70 +749,176 @@ function rebuild() {
   }
   ex.sort((a, b) => a.datum.localeCompare(b.datum) || a.vreme.localeCompare(b.vreme) || a.predmet.localeCompare(b.predmet, 'sr'));
   S.exams = ex;
-  // ukloni filtere koji više ne postoje
-  for (const k of ['rok']) for (const v of [...S.f[k]]) if (!S.rokovi.some(r => r.meta.id === v)) S.f[k].delete(v);
+  for (const v of [...S.f.rok]) if (!S.rokovi.some(r => r.meta.id === v)) S.f.rok.delete(v);
 }
 const rokName = id => { const r = S.rokovi.find(r => r.meta.id === id); return r ? `${rokLabel(r.meta.rok)} ${r.meta.godina}` : id; };
-const rokShort = id => { const r = S.rokovi.find(r => r.meta.id === id); return r ? rokLabel(r.meta.rok) : id; };
+const rokShort = id => { const r = S.rokovi.find(r => r.meta.id === id); return r ? rokLabel(r.meta.rok) : 'nepoznat rok'; };
+const rokTag = id => `<span class="tag rok" style="--c:${S.rokColor[id] || 'var(--ink-3)'}">${esc(rokShort(id))}</span>`;
 
-function matches(e, skip) {
-  const f = S.f;
-  const skipQ = skip === 'q';
-  if (skip !== 'rok' && f.rok.size && !f.rok.has(e.rokId)) return false;
-  if (skip !== 'nivo' && f.nivo.size && !f.nivo.has(e.nivo)) return false;
-  if (skip !== 'sem' && f.sem.size && !f.sem.has(String(e.sem))) return false;
-  if (skip !== 'modul' && f.modul.size && !f.modul.has(e.modul)) return false;
-  if (skip !== 'akred' && f.akred.size && !f.akred.has(String(e.akred))) return false;
-  if (f.od && e.datum < f.od) return false;
-  if (f.do && e.datum > f.do) return false;
-  if (f.q && !skipQ) { const words = fold(f.q).split(/\s+/).filter(Boolean); for (const w of words) if (!e.key.includes(w)) return false; }
+// ---- katalog predmeta za profil ----
+// obavezni: …O01; izborni: …A01, …B01…; završni/praksa: …8ZR, …8SP
+function subjType(code) {
+  const c = code[code.length - 3];
+  if (/\d/.test(c) && /[A-Z]{2}$/.test(code)) return 'Z';
+  return c === 'O' || /\d/.test(c) ? 'O' : 'I';
+}
+const TIP_NAZIV = { O: 'obavezni', I: 'izborni', Z: 'završni' };
+function inProfile(e, d) {
+  return e.nivo === d.nivo && e.akred == d.akred && e.sem <= d.godina * 2 && (e.modul === 'SVI' || e.modul === d.modul);
+}
+function buildCatalog(d) {
+  const m = new Map();
+  if (!d || !d.nivo || !d.akred || !d.godina) return m;
+  for (const e of S.exams) {
+    if (!inProfile(e, d)) continue;
+    let s = m.get(e.sifra);
+    if (!s) { s = { sifra: e.sifra, predmet: e.predmet, sem: e.sem, modul: e.modul, tip: subjType(e.sifra), inst: [] }; m.set(e.sifra, s); }
+    if (!s.inst.some(i => i.rokId === e.rokId)) s.inst.push(e);
+  }
+  return m;
+}
+
+// ---- moji ispiti: plan + konflikti ----
+let CAT = new Map(), MY = [], MYMAP = new Map(), MYEX = new Set();
+function derive() {
+  const p = prof();
+  CAT = buildCatalog(p);
+  MY = []; MYMAP = new Map(); MYEX = new Set();
+  if (!p) return;
+  let changed = false;
+  for (const [sifra, info] of Object.entries(p.remaining)) {
+    const c = CAT.get(sifra), inst = c ? c.inst : [];
+    let pl = p.plan[sifra] || null, ex = null, stale = false;
+    if (pl) {
+      ex = inst.find(i => i.rokId === pl.rokId) || null;
+      if (!ex) stale = true;
+      else if (ex.datum !== pl.datum || ex.vreme !== pl.vreme) { pl.datum = ex.datum; pl.vreme = ex.vreme; changed = true; }
+    }
+    const s = { sifra, predmet: c ? c.predmet : info.n, sem: c ? c.sem : info.s, tip: c ? c.tip : subjType(sifra), inst, plan: ex ? pl : null, exam: ex, stale, conf: null, confWith: [] };
+    MY.push(s); MYMAP.set(sifra, s); inst.forEach(i => MYEX.add(i.id));
+  }
+  if (changed) Me.save();
+  const byDate = {};
+  for (const s of MY) if (s.plan) (byDate[s.plan.datum] = byDate[s.plan.datum] || []).push(s);
+  for (const s of MY) {
+    if (!s.plan) continue;
+    for (const o of byDate[s.plan.datum]) {
+      if (o === s) continue;
+      const lvl = o.plan.vreme === s.plan.vreme ? 'major' : 'minor';
+      s.confWith.push({ s: o, lvl });
+      if (lvl === 'major') s.conf = 'major'; else if (!s.conf) s.conf = 'minor';
+    }
+  }
+  MY.sort((a, b) => a.sem - b.sem || a.predmet.localeCompare(b.predmet, 'sr'));
+}
+function conflictsFor(inst, exclude) {
+  return MY.filter(s => s.plan && s.sifra !== exclude && s.plan.datum === inst.datum)
+    .map(s => ({ s, lvl: s.plan.vreme === inst.vreme ? 'major' : 'minor' }))
+    .sort((a, b) => (a.lvl === 'major' ? -1 : 1) - (b.lvl === 'major' ? -1 : 1));
+}
+function conflictText(list) {
+  if (!list.length) return '';
+  const mj = list.filter(c => c.lvl === 'major'), mn = list.filter(c => c.lvl === 'minor');
+  if (mj.length) return `Isto vreme kao ${mj.map(c => c.s.predmet).join(', ')}`;
+  return `Isti dan kao ${mn.map(c => `${c.s.predmet} (${c.s.plan.vreme})`).join(', ')}`;
+}
+
+// ---- filtriranje kalendara ----
+function matchesQ(e) {
+  if (!S.f.q) return true;
+  const words = fold(S.f.q).split(/\s+/).filter(Boolean);
+  for (const w of words) if (!e.key.includes(w)) return false;
   return true;
 }
+function baseExams() {
+  const mine = S.scope === 'moji' && prof();
+  return S.exams.filter(e => (!mine || MYEX.has(e.id)) && (!S.f.rok.size || S.f.rok.has(e.rokId)));
+}
 let FILTERED = [];
-function applyFilters() { FILTERED = S.exams.filter(e => matches(e)); }
+function applyFilters() { FILTERED = baseExams().filter(matchesQ); }
 
-// ================= Filteri (UI) =================
-function chipGroup(el, key, values, labelFn, titleFn, colorFn) {
-  // brojevi pokazuju koliko bi ispita ostalo uz ostale aktivne filtere
-  const counts = {};
-  for (const e of S.exams) if (matches(e, key)) { const v = key === 'rok' ? e.rokId : String(e[key]); counts[v] = (counts[v] || 0) + 1; }
-  el.innerHTML = values.map(v => {
-    const on = S.f[key].has(v);
-    const c = colorFn ? ` style="--c:${colorFn(v)}"` : '';
-    return `<button class="chip" data-k="${key}" data-v="${esc(v)}" aria-pressed="${on}"${titleFn ? ` title="${esc(titleFn(v))}"` : ''}${c}>${colorFn ? '<span class="dot"></span>' : ''}${esc(labelFn(v))}<span class="n">${counts[v] || 0}</span></button>`;
-  }).join('') || '<span class="sub" style="color:var(--ink-3);font-size:12px">—</span>';
+// ================= Bočni meni: profil, pretraga, moji ispiti =================
+const SEARCH_ICON = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>';
+$('#filters').innerHTML = `
+  <div id="profileBox"></div>
+  <div class="search">${SEARCH_ICON}
+    <input id="q" type="search" placeholder="Pretraži predmete" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sugg" aria-label="Pretraga predmeta">
+    <ul class="sugg" id="sugg" role="listbox" hidden></ul>
+  </div>
+  <div class="fgroup" id="myBox"></div>
+  <div class="fgroup" id="viewOpts"></div>`;
+
+function profileSummary(p) {
+  if (!p) return '';
+  return [p.nivo, `ak. ${p.akred}`, `${p.godina}. godina`, p.modul ? `modul ${p.modul}` : null].filter(Boolean).join(' · ');
 }
-const uniq = (arr) => [...new Set(arr)];
-function renderFilters() {
-  chipGroup($('#f-rok'), 'rok', S.rokovi.map(r => r.meta.id), rokName, null, id => S.rokColor[id]);
-  chipGroup($('#f-nivo'), 'nivo', uniq(S.exams.map(e => e.nivo)).sort(), v => v, v => NIVO_NAZIV[v] || v);
-  chipGroup($('#f-sem'), 'sem', uniq(S.exams.map(e => String(e.sem))).sort((a, b) => a - b), v => v + '.');
-  chipGroup($('#f-modul'), 'modul', uniq(S.exams.map(e => e.modul)).sort((a, b) => a === 'SVI' ? -1 : b === 'SVI' ? 1 : a.localeCompare(b)), v => v, v => v === 'SVI' ? 'Zajednički predmeti (svi moduli)' : 'Modul ' + v);
-  chipGroup($('#f-akred'), 'akred', uniq(S.exams.map(e => String(e.akred))).sort((a, b) => b - a), v => v, v => 'Akreditacija ' + v);
-  $('#resultCount').textContent = ispita(FILTERED.length) + (FILTERED.length !== S.exams.length ? ` od ${S.exams.length}` : '');
-  document.querySelectorAll('#filters [data-clear]').forEach(b => {
-    const k = b.dataset.clear; b.hidden = k === 'datum' ? !(S.f.od || S.f.do) : !S.f[k].size;
-  });
-  $('#resetAll').hidden = !activeFilterCount();
-  const n = activeFilterCount();
-  $('#fcount').textContent = n ? `(${n})` : '';
+function renderSide() {
+  const p = prof();
+  $('#profileBox').innerHTML = p
+    ? `<div class="profile"><div class="pi"><div class="pt">${esc(p.nivo)} · ${p.godina}. godina</div><div class="ps" title="${esc(NIVO_NAZIV[p.nivo] || '')}">${esc([p.modul ? 'modul ' + p.modul : 'zajednički predmeti', 'ak. ' + p.akred].join(' · '))}</div></div><button class="btn sm" data-open-settings>Izmeni</button></div>`
+    : `<div class="profile"><div class="pi"><div class="pt">Podesi profil</div><div class="ps">Studije, godina, modul i ispiti koji su ti ostali.</div></div><button class="btn primary sm" data-open-settings>Podesi</button></div>`;
+
+  const box = $('#myBox');
+  if (!p) { box.innerHTML = ''; }
+  else {
+    const q = S.f.q ? fold(S.f.q) : '';
+    const hit = s => !q || q.split(/\s+/).every(w => fold(s.predmet + ' ' + s.sifra).includes(w));
+    const todo = MY.filter(s => !s.plan), done = MY.filter(s => s.plan).sort((a, b) => a.plan.datum.localeCompare(b.plan.datum) || a.plan.vreme.localeCompare(b.plan.vreme));
+    const list = (S.tab === 'todo' ? todo : S.tab === 'done' ? done : MY).filter(hit);
+    let items = '';
+    if (!MY.length) items = `<div class="muted" style="padding:8px 4px">Nisi označio/la nijedan ispit. <button class="linkbtn" data-open-settings="ispiti">Izaberi ispite</button></div>`;
+    else if (!list.length) items = `<div class="muted" style="padding:8px 4px">${S.tab === 'todo' ? (q ? 'Nema rezultata.' : 'Svi ispiti su zakazani.') : S.tab === 'done' ? (q ? 'Nema rezultata.' : 'Još ništa nije zakazano. Klikni na ispit u kartici „Bez termina".') : 'Nema rezultata.'}</div>`;
+    else {
+      let lastSem = null;
+      for (const s of list) {
+        if (S.tab !== 'done' && s.sem !== lastSem) { lastSem = s.sem; items += `<div class="semhead">${s.sem}. semestar</div>`; }
+        const st = s.plan ? (s.conf || 'planned') : '';
+        const meta = s.plan
+          ? `<b>${fmtShort(s.plan.datum)} ${s.plan.vreme}</b>${s.conf ? ` · <span style="color:var(--${s.conf === 'major' ? 'bad' : 'warn'})">${s.conf === 'major' ? 'isto vreme' : 'isti dan'}</span>` : ''}`
+          : s.stale ? 'Termin više ne postoji, izaberi ponovo'
+          : s.inst.length ? termina(s.inst.length) + ' u rokovima' : 'nema termina u učitanim rokovima';
+        items += `<button class="mi${S.pick === s.sifra ? ' on' : ''}" data-pick="${esc(s.sifra)}"><span class="st ${st}"></span><span class="mt"><span class="mn">${esc(s.predmet)}</span><span class="mm">${meta}</span></span></button>`;
+      }
+    }
+    box.innerHTML = `
+      <div class="flabel">Moji ispiti <button data-open-settings="ispiti">uredi listu</button></div>
+      <div class="seg sm" role="group" aria-label="Moji ispiti">
+        <button data-tab="todo" aria-pressed="${S.tab === 'todo'}">Bez termina<span class="n">${todo.length}</span></button>
+        <button data-tab="done" aria-pressed="${S.tab === 'done'}">Zakazani<span class="n">${done.length}</span></button>
+        <button data-tab="all" aria-pressed="${S.tab === 'all'}">Svi<span class="n">${MY.length}</span></button>
+      </div>
+      <div class="mylist">${items}</div>`;
+  }
+
+  let vo = '';
+  if (p) vo += `<label class="switch" for="scopeSw">Prikaži i ostale ispite<input type="checkbox" id="scopeSw" ${S.scope === 'svi' ? 'checked' : ''}></label>`;
+  if (S.rokovi.length > 1) {
+    vo += `<div class="flabel" style="margin-top:6px">Rokovi <button data-clear-rok ${S.f.rok.size ? '' : 'hidden'}>poništi</button></div><div class="chips">` +
+      S.rokovi.map(r => `<button class="chip" data-rok="${esc(r.meta.id)}" aria-pressed="${S.f.rok.has(r.meta.id)}" style="--c:${S.rokColor[r.meta.id]}"><span class="dot"></span>${esc(rokName(r.meta.id))}</button>`).join('') + '</div>';
+  }
+  $('#viewOpts').innerHTML = vo;
+  $('#viewOpts').hidden = !vo;
+  const todoN = MY.filter(s => !s.plan).length;
+  $('#fcount').textContent = p ? `(${todoN})` : '';
 }
-function activeFilterCount() {
-  const f = S.f; return (f.q ? 1 : 0) + f.rok.size + f.nivo.size + f.sem.size + f.modul.size + f.akred.size + (f.od ? 1 : 0) + (f.do ? 1 : 0);
-}
-document.getElementById('filters').addEventListener('click', e => {
-  const chip = e.target.closest('.chip');
-  if (chip) { const set = S.f[chip.dataset.k]; set.has(chip.dataset.v) ? set.delete(chip.dataset.v) : set.add(chip.dataset.v); refresh(); return; }
-  const clr = e.target.closest('[data-clear]');
-  if (clr) { const k = clr.dataset.clear; if (k === 'datum') { S.f.od = S.f.do = ''; $('#od').value = $('#do').value = ''; } else S.f[k].clear(); refresh(); }
+
+$('#filters').addEventListener('click', e => {
+  const t = e.target.closest('[data-tab]'); if (t) { S.tab = t.dataset.tab; renderSide(); return; }
+  const r = e.target.closest('[data-rok]'); if (r) { const v = r.dataset.rok; S.f.rok.has(v) ? S.f.rok.delete(v) : S.f.rok.add(v); refresh(); return; }
+  if (e.target.closest('[data-clear-rok]')) { S.f.rok.clear(); refresh(); return; }
+  const pk = e.target.closest('[data-pick]'); if (pk) { S.pick === pk.dataset.pick ? cancelPick() : startPick(pk.dataset.pick); return; }
 });
-let qTimer;
-$('#q').addEventListener('input', e => { clearTimeout(qTimer); renderSugg(); qTimer = setTimeout(() => { S.f.q = e.target.value.trim(); S.listLimit = 300; refresh(true); }, 150); });
+$('#filters').addEventListener('change', e => {
+  if (e.target.id === 'scopeSw') { S.scope = e.target.checked ? 'svi' : 'moji'; saveUi(); refresh(); }
+});
+$('#filtersToggle').addEventListener('click', e => {
+  const f = $('#filters'); const open = f.classList.toggle('collapsed') === false; e.currentTarget.setAttribute('aria-expanded', open);
+});
 
-// ---- predlozi ispod pretrage ----
+// ---- pretraga sa predlozima ----
+let qTimer;
+$('#q').addEventListener('input', e => { clearTimeout(qTimer); renderSugg(); qTimer = setTimeout(() => { S.f.q = e.target.value.trim(); S.listLimit = 300; refresh(); }, 150); });
 let SUGG = [], suggIdx = -1;
-function fmtShort(d) { const x = parseIso(d); return `${DANI[(x.getDay() + 6) % 7].toLowerCase()} ${x.getDate()}.${x.getMonth() + 1}.`; }
-// istakni deo naziva koji se poklapa (poređenje bez kvačica, slovo po slovo)
 function highlight(name, words) {
   const chars = [...name], folded = chars.map(ch => fold(ch));
   const mark = new Array(chars.length).fill(false);
@@ -614,27 +937,28 @@ function computeSugg(q) {
   const words = fold(q).split(/\s+/).filter(Boolean);
   if (!words.length) return [];
   const by = new Map();
-  for (const e of S.exams) {
-    if (!matches(e, 'q')) continue;
+  for (const e of baseExams()) {
     let ok = true; for (const w of words) if (!e.key.includes(w)) { ok = false; break; }
     if (!ok) continue;
     let g = by.get(e.predmet);
-    if (!g) { g = { name: e.predmet, nk: fold(e.predmet), slots: new Map(), n: 0, codeHit: false }; by.set(e.predmet, g); }
-    g.n++; g.slots.set(e.datum + ' ' + e.vreme, true);
+    if (!g) { g = { name: e.predmet, nk: fold(e.predmet), slots: new Map(), n: 0, codeHit: false, sifre: new Set() }; by.set(e.predmet, g); }
+    g.n++; g.slots.set(e.datum + ' ' + e.vreme, true); g.sifre.add(e.sifra);
     if (!words.every(w => g.nk.includes(w))) g.codeHit = true;
   }
   const first = words[0];
   const score = g => (g.nk.startsWith(first) ? 0 : new RegExp('(^|\\s)' + first.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).test(g.nk) ? 1 : g.codeHit ? 3 : 2);
   return [...by.values()].sort((a, b) => score(a) - score(b) || a.name.localeCompare(b.name, 'sr')).slice(0, 10)
-    .map(g => ({ ...g, words, slots: [...g.slots.keys()].sort() }));
+    .map(g => ({ ...g, words, slots: [...g.slots.keys()].sort(), mine: [...g.sifre].find(x => MYMAP.has(x)) }));
 }
 function renderSugg() {
   const inp = $('#q'), ul = $('#sugg'), q = inp.value.trim();
   SUGG = q ? computeSugg(q) : []; suggIdx = -1;
   if (!q || document.activeElement !== inp) { ul.hidden = true; inp.setAttribute('aria-expanded', 'false'); return; }
   ul.innerHTML = SUGG.length ? SUGG.map((g, i) => {
-    const sl = g.slots, when = sl.length === 1 ? `${fmtShort(sl[0].slice(0, 10))} ${sl[0].slice(11)}` : `${sl.length} termina · prvi ${fmtShort(sl[0].slice(0, 10))} ${sl[0].slice(11)}`;
-    return `<li role="option" id="sg${i}" data-i="${i}" aria-selected="false"><span class="sn">${highlight(g.name, g.words)}</span><span class="sm">${when} · ${num(g.n, 'šifra', 'šifre', 'šifri')}</span></li>`;
+    const sl = g.slots, when = sl.length === 1 ? `${fmtShort(sl[0].slice(0, 10))} ${sl[0].slice(11)}` : `${termina(sl.length)} · prvi ${fmtShort(sl[0].slice(0, 10))} ${sl[0].slice(11)}`;
+    const ms = g.mine ? MYMAP.get(g.mine) : null;
+    const st = ms ? (ms.plan ? ` · zakazan ${fmtShort(ms.plan.datum)}` : ' · moj ispit') : '';
+    return `<li role="option" id="sg${i}" data-i="${i}" aria-selected="false"><span class="sn">${highlight(g.name, g.words)}</span><span class="sm">${when}${st}</span></li>`;
   }).join('') : '<li class="none">Nema predmeta koji odgovaraju</li>';
   ul.hidden = false; inp.setAttribute('aria-expanded', 'true');
 }
@@ -644,73 +968,218 @@ function moveSugg(d) {
   document.querySelectorAll('#sugg li[data-i]').forEach(li => li.setAttribute('aria-selected', +li.dataset.i === suggIdx));
   const cur = $('#sg' + suggIdx); if (cur) { cur.scrollIntoView({ block: 'nearest' }); $('#q').setAttribute('aria-activedescendant', 'sg' + suggIdx); }
 }
+function closeSugg() { $('#sugg').hidden = true; $('#q').setAttribute('aria-expanded', 'false'); $('#q').removeAttribute('aria-activedescendant'); }
 function pickSugg(i) {
   const g = SUGG[i]; if (!g) return;
-  const inp = $('#q'); inp.value = g.name; clearTimeout(qTimer);
-  $('#sugg').hidden = true; inp.setAttribute('aria-expanded', 'false'); inp.removeAttribute('aria-activedescendant');
-  S.f.q = g.name; S.listLimit = 300;
+  closeSugg(); clearTimeout(qTimer);
+  if (g.mine) { $('#q').value = ''; S.f.q = ''; startPick(g.mine); return; }
+  $('#q').value = g.name; S.f.q = g.name; S.listLimit = 300;
   const d0 = g.slots[0].slice(0, 10), dt = parseIso(d0);
-  S.selDay = d0; S.y = dt.getFullYear(); S.m = dt.getMonth(); if (S.view === 'godina') S.view = 'mesec';
-  refresh(true);
+  S.selDay = d0; S.y = dt.getFullYear(); S.m = dt.getMonth(); if (S.view === 'godina' || S.view === 'plan') S.view = 'mesec';
+  refresh();
 }
 $('#q').addEventListener('keydown', e => {
   const open = !$('#sugg').hidden;
   if (e.key === 'ArrowDown') { e.preventDefault(); if (!open) renderSugg(); moveSugg(1); }
   else if (e.key === 'ArrowUp') { e.preventDefault(); moveSugg(-1); }
   else if (e.key === 'Enter' && open && suggIdx >= 0) { e.preventDefault(); pickSugg(suggIdx); }
-  else if (e.key === 'Escape' && open) { e.preventDefault(); $('#sugg').hidden = true; $('#q').setAttribute('aria-expanded', 'false'); }
+  else if (e.key === 'Escape' && open) { e.preventDefault(); closeSugg(); }
 });
 $('#q').addEventListener('focus', renderSugg);
-$('#q').addEventListener('blur', () => setTimeout(() => { $('#sugg').hidden = true; $('#q').setAttribute('aria-expanded', 'false'); }, 120));
+$('#q').addEventListener('blur', () => setTimeout(closeSugg, 120));
 $('#sugg').addEventListener('mousedown', e => { const li = e.target.closest('li[data-i]'); if (li) { e.preventDefault(); pickSugg(+li.dataset.i); } });
-$('#od').addEventListener('change', e => { S.f.od = e.target.value; refresh(true); });
-$('#do').addEventListener('change', e => { S.f.do = e.target.value; refresh(true); });
-$('#resetAll').addEventListener('click', () => {
-  Object.assign(S.f, { q: '', od: '', do: '' }); ['rok', 'nivo', 'sem', 'modul', 'akred'].forEach(k => S.f[k].clear());
-  $('#q').value = $('#od').value = $('#do').value = ''; refresh();
-});
-$('#filtersToggle').addEventListener('click', e => {
-  const f = $('#filters'); const open = f.classList.toggle('collapsed') === false; e.currentTarget.setAttribute('aria-expanded', open);
+
+// ================= Zakazivanje =================
+function startPick(sifra) {
+  const s = MYMAP.get(sifra); if (!s) return;
+  S.pick = sifra;
+  if (S.view !== 'mesec' && S.view !== 'godina') S.view = 'mesec';
+  const target = (s.plan && s.plan.datum) || (s.inst.find(i => i.datum >= todayIso) || s.inst[0] || {}).datum;
+  if (target) { const d = parseIso(target); S.y = d.getFullYear(); S.m = d.getMonth(); S.selDay = target; }
+  refresh();
+  if (window.matchMedia('(max-width: 860px)').matches) $('#pickArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function cancelPick() { S.pick = null; refresh(); }
+let pendingConflict = null;
+function schedule(sifra, inst, force) {
+  const s = MYMAP.get(sifra), p = prof(); if (!s || !p) return;
+  const cs = conflictsFor(inst, sifra), major = cs.filter(c => c.lvl === 'major'), minor = cs.filter(c => c.lvl === 'minor');
+  if (major.length && !force) { openConflict(sifra, inst, major); return; }
+  const prev = p.plan[sifra] ? { ...p.plan[sifra] } : null;
+  p.plan[sifra] = { rokId: inst.rokId, datum: inst.datum, vreme: inst.vreme };
+  Me.save(); S.pick = null; S.selDay = inst.datum; derive(); refresh();
+  const undo = { label: 'Poništi', fn: () => { if (prev) p.plan[sifra] = prev; else delete p.plan[sifra]; Me.save(); derive(); refresh(); } };
+  if (major.length) toast(`Zakazano uprkos konfliktu: isto vreme kao ${major[0].s.predmet}.`, undo);
+  else if (minor.length) toast(`Zakazano. Istog dana imaš i ${minor[0].s.predmet} u ${minor[0].s.plan.vreme}.`, undo);
+  else toast(`Zakazano: ${s.predmet}, ${fmtShort(inst.datum)} u ${inst.vreme}.`, undo);
+}
+function unschedule(sifra) {
+  const p = prof(); if (!p || !p.plan[sifra]) return;
+  const prev = { ...p.plan[sifra] }, s = MYMAP.get(sifra);
+  delete p.plan[sifra]; Me.save(); derive(); refresh();
+  toast(`Uklonjen termin: ${s ? s.predmet : sifra}.`, { label: 'Poništi', fn: () => { p.plan[sifra] = prev; Me.save(); derive(); refresh(); } });
+}
+function markPassed(sifra) {
+  const p = prof(); if (!p || !p.remaining[sifra]) return;
+  const rem = p.remaining[sifra], pl = p.plan[sifra];
+  delete p.remaining[sifra]; delete p.plan[sifra];
+  if (S.pick === sifra) S.pick = null;
+  Me.save(); derive(); refresh();
+  toast(`${rem.n} je uklonjen sa liste. Čestitamo!`, { label: 'Poništi', fn: () => { p.remaining[sifra] = rem; if (pl) p.plan[sifra] = pl; Me.save(); derive(); refresh(); } });
+}
+function openConflict(sifra, inst, major) {
+  const s = MYMAP.get(sifra);
+  pendingConflict = { sifra, inst };
+  $('#cfx').innerHTML = `
+    <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2.5 20h19z"/><path d="M12 10v4M12 17h.01"/></svg></div>
+    <h2 id="cfxTitle">Konflikt: isti dan i isto vreme</h2>
+    <p><b>${esc(s.predmet)}</b> je ${fmtDay(inst.datum)} u ${inst.vreme}. U isto vreme već imaš zakazano:</p>
+    ${major.map(c => `<div class="xrow major"><div class="xi"><div class="xn">${esc(c.s.predmet)}</div><div class="xm"><span class="pill major">${c.s.plan.vreme}</span>${rokTag(c.s.plan.rokId)}</div></div></div>`).join('')}
+    <p class="muted">Ne možeš biti na dva ispita istovremeno. Ako ga ipak zakažeš, oba ispita ostaju označena crveno dok ne promeniš jedan termin.</p>
+    <div class="actions"><button class="btn" data-cfx="cancel">Odustani</button><button class="btn danger-solid" data-cfx="force">Zakaži svejedno</button></div>`;
+  $('#conflictDlg').showModal();
+  setTimeout(() => { const b = $('[data-cfx="cancel"]'); b && b.focus(); }, 30);
+}
+$('#cfx').addEventListener('click', e => {
+  const b = e.target.closest('[data-cfx]'); if (!b) return;
+  $('#conflictDlg').close();
+  if (b.dataset.cfx === 'force' && pendingConflict) schedule(pendingConflict.sifra, pendingConflict.inst, true);
+  pendingConflict = null;
 });
 
 // ================= Pogledi =================
-function byDay(list) { const m = {}; for (const e of list) (m[e.datum] = m[e.datum] || []).push(e); return m; }
+function byDay(list, f) { const m = {}; for (const e of list) { const k = f ? f(e) : e.datum; (m[k] = m[k] || []).push(e); } return m; }
+const plannedList = () => MY.filter(s => s.plan).sort((a, b) => a.plan.datum.localeCompare(b.plan.datum) || a.plan.vreme.localeCompare(b.plan.vreme));
+function countdown(d) { const n = daysBetween(todayIso, d); return n === 0 ? 'danas' : n === 1 ? 'sutra' : n > 1 ? `za ${dana(n)}` : `pre ${dana(-n)}`; }
+function confPill(s) {
+  if (!s.conf) return '';
+  return `<span class="pill ${s.conf}" title="${esc(conflictText(s.confWith))}">${s.conf === 'major' ? 'Konflikt: isto vreme' : 'Isti dan'}</span>`;
+}
 
+function renderPickBar() {
+  const s = S.pick ? MYMAP.get(S.pick) : null;
+  if (!s) { $('#pickArea').innerHTML = ''; return; }
+  const n = s.inst.length;
+  $('#pickArea').innerHTML = `<div class="pickbar"><div class="pk">Biraš termin za <b>${esc(s.predmet)}</b><br>${n ? `${termina(n)} u učitanim rokovima. Klikni na označen dan u kalendaru ili izaberi termin desno.` : 'Ovaj predmet nema termin ni u jednom učitanom roku.'}</div>${s.plan ? `<button class="btn sm" data-unplan="${esc(s.sifra)}">Ukloni termin</button>` : ''}<button class="btn sm" data-cancel-pick>Otkaži</button></div>`;
+}
+
+// ---- Plan ----
+function renderPlan() {
+  const p = prof();
+  if (!p) {
+    $('#viewArea').innerHTML = `<div class="hero-empty"><h2>Napravi svoj plan ispita</h2><p>Podesi studije, godinu i modul, označi ispite koji su ti ostali, pa im biraj termine iz učitanih rokova.</p><button class="btn primary" data-open-settings>Podesi profil</button></div>`;
+    $('#period').innerHTML = 'Moj plan'; return;
+  }
+  const planned = plannedList(), unplanned = MY.filter(s => !s.plan);
+  const nMajor = planned.filter(s => s.conf === 'major').length, nMinor = planned.filter(s => s.conf === 'minor').length;
+  const next = planned.find(s => s.plan.datum >= todayIso);
+  let h = '<div class="planv">';
+  h += `<div class="stats">
+    <div class="stat2"><b>${MY.length}</b>preostalih ispita</div>
+    <div class="stat2"><b>${planned.length}</b>zakazano</div>
+    <div class="stat2"><b>${unplanned.length}</b>bez termina</div>
+    <div class="stat2${nMajor ? ' bad' : ''}"><b>${nMajor + nMinor}</b>${nMajor ? `${num(nMajor, 'ispit', 'ispita', 'ispita')} u istom terminu` : nMinor ? 'istog dana' : 'konflikata'}</div>
+  </div>`;
+  if (next) {
+    h += `<div class="nextcard"><div><div class="nl">Sledeći ispit</div><div class="nn">${esc(next.predmet)}</div><div class="nd">${cap(fmtDay(next.plan.datum))} u ${next.plan.vreme} · ${esc(rokName(next.plan.rokId))}</div></div><div class="cd">${countdown(next.plan.datum).replace(/^za /, '')}<small>${daysBetween(todayIso, next.plan.datum) > 1 ? 'do ispita' : ''}</small></div></div>`;
+  }
+  if (!MY.length) {
+    h += `<div class="empty"><strong>Lista ispita je prazna</strong>Označi ispite koji su ti ostali da bi mogao/la da ih planiraš.<br><button class="btn primary" data-open-settings="ispiti">Izaberi ispite</button></div>`;
+  }
+  if (planned.length) {
+    h += `<div><div class="sechead"><h3>Zakazani ispiti</h3><span class="muted">${ispita(planned.length)}</span></div><div class="timeline">`;
+    planned.forEach((s, i) => {
+      if (i > 0) {
+        const gap = daysBetween(planned[i - 1].plan.datum, s.plan.datum);
+        h += `<div class="gap${gap <= 1 ? ' tight' : ''}">${gap === 0 ? 'isti dan' : gap === 1 ? 'sledeći dan' : `${dana(gap)} razmaka`}</div>`;
+      }
+      const d = parseIso(s.plan.datum), past = s.plan.datum < todayIso;
+      h += `<div class="titem">
+        <div class="dbadge ${s.conf || ''}${past ? ' past' : ''}"><span>${DANI_KRATKO[d.getDay()]}</span><b>${d.getDate()}</b><span>${MES_KRATKO[d.getMonth()]}</span></div>
+        <div class="tinfo"><div class="tn">${esc(s.predmet)}</div>
+          <div class="tm"><span class="mono"><b style="color:var(--ink)">${s.plan.vreme}</b></span><span>${s.sem}. sem.</span>${rokTag(s.plan.rokId)}<span>${countdown(s.plan.datum)}</span></div>
+          ${s.conf ? `<div class="note ${s.conf}" style="font-size:12.5px;margin-top:4px;font-weight:600">${s.conf === 'major' ? 'Konflikt' : 'Upozorenje'}: ${esc(conflictText(s.confWith).replace(/^I/, 'i'))}</div>` : ''}
+        </div>
+        <div class="tact"><button class="btn sm" data-pick="${esc(s.sifra)}">Promeni</button><button class="iconbtn" style="width:36px;height:36px" data-unplan="${esc(s.sifra)}" aria-label="Ukloni termin" title="Ukloni termin">${ICON_X}</button></div>
+      </div>`;
+    });
+    h += '</div></div>';
+  }
+  if (unplanned.length) {
+    h += `<div><div class="sechead"><h3>Bez termina</h3><span class="muted">${ispita(unplanned.length)}</span></div><div class="ucards" style="margin-top:10px">`;
+    for (const s of unplanned) {
+      const n = s.inst.length;
+      h += `<div class="ucard"><div class="un">${esc(s.predmet)}</div><div class="um">${s.sem}. sem. · ${TIP_NAZIV[s.tip]}${s.stale ? ' · stari termin više ne postoji' : ''}<br>${n ? termina(n) + ': ' + s.inst.slice(0, 3).map(i => fmtShort(i.datum)).join(', ') + (n > 3 ? '…' : '') : 'nema termina u učitanim rokovima'}</div>
+        ${n ? `<button class="btn primary sm" data-pick="${esc(s.sifra)}">Izaberi termin</button>` : `<button class="btn sm" data-manage>Dodaj rok</button>`}</div>`;
+    }
+    h += '</div></div>';
+  }
+  h += '</div>';
+  $('#viewArea').innerHTML = h;
+  $('#period').innerHTML = `Moj plan<small>${planned.length} od ${MY.length} zakazano</small>`;
+}
+
+// ---- Mesec ----
 function renderMonth() {
   const days = byDay(FILTERED);
+  const plannedBy = byDay(MY.filter(s => s.plan), s => s.plan.datum);
+  const pick = S.pick ? MYMAP.get(S.pick) : null;
+  const pickBy = pick ? byDay(pick.inst) : null;
+  const mine = S.scope === 'moji' && prof();
   const first = new Date(S.y, S.m, 1);
   const start = new Date(first); start.setDate(1 - ((first.getDay() + 6) % 7));
   let h = '<div class="month"><div class="mgrid">' + DANI.map(d => `<div class="mhead">${d}</div>`).join('');
   for (let i = 0; i < 42; i++) {
     const d = new Date(start); d.setDate(start.getDate() + i);
     if (i === 35 && d.getMonth() !== S.m) break;
-    const k = iso(d), list = days[k] || [], out = d.getMonth() !== S.m;
-    const cls = ['mcell', out && 'out', list.length && 'has', k === todayIso && 'today', k === S.selDay && 'sel', (d.getDay() % 6 === 0) && 'weekend'].filter(Boolean).join(' ');
-    let inner = `<div class="dn"><span>${d.getDate()}</span>${list.length ? `<span class="total">${list.length}</span>` : ''}</div>`;
-    if (list.length) {
-      const names = uniq(list.map(e => e.predmet));
-      if (names.length <= 3) {
-        const seen = new Set();
-        for (const e of list) { if (seen.has(e.predmet)) continue; seen.add(e.predmet); inner += `<div class="mini" style="--c:${S.rokColor[e.rokId]}" title="${esc(e.predmet)}"><span class="mono">${e.vreme}</span> ${esc(e.predmet)}</div>`; }
+    const k = iso(d), list = days[k] || [], pl = plannedBy[k] || [], out = d.getMonth() !== S.m;
+    const chips = pl.slice(0, 3).map(s => `<div class="pchip ${s.conf || ''}" title="${esc(s.predmet)} · ${s.plan.vreme}${s.conf ? ' · ' + esc(conflictText(s.confWith)) : ''}"><b>${s.plan.vreme}</b> ${esc(s.predmet)}</div>`).join('') + (pl.length > 3 ? `<div class="opts">+${pl.length - 3} zakazano</div>` : '');
+    const base = ['mcell', out && 'out', k === todayIso && 'today', k === S.selDay && 'sel', d.getDay() % 6 === 0 && 'weekend'];
+    let inner = `<div class="dn"><span>${d.getDate()}</span>`, cls, clickable = false, attr = `data-day="${k}"`;
+    if (pick) {
+      const opts = pickBy[k] || [];
+      if (opts.length) {
+        const cs = conflictsFor(opts[0], pick.sifra), lvl = cs.length ? cs[0].lvl : '';
+        cls = [...base, 'has', 'opt', lvl && lvl + '-c'];
+        inner += `</div><div class="ot">${uniq(opts.map(o => o.vreme)).join(', ')}${pick.plan && pick.plan.datum === k ? ' · trenutno' : ''}</div>` + (lvl ? `<div class="cw ${lvl}">${lvl === 'major' ? 'Isto vreme' : 'Isti dan'}: ${esc(cs[0].s.predmet)}</div>` : '') + chips;
+        clickable = true; attr = `data-pickday="${k}"`;
       } else {
+        cls = [...base, 'dim', pl.length && 'mine-has'];
+        inner += `</div>${chips}`;
+      }
+    } else if (mine) {
+      const options = uniq(list.filter(e => { const s = MYMAP.get(e.sifra); return s && !s.plan; }).map(e => e.sifra)).length;
+      cls = [...base, (pl.length || list.length) && 'has'];
+      inner += `</div>${chips}` + (options ? `<div class="opts">${num(options, 'ispit za izbor', 'ispita za izbor', 'ispita za izbor')}</div>` : '');
+      clickable = pl.length || list.length;
+    } else {
+      cls = [...base, list.length && 'has'];
+      inner += `${list.length ? `<span class="total">${list.length}</span>` : ''}</div>${chips}`;
+      if (list.length && !pl.length) {
         const slots = {}; for (const e of list) slots[e.vreme] = (slots[e.vreme] || 0) + 1;
         for (const [t, n] of Object.entries(slots).sort()) inner += `<div class="slot"><b>${t}</b>${n}</div>`;
       }
-      const roks = uniq(list.map(e => e.rokId));
-      if (S.rokovi.length > 1) inner += `<div class="rokdots">${roks.map(r => `<i style="--c:${S.rokColor[r]}" title="${esc(rokName(r))}"></i>`).join('')}</div>`;
+      clickable = list.length || pl.length;
     }
-    h += list.length ? `<button class="${cls}" data-day="${k}" aria-label="${fmtDay(k)}: ${ispita(list.length)}">${inner}</button>` : `<div class="${cls}">${inner}</div>`;
+    const c = cls.filter(Boolean).join(' ');
+    h += clickable ? `<button class="${c}" ${attr} aria-label="${fmtDay(k)}">${inner}</button>` : `<div class="${c}">${inner}</div>`;
   }
   h += '</div></div>';
   $('#viewArea').innerHTML = h;
-  const cnt = FILTERED.filter(e => e.datum.startsWith(`${S.y}-${pad(S.m + 1)}`)).length;
-  $('#period').innerHTML = `${cap(MESECI[S.m])} ${S.y}.<small>${ispita(cnt)}</small>`;
+  const ym = `${S.y}-${pad(S.m + 1)}`;
+  const nPl = MY.filter(s => s.plan && s.plan.datum.startsWith(ym)).length;
+  const sub = pick ? termina(pick.inst.filter(i => i.datum.startsWith(ym)).length) + ' ovog meseca' : mine ? `${nPl} zakazano` : ispita(FILTERED.filter(e => e.datum.startsWith(ym)).length);
+  $('#period').innerHTML = `${cap(MESECI[S.m])} ${S.y}.<small>${sub}</small>`;
 }
 
+// ---- Godina ----
 function schoolYearStart() { return S.m >= 9 ? S.y : S.y - 1; }
 function renderYear() {
   const y0 = schoolYearStart();
-  const days = byDay(FILTERED);
+  const pick = S.pick ? MYMAP.get(S.pick) : null;
+  const src = pick ? pick.inst : FILTERED;
+  const days = byDay(src);
+  const plannedBy = byDay(MY.filter(s => s.plan), s => s.plan.datum);
   let max = 0; for (const k in days) max = Math.max(max, days[k].length);
   let h = '<div class="year">', total = 0;
   for (let i = 0; i < 12; i++) {
@@ -719,88 +1188,128 @@ function renderYear() {
     let mcount = 0, cells = '';
     for (let j = 0; j < off; j++) cells += '<span class="yd e"></span>';
     for (let d = 1; d <= dim; d++) {
-      const k = `${yy}-${pad(mm + 1)}-${pad(d)}`, n = (days[k] || []).length; mcount += n;
+      const k = `${yy}-${pad(mm + 1)}-${pad(d)}`, n = (days[k] || []).length, pl = plannedBy[k] || [];
+      mcount += n;
       const p = n ? Math.round(18 + 82 * Math.sqrt(n / max)) : 0;
-      const cls = ['yd', n && 'has', p > 55 && 'hot', k === todayIso && 'today'].filter(Boolean).join(' ');
-      cells += n ? `<button class="${cls}" style="--p:${p}%" data-day="${k}" title="${fmtDay(k)} · ${ispita(n)}">${d}</button>` : `<span class="${cls}">${d}</span>`;
+      const cls = ['yd', n && 'has', p > 55 && 'hot', k === todayIso && 'today', pl.length && 'planned', pl.some(s => s.conf === 'major') && 'cmajor'].filter(Boolean).join(' ');
+      const tip = `${fmtDay(k)}${n ? ' · ' + (pick ? 'termin' : ispita(n)) : ''}${pl.length ? ' · zakazano: ' + pl.map(s => s.predmet).join(', ') : ''}`;
+      cells += n || pl.length ? `<button class="${cls}" style="--p:${p}%" data-day="${k}" title="${esc(tip)}">${d}</button>` : `<span class="${cls}">${d}</span>`;
     }
     total += mcount;
     h += `<div class="ym"><h3><button data-month="${yy}-${mm}">${cap(MESECI[mm])} ${yy}.</button><span>${mcount || ''}</span></h3><div class="ygrid">${DANI.map(x => `<span class="h">${x[0]}</span>`).join('')}${cells}</div></div>`;
   }
   h += '</div>';
-  const leg = [18, 45, 72, 100].map(p => `<i style="background:color-mix(in srgb, var(--accent) ${p}%, var(--surface-2))"></i>`).join('');
-  h += `<div class="ylegend">Manje ${leg} više ispita u danu${max ? ` · najviše ${max}` : ''}</div>`;
+  const leg = [18, 45, 72, 100].map(p => `<i style="background:color-mix(in srgb, var(--brand) ${p}%, var(--surface))"></i>`).join('');
+  h += `<div class="ylegend">Manje ${leg} više ${pick ? 'termina' : 'ispita'} u danu · <i style="box-shadow:inset 0 0 0 2px var(--brand)"></i> zakazano</div>`;
   $('#viewArea').innerHTML = h;
-  $('#period').innerHTML = `Školska ${y0}/${String(y0 + 1).slice(2)}.<small>${ispita(total)}</small>`;
+  $('#period').innerHTML = `Školska ${y0}/${String(y0 + 1).slice(2)}.<small>${pick ? termina(total) : ispita(total)}</small>`;
 }
 
+// ---- Lista ----
 function renderList() {
   const list = FILTERED.slice(0, S.listLimit);
   if (!FILTERED.length) { $('#viewArea').innerHTML = emptyFiltered(); $('#period').innerHTML = 'Lista'; return; }
-  let h = '<div class="tablewrap"><table><thead><tr><th>Vreme</th><th>Predmet</th><th>Šifra</th><th>Nivo</th><th>Sem.</th><th>Modul</th><th>Akred.</th><th>Rok</th></tr></thead><tbody>';
+  let h = '<div class="tablewrap"><table><thead><tr><th>Vreme</th><th>Predmet</th><th>Status</th><th>Šifra</th><th>Sem.</th><th>Modul</th><th>Rok</th></tr></thead><tbody>';
   let last = '';
   for (const e of list) {
-    if (e.datum !== last) { last = e.datum; h += `<tr class="dayrow"><td colspan="8">${cap(fmtDay(e.datum))}</td></tr>`; }
-    h += `<tr><td class="mono nowrap">${e.vreme}</td><td>${esc(e.predmet)}</td><td class="mono nowrap">${esc(e.sifra)}</td><td title="${esc(NIVO_NAZIV[e.nivo] || '')}">${esc(e.nivo)}</td><td class="mono">${e.sem}</td><td>${esc(e.modul)}</td><td class="mono">${e.akred}</td><td class="nowrap"><span class="tag rok" style="--c:${S.rokColor[e.rokId]}">${esc(rokShort(e.rokId))}</span></td></tr>`;
+    if (e.datum !== last) { last = e.datum; h += `<tr class="dayrow"><td colspan="7">${cap(fmtDay(e.datum))}</td></tr>`; }
+    const s = MYMAP.get(e.sifra);
+    const st = s ? (s.plan && s.plan.rokId === e.rokId ? `<span class="pill ${s.conf || 'planned'}">Zakazano</span>` : s.plan ? `<button class="linkbtn" data-sched="${esc(e.id)}">Prebaci ovde</button>` : `<button class="linkbtn" data-sched="${esc(e.id)}">Zakaži</button>`) : '';
+    h += `<tr><td class="mono nowrap">${e.vreme}</td><td>${esc(e.predmet)}</td><td class="nowrap">${st}</td><td class="mono nowrap">${esc(e.sifra)}</td><td class="mono">${e.sem}</td><td>${esc(e.modul)}</td><td class="nowrap">${rokTag(e.rokId)}</td></tr>`;
   }
   h += '</tbody></table></div>';
   if (FILTERED.length > list.length) h += `<div class="more"><button class="btn" id="moreBtn">Prikaži još (${FILTERED.length - list.length} preostalo)</button></div>`;
   $('#viewArea').innerHTML = h;
   $('#period').innerHTML = `Lista<small>${ispita(FILTERED.length)}</small>`;
 }
-
 function emptyFiltered() {
-  return `<div class="empty"><strong>Nema ispita za izabrane filtere</strong>Promeni ili poništi filtere da vidiš više.</div>`;
+  if (S.scope === 'moji' && prof() && !S.f.q) return `<div class="empty"><strong>Nema termina za tvoje ispite</strong>U učitanim rokovima nema ispita sa tvoje liste. Uključi „Prikaži i ostale ispite" ili dodaj novi rok.</div>`;
+  return `<div class="empty"><strong>Nema ispita za ovu pretragu</strong>Promeni pretragu ili izbor rokova.</div>`;
 }
 
+// ---- Panel dana ----
+const examById = id => S.exams.find(e => e.id === id);
+function schedRow(s, inst, opts = {}) {
+  const cs = conflictsFor(inst, s.sifra), lvl = cs.length ? cs[0].lvl : '';
+  const isCur = s.plan && s.plan.rokId === inst.rokId;
+  const btn = isCur ? `<span class="pill ${s.conf || 'planned'}">Zakazano</span>`
+    : `<button class="btn ${lvl === 'major' ? '' : 'primary'} sm" data-sched="${esc(inst.id)}">${s.plan ? 'Prebaci ovde' : 'Zakaži'}</button>`;
+  return `<div class="xrow ${isCur ? 'mine' : ''} ${(isCur ? s.conf : lvl) || ''}"><div class="xi">
+    <div class="xn">${opts.dateTitle ? `${cap(fmtShort(inst.datum))} · ${inst.vreme}` : esc(s.predmet)}</div>
+    <div class="xm">${opts.dateTitle ? '' : `<span class="tag mono">${inst.vreme}</span>`}<span class="tag">${s.sem}. sem.</span>${rokTag(inst.rokId)}${opts.dateTitle ? `<span class="tag">${countdown(inst.datum)}</span>` : ''}</div>
+    ${!isCur && s.plan && !opts.dateTitle ? `<div class="note muted">Sada zakazano: ${fmtShort(s.plan.datum)} u ${s.plan.vreme}</div>` : ''}
+    ${(isCur ? s.confWith.length : cs.length) ? `<div class="note ${isCur ? s.conf : lvl}">${esc(conflictText(isCur ? s.confWith : cs))}</div>` : ''}
+  </div>${btn}</div>`;
+}
 function renderDay() {
   const p = $('#dayPanel');
+  const pick = S.pick ? MYMAP.get(S.pick) : null;
+  if (pick) {
+    let h = `<div class="dh"><h2>${esc(pick.predmet)}</h2><div class="dsub">${pick.sem}. semestar · ${termina(pick.inst.length)}</div></div><div class="dsec">`;
+    if (!pick.inst.length) h += `<div class="empty">Nema termina u učitanim rokovima.<br><button class="btn sm" data-manage>Dodaj rok</button></div>`;
+    for (const i of pick.inst) h += schedRow(pick, i, { dateTitle: true });
+    h += `<div class="actions" style="margin-top:8px;justify-content:space-between"><button class="btn ghost sm" data-passed="${esc(pick.sifra)}">Položen, ukloni sa liste</button><button class="btn sm" data-cancel-pick>Gotovo</button></div></div>`;
+    p.innerHTML = h; return;
+  }
   if (!S.selDay) {
+    const nx = plannedList().find(s => s.plan.datum >= todayIso);
     const upcoming = FILTERED.find(e => e.datum >= todayIso);
-    p.innerHTML = `<div class="empty"><strong>Izaberi dan</strong>Klikni na dan u kalendaru da vidiš sve ispite tog dana.${upcoming ? `<div style="margin-top:12px"><button class="btn" data-day="${upcoming.datum}">Sledeći ispitni dan: ${upcoming.datum.slice(8)}.${upcoming.datum.slice(5, 7)}.</button></div>` : ''}</div>`;
+    p.innerHTML = `<div class="empty"><strong>Izaberi dan</strong>Klikni na dan u kalendaru da vidiš ispite i zakažeš termin.${nx ? `<div><button class="btn" data-day="${nx.plan.datum}">Sledeći zakazan: ${fmtShort(nx.plan.datum)}</button></div>` : upcoming ? `<div><button class="btn" data-day="${upcoming.datum}">Sledeći ispitni dan: ${fmtShort(upcoming.datum)}</button></div>` : ''}</div>`;
     return;
   }
-  const list = FILTERED.filter(e => e.datum === S.selDay);
-  let h = `<div class="dh"><h2>${cap(fmtDay(S.selDay))}</h2><div class="dsub">${ispita(list.length)}${list.length ? ' · ' + num(uniq(list.map(e => e.predmet)).length, 'predmet', 'predmeta', 'predmeta') : ''}</div></div>`;
-  if (!list.length) { p.innerHTML = h + '<div class="empty">Nema ispita ovog dana uz trenutne filtere.</div>'; return; }
-  const slots = {};
-  for (const e of list) ((slots[e.vreme] = slots[e.vreme] || {})[e.predmet] = slots[e.vreme][e.predmet] || []).push(e);
-  for (const t of Object.keys(slots).sort()) {
-    const subj = slots[t];
-    h += `<div class="tslot"><b>${t}</b>${ispita(Object.values(subj).reduce((a, b) => a + b.length, 0))}</div>`;
-    h += '<div class="subjs">';
-    for (const name of Object.keys(subj).sort((a, b) => a.localeCompare(b, 'sr'))) {
-      const vs = subj[name];
-      h += `<div class="subj"><div class="nm">${esc(name)}</div><div class="vs">` + vs.map(e =>
-        `<div class="v"><span class="tag" title="${esc(NIVO_NAZIV[e.nivo] || '')}">${esc(e.nivo)}</span><span class="tag">${e.sem}. sem.</span><span class="tag">${esc(e.modul)}</span><span class="tag code">${esc(e.sifra)}</span><span class="tag">ak. ${e.akred}</span>${S.rokovi.length > 1 ? `<span class="tag rok" style="--c:${S.rokColor[e.rokId]}">${esc(rokShort(e.rokId))}</span>` : ''}</div>`
-      ).join('') + '</div></div>';
-    }
+  const k = S.selDay;
+  const pl = MY.filter(s => s.plan && s.plan.datum === k).sort((a, b) => a.plan.vreme.localeCompare(b.plan.vreme));
+  const list = FILTERED.filter(e => e.datum === k && !(MYMAP.get(e.sifra) && MYMAP.get(e.sifra).plan && MYMAP.get(e.sifra).plan.rokId === e.rokId));
+  let h = `<div class="dh"><h2>${cap(fmtDay(k))}</h2><div class="dsub">${pl.length ? `${pl.length} zakazano · ` : ''}${ispita(list.length)} ${S.scope === 'moji' && prof() ? 'sa tvoje liste' : 'u rasporedu'}</div></div>`;
+  if (pl.length) {
+    h += `<div class="dsec"><h4>Moj plan</h4>`;
+    for (const s of pl) h += `<div class="xrow mine ${s.conf || ''}"><div class="xi"><div class="xn">${esc(s.predmet)}</div><div class="xm"><span class="tag mono">${s.plan.vreme}</span><span class="tag">${s.sem}. sem.</span>${rokTag(s.plan.rokId)}</div>${s.conf ? `<div class="note ${s.conf}">${esc(conflictText(s.confWith))}</div>` : ''}</div><button class="btn sm" data-pick="${esc(s.sifra)}">Promeni</button></div>`;
     h += '</div>';
   }
+  if (list.length) {
+    const slots = byDay(list, e => e.vreme);
+    for (const t of Object.keys(slots).sort()) {
+      const seen = new Set();
+      h += `<div class="tslot"><b>${t}</b>${ispita(slots[t].length)}</div><div class="dsec" style="padding-top:0">`;
+      for (const e of slots[t].sort((a, b) => a.predmet.localeCompare(b.predmet, 'sr'))) {
+        if (seen.has(e.sifra)) continue; seen.add(e.sifra);
+        const s = MYMAP.get(e.sifra);
+        if (s) h += schedRow(s, CAT.get(e.sifra) ? (CAT.get(e.sifra).inst.find(i => i.rokId === e.rokId) || e) : e);
+        else h += `<div class="xrow"><div class="xi"><div class="xn">${esc(e.predmet)}</div><div class="xm"><span class="tag">${esc(e.nivo)}</span><span class="tag">${e.sem}. sem.</span><span class="tag">${esc(e.modul)}</span><span class="tag code">${esc(e.sifra)}</span><span class="tag">ak. ${e.akred}</span>${rokTag(e.rokId)}</div></div></div>`;
+      }
+      h += '</div>';
+    }
+  } else if (!pl.length) h += `<div class="empty">Nema ispita ovog dana.</div>`;
   p.innerHTML = h;
 }
 
 function renderView() {
   document.querySelectorAll('[data-view]').forEach(b => b.setAttribute('aria-pressed', b.dataset.view === S.view));
-  $('#navbtns').hidden = $('#todayBtn').hidden = S.view === 'lista';
+  $('#navbtns').hidden = $('#todayBtn').hidden = S.view === 'lista' || S.view === 'plan';
   if (!S.loaded) { $('#viewArea').innerHTML = `<div class="empty"><span class="spinner"></span><div style="margin-top:8px">Učitavanje rasporeda…</div></div>`; $('#period').textContent = ''; return; }
   if (!S.exams.length) {
     $('#viewArea').innerHTML = `<div class="hero-empty"><h2>Još nema učitanih rokova</h2><p>Dodaj PDF raspored ispita za jedan rok (npr. decembarski). Podaci se izvlače automatski, prevode na latinicu i prikazuju u kalendaru.</p><button class="btn primary" data-open-upload>Dodaj rok (PDF)</button></div>`;
     $('#period').textContent = ''; return;
   }
-  if (S.view === 'mesec') renderMonth(); else if (S.view === 'godina') renderYear(); else renderList();
+  if (S.view === 'plan') renderPlan(); else if (S.view === 'mesec') renderMonth(); else if (S.view === 'godina') renderYear(); else renderList();
 }
-
-function refresh(keepDay) {
+function storeInfo() {
+  const n = S.rokovi.length;
+  const where = Store.mode === 'db' ? (Me.mode === 'db' ? 'plan sačuvan na tvom nalogu' : 'plan sačuvan u ovom pregledaču') : Store.mode === 'local' ? 'sačuvano u ovom pregledaču' : 'nije sačuvano (privatni prozor)';
+  $('#storeInfo').textContent = `${num(n, 'rok', 'roka', 'rokova')} · ${where}`;
+}
+function refresh() {
   applyFilters();
-  renderFilters();
+  renderSide();
+  renderPickBar();
   renderView();
   renderDay();
+  storeInfo();
 }
 
-document.querySelector('.seg').addEventListener('click', e => {
+document.querySelector('.toolbar .seg').addEventListener('click', e => {
   const b = e.target.closest('[data-view]'); if (!b) return;
-  S.view = b.dataset.view; lsSet(LS_UI, JSON.stringify({ view: S.view })); renderView();
+  S.view = b.dataset.view; saveUi(); renderView();
 });
 $('#prev').addEventListener('click', () => step(-1));
 $('#next').addEventListener('click', () => step(1));
@@ -809,26 +1318,246 @@ function step(dir) {
   if (S.view === 'godina') S.y += dir; else { S.m += dir; if (S.m < 0) { S.m = 11; S.y--; } if (S.m > 11) { S.m = 0; S.y++; } }
   renderView();
 }
+function selectDay(k) {
+  S.selDay = k; const dt = parseIso(k);
+  if (S.view === 'godina' || S.view === 'plan' || S.y !== dt.getFullYear() || S.m !== dt.getMonth()) { S.y = dt.getFullYear(); S.m = dt.getMonth(); if (S.view !== 'lista') S.view = 'mesec'; }
+  renderView(); renderDay();
+  if (window.matchMedia('(max-width: 1320px)').matches) $('#dayPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 document.addEventListener('click', e => {
-  const d = e.target.closest('[data-day]');
-  if (d) {
-    const k = d.dataset.day; S.selDay = k; const dt = parseIso(k);
-    if (S.view === 'godina' || S.y !== dt.getFullYear() || S.m !== dt.getMonth()) { S.y = dt.getFullYear(); S.m = dt.getMonth(); if (S.view === 'godina') S.view = 'mesec'; }
-    renderView(); renderDay();
-    if (window.matchMedia('(max-width: 1260px)').matches) $('#dayPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const t = e.target;
+  const pd = t.closest('[data-pickday]');
+  if (pd) {
+    const pick = MYMAP.get(S.pick), k = pd.dataset.pickday;
+    const opts = pick ? pick.inst.filter(i => i.datum === k) : [];
+    if (opts.length === 1 && !(pick.plan && pick.plan.rokId === opts[0].rokId)) schedule(pick.sifra, opts[0]);
+    else { S.selDay = k; renderView(); }
     return;
   }
-  const mo = e.target.closest('[data-month]');
+  const d = t.closest('[data-day]'); if (d) { selectDay(d.dataset.day); return; }
+  const sc = t.closest('[data-sched]');
+  if (sc) { const ex = examById(sc.dataset.sched); if (ex && MYMAP.has(ex.sifra)) schedule(ex.sifra, ex); return; }
+  const pk = t.closest('[data-pick]'); if (pk && !t.closest('#filters')) { startPick(pk.dataset.pick); return; }
+  const up = t.closest('[data-unplan]'); if (up) { unschedule(up.dataset.unplan); return; }
+  const ps = t.closest('[data-passed]'); if (ps) { markPassed(ps.dataset.passed); return; }
+  if (t.closest('[data-cancel-pick]')) { cancelPick(); return; }
+  const st = t.closest('[data-open-settings]'); if (st) { openWizard(false, st.dataset.openSettings || null); return; }
+  if (t.closest('[data-manage]')) { openManage(); return; }
+  const mo = t.closest('[data-month]');
   if (mo) { const [y, m] = mo.dataset.month.split('-').map(Number); S.y = y; S.m = m; S.view = 'mesec'; renderView(); return; }
-  if (e.target.closest('#moreBtn')) { S.listLimit += 500; renderList(); return; }
-  if (e.target.closest('[data-open-upload]')) { openUpload(); return; }
-  const close = e.target.closest('[data-close]'); if (close) close.closest('dialog').close();
+  if (t.closest('#moreBtn')) { S.listLimit += 500; renderList(); return; }
+  if (t.closest('[data-open-upload]')) { if ($('#manageDlg').open) $('#manageDlg').close(); openUpload(); return; }
+  const close = t.closest('[data-close]'); if (close) close.closest('dialog').close();
 });
 document.addEventListener('keydown', e => {
   if (e.target.matches('input, select, textarea') || document.querySelector('dialog[open]')) return;
+  if (e.key === 'Escape' && S.pick) { cancelPick(); return; }
+  if (S.view !== 'mesec' && S.view !== 'godina') return;
   if (e.key === 'ArrowLeft') step(-1); else if (e.key === 'ArrowRight') step(1);
 });
+$('#settingsBtn').addEventListener('click', () => openWizard(false, null));
 
+// ================= Čarobnjak za podešavanje =================
+const W = { step: 0, d: null, first: false, q: '', origin: null };
+const STEP_LABEL = { nivo: 'Studije', akred: 'Akreditacija', godina: 'Godina', modul: 'Modul', ispiti: 'Ispiti', kraj: 'Gotovo' };
+const keyOf = d => [d.nivo, d.akred, d.godina, d.modul].join('|');
+function uniqSubjects(fn) { const m = new Map(); for (const e of S.exams) if (fn(e) && !m.has(e.sifra)) m.set(e.sifra, e); return [...m.values()]; }
+function nivoOpts() {
+  return uniq(S.exams.map(e => e.nivo)).sort((a, b) => (a === 'OAS' ? -1 : b === 'OAS' ? 1 : a.localeCompare(b)))
+    .map(v => ({ v, n: uniqSubjects(e => e.nivo === v).length }));
+}
+function akredOpts(nivo) {
+  return uniq(S.exams.filter(e => e.nivo === nivo).map(e => e.akred)).sort((a, b) => b - a).map(v => {
+    const subs = uniqSubjects(e => e.nivo === nivo && e.akred === v);
+    const pref = Object.entries(subs.reduce((m, e) => (m[e.sifra[0]] = (m[e.sifra[0]] || 0) + 1, m), {})).sort((a, b) => b[1] - a[1])[0];
+    const sems = uniq(subs.map(e => e.sem)).sort((a, b) => a - b);
+    return { v, n: subs.length, pref: pref ? pref[0] : '', ex: subs.find(e => e.sem === sems[0]), sems };
+  });
+}
+function godinaOpts(nivo, akred) {
+  const max = Math.max(0, ...S.exams.filter(e => e.nivo === nivo && e.akred == akred).map(e => e.sem));
+  return Array.from({ length: Math.max(1, Math.ceil(max / 2)) }, (_, i) => i + 1);
+}
+function modulOpts(nivo, akred, godina) {
+  const subs = uniqSubjects(e => e.nivo === nivo && e.akred == akred && e.sem <= godina * 2 && e.modul !== 'SVI');
+  const by = {}; for (const e of subs) (by[e.modul] = by[e.modul] || []).push(e);
+  return Object.keys(by).sort().map(v => {
+    const list = by[v].sort((a, b) => (subjType(a.sifra) === 'O' ? 0 : 1) - (subjType(b.sifra) === 'O' ? 0 : 1) || a.sem - b.sem);
+    return { v, n: list.length, ex: list.filter(e => subjType(e.sifra) === 'O').slice(0, 3).map(e => e.predmet) };
+  });
+}
+function wizSteps() {
+  const d = W.d, st = ['nivo', 'akred'];
+  if (!(d.nivo && d.akred) || godinaOpts(d.nivo, d.akred).length > 1) st.push('godina');
+  if (!(d.nivo && d.akred && d.godina) || modulOpts(d.nivo, d.akred, d.godina).length) st.push('modul');
+  st.push('ispiti', 'kraj');
+  return st;
+}
+function wizValid(step) {
+  const d = W.d;
+  if (step === 'nivo') return !!d.nivo;
+  if (step === 'akred') return !!d.akred;
+  if (step === 'godina') return !!d.godina;
+  if (step === 'modul') return !!d.modul;
+  return true;
+}
+// pametni podrazumevani izbor: obavezni i završni predmeti iz tekuće godine; ranije označeni ostaju
+function defaultRemaining(cat, prev) {
+  const g = W.d.godina, set = new Set();
+  for (const s of cat.values()) {
+    if (prev) { if (prev.has(s.sifra)) set.add(s.sifra); }
+    else if (Math.ceil(s.sem / 2) === g && s.tip !== 'I') set.add(s.sifra);
+  }
+  return set;
+}
+function openWizard(first, startAt) {
+  if (!S.exams.length) { toast('Prvo dodaj bar jedan ispitni rok (PDF).'); openUpload(); return; }
+  const p = prof();
+  W.first = first; W.q = '';
+  W.d = p ? { nivo: p.nivo, akred: p.akred, godina: p.godina, modul: p.modul || null, remaining: new Set(Object.keys(p.remaining || {})), remKey: keyOf(p) }
+    : { nivo: null, akred: null, godina: null, modul: null, remaining: null, remKey: null };
+  const steps = wizSteps();
+  W.step = startAt && steps.includes(startAt) ? steps.indexOf(startAt) : 0;
+  W.origin = startAt;
+  renderWizard();
+  if (!$('#setupDlg').open) $('#setupDlg').showModal();
+}
+$('#setupDlg').addEventListener('cancel', e => { if (W.first) e.preventDefault(); });
+
+function choose(field, value) {
+  const d = W.d, changed = d[field] !== value;
+  d[field] = value;
+  if (changed) {
+    if (field === 'nivo') { d.akred = d.godina = d.modul = null; }
+    if (field === 'akred') { d.godina = null; d.modul = null; }
+    if (field === 'godina' && d.modul && !modulOpts(d.nivo, d.akred, d.godina).some(o => o.v === d.modul)) d.modul = null;
+  }
+  // automatski izbori kad postoji samo jedna mogućnost
+  if (d.nivo && d.akred && !d.godina) { const g = godinaOpts(d.nivo, d.akred); if (g.length === 1) d.godina = g[0]; }
+  if (d.nivo && d.akred && d.godina) {
+    const mo = modulOpts(d.nivo, d.akred, d.godina);
+    if (!mo.length) d.modul = null; else if (mo.length === 1 && !d.modul) d.modul = mo[0].v;
+  }
+  renderWizard();
+  if (changed) setTimeout(() => wizGo(1), 240);
+}
+function wizGo(delta) {
+  const steps = wizSteps();
+  if (delta > 0 && !wizValid(steps[W.step])) return;
+  W.step = Math.max(0, Math.min(steps.length - 1, W.step + delta));
+  W.q = '';
+  renderWizard();
+  const b = $('#wiz .wiz-body'); if (b) b.scrollTop = 0;
+}
+function wizCatalog() {
+  const d = W.d, cat = buildCatalog(d);
+  if (W.d.remKey !== keyOf(d) || !W.d.remaining) {
+    // promenjen profil: zadrži ranije označene koji i dalje važe + obavezni iz tekuće godine
+    const set = defaultRemaining(cat, null);
+    if (W.d.remaining) for (const s of W.d.remaining) if (cat.has(s)) set.add(s);
+    W.d.remaining = set;
+    W.d.remKey = keyOf(d);
+  }
+  return cat;
+}
+function renderWizard() {
+  const steps = wizSteps(), cur = steps[W.step], d = W.d;
+  const stepper = steps.map((s, i) => `<button type="button" class="${i < W.step ? 'done' : ''}${i === W.step ? ' cur' : ''}" ${i < W.step ? `data-wstep="${i}"` : 'tabindex="-1"'}><i></i><span>${STEP_LABEL[s]}</span></button>`).join('');
+  let body = '';
+  const choiceBtn = (field, v, big, sub, extra) => `<button type="button" class="choice" data-choose="${field}" data-v="${esc(v)}" aria-pressed="${String(d[field]) === String(v)}"><span class="ck">${ICON_CHECK}</span><span class="cb">${big}</span>${sub ? `<span class="cs">${sub}</span>` : ''}${extra ? `<span class="cx">${extra}</span>` : ''}</button>`;
+  if (cur === 'nivo') {
+    body = `<h2 id="wizTitle">${W.first ? 'Dobro došao/la! ' : ''}Koje studije pohađaš?</h2><p class="lead">Na osnovu toga prikazujemo samo tvoje predmete i termine. Sve možeš kasnije da promeniš u podešavanjima.</p>
+      <div class="choices big">${nivoOpts().map(o => choiceBtn('nivo', o.v, o.v, esc(NIVO_NAZIV[o.v] || o.v), `${o.n} predmeta u učitanim rokovima`)).join('')}</div>`;
+  } else if (cur === 'akred') {
+    body = `<h2 id="wizTitle">Po kojoj akreditaciji studiraš?</h2><p class="lead">Akreditacija je verzija studijskog programa po kojoj si upisan/a. Lako je prepoznaš po šifri predmeta: svaka akreditacija ima svoju početnu cifru.</p>
+      <div class="choices">${akredOpts(d.nivo).map(o => choiceBtn('akred', o.v, o.v, `šifre počinju sa <b>${esc(o.pref)}…</b>`, o.ex ? `npr. ${esc(o.ex.predmet)} · ${esc(o.ex.sifra)}<br>${o.n} predmeta` : `${o.n} predmeta`)).join('')}</div>`;
+  } else if (cur === 'godina') {
+    body = `<h2 id="wizTitle">Koja si godina?</h2><p class="lead">Prikazaćemo ispite iz ove i svih prethodnih godina, da možeš da označiš i one koje prenosiš.</p>
+      <div class="choices">${godinaOpts(d.nivo, d.akred).map(g => choiceBtn('godina', g, `${g}. godina`, `${2 * g - 1}. i ${2 * g}. semestar`)).join('')}</div>`;
+  } else if (cur === 'modul') {
+    const mo = modulOpts(d.nivo, d.akred, d.godina);
+    body = `<h2 id="wizTitle">Koji je tvoj modul?</h2><p class="lead">Zajednički predmeti svih modula se uvek prikazuju. Ispod oznake modula su primeri njegovih obaveznih predmeta.</p>
+      <div class="choices">${mo.map(o => choiceBtn('modul', o.v, o.v, `${o.n} predmeta`, o.ex.map(esc).join(' · '))).join('')}</div>`;
+  } else if (cur === 'ispiti') {
+    wizCatalog();
+    body = `<h2 id="wizTitle">Koji su ti ispiti ostali?</h2><p class="lead">Unapred smo označili obavezne predmete iz ${d.godina}. godine. Dodaj ispite koje prenosiš iz ranijih godina i izborne predmete koje slušaš.</p>
+      <div class="picktools"><div class="search">${SEARCH_ICON}<input id="wq" type="search" placeholder="Pronađi predmet" autocomplete="off" aria-label="Pronađi predmet" value="${esc(W.q)}"></div>
+        <button type="button" class="btn sm" data-wbulk="cur">Samo tekuća godina</button><button type="button" class="btn sm" data-wbulk="none">Poništi sve</button></div>
+      <div id="wizList"></div>`;
+  } else if (cur === 'kraj') {
+    const cat = wizCatalog();
+    const rem = [...d.remaining].filter(s => cat.has(s));
+    const withT = rem.filter(s => cat.get(s).inst.length).length;
+    body = `<h2 id="wizTitle">Sve je spremno</h2><p class="lead">Tvoj plan se čuva ${Me.mode === 'db' ? 'na tvom nalogu i vidiš ga samo ti' : 'u ovom pregledaču'}.</p>
+      <div class="sumgrid">
+        <div><b>${esc(d.nivo)} · ak. ${d.akred}</b>studije</div>
+        <div><b>${d.godina}. godina</b>${d.modul ? `modul ${esc(d.modul)}` : 'zajednički predmeti'}</div>
+        <div><b>${rem.length}</b>ispita za planiranje</div>
+        <div><b>${withT}</b>ima termin u učitanim rokovima</div>
+      </div>
+      <div class="hint"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span>Kako se planira: klikni na ispit u listi „Moji ispiti", pa izaberi jedan od označenih dana u kalendaru. Ako se dva ispita poklope istog dana, dobićeš upozorenje.</span></div>`;
+  }
+  const last = W.step === steps.length - 1, valid = wizValid(cur);
+  $('#wiz').innerHTML = `
+    <div class="wiz-top"><div class="row"><span class="eyebrow">${W.first ? 'Podešavanje profila' : 'Podešavanja'} · korak ${W.step + 1} od ${steps.length}</span>${W.first ? '' : `<button class="iconbtn" data-close aria-label="Zatvori">${ICON_X}</button>`}</div><div class="stepper">${stepper}</div></div>
+    <div class="wiz-body">${body}</div>
+    <div class="wiz-foot">${W.step > 0 ? '<button type="button" class="btn" data-wnav="-1">Nazad</button>' : ''}<span class="grow"></span>
+      ${cur === 'ispiti' ? `<span class="muted" id="wcount"></span>` : ''}
+      ${!W.first && W.step < steps.length - 1 && valid && steps.slice(W.step).every(s => wizValid(s)) ? '<button type="button" class="btn" data-wfinish>Sačuvaj</button>' : ''}
+      ${last ? '<button type="button" class="btn primary" data-wfinish>Počni planiranje</button>' : `<button type="button" class="btn primary" data-wnav="1" ${valid ? '' : 'disabled'}>Dalje</button>`}</div>`;
+  if (cur === 'ispiti') {
+    renderWizList();
+    $('#wq').addEventListener('input', e => { W.q = e.target.value; renderWizList(); });
+  }
+  setTimeout(() => { const f = $('#wiz [aria-pressed="true"]') || $('#wiz .choice') || $('#wq') || $('#wiz [data-wnav="1"], #wiz [data-wfinish]'); f && f.focus({ preventScroll: true }); }, 20);
+}
+function renderWizList() {
+  const cat = wizCatalog(), d = W.d, q = fold(W.q || '');
+  const words = q.split(/\s+/).filter(Boolean);
+  const items = [...cat.values()].filter(s => !words.length || words.every(w => fold(s.predmet + ' ' + s.sifra).includes(w)));
+  const sems = uniq(items.map(s => s.sem)).sort((a, b) => {
+    const ga = Math.ceil(a / 2) === d.godina, gb = Math.ceil(b / 2) === d.godina;
+    return ga !== gb ? (ga ? -1 : 1) : (ga ? a - b : b - a);
+  });
+  let h = '';
+  for (const sem of sems) {
+    const list = items.filter(s => s.sem === sem).sort((a, b) => ({ O: 0, Z: 1, I: 2 }[a.tip] - { O: 0, Z: 1, I: 2 }[b.tip]) || a.predmet.localeCompare(b.predmet, 'sr'));
+    const allOn = list.every(s => d.remaining.has(s.sifra));
+    h += `<div class="semgroup"><div class="sh"><div><b>${sem}. semestar</b><span>${Math.ceil(sem / 2)}. godina${Math.ceil(sem / 2) === d.godina ? ' · tekuća' : ''}</span></div><button type="button" class="linkbtn" data-wsem="${sem}" data-on="${allOn ? 0 : 1}">${allOn ? 'Poništi sve' : 'Označi sve'}</button></div><div class="subjgrid">` +
+      list.map(s => `<button type="button" class="sopt" data-wsub="${esc(s.sifra)}" aria-pressed="${d.remaining.has(s.sifra)}"><span class="box">${ICON_CHECK}</span><span><span class="sn2">${esc(s.predmet)}</span><span class="sm2"><span>${esc(s.sifra)}</span><span>${TIP_NAZIV[s.tip]}</span><span>${s.inst.length ? termina(s.inst.length) : 'bez termina'}</span></span></span></button>`).join('') + '</div></div>';
+  }
+  $('#wizList').innerHTML = h || `<div class="empty">Nema predmeta${words.length ? ' za ovu pretragu' : ' za izabrani profil u učitanim rokovima'}.</div>`;
+  const n = [...d.remaining].filter(s => cat.has(s)).length;
+  const c = $('#wcount'); if (c) c.textContent = `Izabrano: ${n}`;
+}
+$('#wiz').addEventListener('click', e => {
+  const t = e.target;
+  const ch = t.closest('[data-choose]'); if (ch) { const f = ch.dataset.choose; choose(f, f === 'godina' || f === 'akred' ? +ch.dataset.v : ch.dataset.v); return; }
+  const nv = t.closest('[data-wnav]'); if (nv) { wizGo(+nv.dataset.wnav); return; }
+  const ws = t.closest('[data-wstep]'); if (ws) { W.step = +ws.dataset.wstep; renderWizard(); return; }
+  const sub = t.closest('[data-wsub]'); if (sub) { const r = W.d.remaining, k = sub.dataset.wsub; r.has(k) ? r.delete(k) : r.add(k); renderWizList(); return; }
+  const sm = t.closest('[data-wsem]'); if (sm) { const cat = wizCatalog(), on = sm.dataset.on === '1'; for (const s of cat.values()) if (s.sem === +sm.dataset.wsem) on ? W.d.remaining.add(s.sifra) : W.d.remaining.delete(s.sifra); renderWizList(); return; }
+  const bk = t.closest('[data-wbulk]'); if (bk) { const cat = wizCatalog(); W.d.remaining = bk.dataset.wbulk === 'cur' ? defaultRemaining(cat, null) : new Set(); renderWizList(); return; }
+  if (t.closest('[data-wfinish]')) { finishWizard(); return; }
+});
+$('#wiz').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.id !== 'wq' && !e.target.closest('button')) { e.preventDefault(); const steps = wizSteps(); W.step === steps.length - 1 ? finishWizard() : wizGo(1); }
+});
+function finishWizard() {
+  const d = W.d, cat = wizCatalog(), old = prof();
+  const remaining = {}, plan = {};
+  for (const s of d.remaining) { const c = cat.get(s); if (c) remaining[s] = { n: c.predmet, s: c.sem }; }
+  if (old && old.plan) for (const k of Object.keys(remaining)) if (old.plan[k]) plan[k] = old.plan[k];
+  Me.data = { v: 1, nivo: d.nivo, akred: d.akred, godina: d.godina, modul: d.modul, remaining, plan, onboarded: true };
+  Me.save();
+  const wasFirst = W.first;
+  W.first = false;
+  $('#setupDlg').close();
+  S.pick = null; S.scope = 'moji'; S.tab = 'todo';
+  if (wasFirst) S.view = 'plan';
+  saveUi(); derive(); refresh();
+  toast(wasFirst ? `Profil je podešen. ${ispita(Object.keys(remaining).length)} čeka planiranje.` : 'Podešavanja su sačuvana.');
+}
 // ================= Upload =================
 let pdfLibPromise = null;
 function loadScript(src) { return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = () => rej(new Error('Ne mogu da učitam ' + src)); document.head.appendChild(s); }); }
@@ -844,7 +1573,6 @@ function loadPdfJs() {
 
 let UP = null; // {fileName, rows, bad, rok, godina}
 function openUpload() { UP = null; renderUpload(); $('#uploadDlg').showModal(); }
-$('#uploadBtn').addEventListener('click', openUpload);
 
 function renderUpload(state) {
   const b = $('#uploadBody');
@@ -937,8 +1665,9 @@ async function saveUpload() {
     rebuild();
     const d = parseIso(meta.od); S.y = d.getFullYear(); S.m = d.getMonth(); S.selDay = null;
     $('#uploadDlg').close();
-    refresh();
+    derive(); refresh();
     toast(`Sačuvano: ${rokName(id)} · ${ispita(rows.length)}`);
+    if (!prof()) setTimeout(() => openWizard(true, null), 400);
   } catch (err) {
     renderUpload();
     const code = err && err.code;
@@ -949,25 +1678,26 @@ async function saveUpload() {
   }
 }
 
-// ================= Upravljanje rokovima =================
+
+// ================= Ispitni rokovi =================
 let confirmId = null;
 function renderManage() {
   const b = $('#manageBody');
   if (!S.rokovi.length) { b.innerHTML = `<div class="empty"><strong>Nema učitanih rokova</strong>Dodaj prvi PDF raspored.</div><div class="actions"><button class="btn primary" data-open-upload>Dodaj rok (PDF)</button></div>`; return; }
-  b.innerHTML = `<div class="doclist">` + S.rokovi.map(({ meta }) => `
+  b.innerHTML = `<p class="muted" style="margin:0">Rokovi su zajednički za sve koji koriste aplikaciju. Tvoj profil i plan su lični.</p><div class="doclist">` + S.rokovi.map(({ meta }) => `
     <div class="doc" style="--c:${S.rokColor[meta.id]}">
       <span class="sw"></span>
       <div class="info"><b>${esc(rokLabel(meta.rok))} rok ${esc(meta.godina)}</b>
         <div>${ispita(meta.count)} · ${meta.od.split('-').reverse().join('.')} – ${meta.do.split('-').reverse().join('.')} · ${esc(meta.fileName || '')}</div></div>
       ${confirmId === meta.id
-        ? `<span class="warn">Obrisati ovaj rok?</span><button class="btn" data-cancel>Otkaži</button><button class="btn danger solid" data-del="${esc(meta.id)}">Obriši</button>`
-        : `<button class="btn danger" data-ask="${esc(meta.id)}">Obriši</button>`}
+        ? `<span class="warn">Obrisati ovaj rok? Zakazani termini iz njega ostaju bez termina.</span><button class="btn sm" data-cancel>Otkaži</button><button class="btn danger solid sm" data-del="${esc(meta.id)}">Obriši</button>`
+        : `<button class="btn danger sm" data-ask="${esc(meta.id)}">Obriši</button>`}
     </div>`).join('') + `</div>
-    <div class="actions"><button class="btn primary" data-open-upload>Dodaj još jedan rok</button></div>`;
+    <div class="actions"><button class="btn primary" data-open-upload>Dodaj rok (PDF)</button></div>`;
 }
-$('#manageBtn').addEventListener('click', () => { confirmId = null; renderManage(); $('#manageDlg').showModal(); });
+function openManage() { confirmId = null; renderManage(); if (!$('#manageDlg').open) $('#manageDlg').showModal(); }
+$('#manageBtn').addEventListener('click', openManage);
 $('#manageBody').addEventListener('click', async e => {
-  if (e.target.closest('[data-open-upload]')) { $('#manageDlg').close(); return; }
   const ask = e.target.closest('[data-ask]'); if (ask) { confirmId = ask.dataset.ask; renderManage(); return; }
   if (e.target.closest('[data-cancel]')) { confirmId = null; renderManage(); return; }
   const del = e.target.closest('[data-del]');
@@ -976,37 +1706,33 @@ $('#manageBody').addEventListener('click', async e => {
     del.disabled = true; del.textContent = 'Brišem…';
     try {
       await Store.deleteRok(r.meta);
-      S.rokovi = S.rokovi.filter(x => x !== r); confirmId = null; rebuild(); refresh(); renderManage();
+      S.rokovi = S.rokovi.filter(x => x !== r); confirmId = null; rebuild(); derive(); refresh(); renderManage();
       toast('Obrisano: ' + rokLabel(r.meta.rok) + ' ' + r.meta.godina);
     } catch (err) { confirmId = null; renderManage(); toast('Brisanje nije uspelo. Pokušaj ponovo.'); }
   }
 });
 
 // ================= Start =================
-function storeInfo() {
-  const n = S.rokovi.length;
-  const where = Store.mode === 'db' ? 'sačuvano u aplikaciji' : Store.mode === 'local' ? 'sačuvano samo u ovom pregledaču' : 'nije sačuvano (privatni prozor)';
-  $('#storeInfo').textContent = `${num(n, 'rok', 'roka', 'rokova')} · ${ispita(S.exams.length)} · ${where}`;
-}
-const _refresh = refresh;
-refresh = function (k) { _refresh(k); storeInfo(); };
-
 function pickInitialMonth() {
-  if (!S.exams.length) return;
-  const next = S.exams.find(e => e.datum >= todayIso) || S.exams[S.exams.length - 1];
-  const d = parseIso(next.datum); S.y = d.getFullYear(); S.m = d.getMonth();
+  const nx = plannedList().find(s => s.plan.datum >= todayIso);
+  const src = nx ? nx.plan.datum : (FILTERED.find(e => e.datum >= todayIso) || S.exams.find(e => e.datum >= todayIso) || S.exams[S.exams.length - 1] || {}).datum;
+  if (!src) return;
+  const d = parseIso(src); S.y = d.getFullYear(); S.m = d.getMonth();
 }
-
 (async function start() {
-  renderView(); renderDay();
+  renderSide(); renderView(); renderDay();
   await Store.init();
-  try {
-    S.rokovi = await Store.loadAll();
-  } catch (err) {
+  await Me.init(Store.db);
+  try { S.rokovi = await Store.loadAll(); }
+  catch (err) {
     S.rokovi = [];
     $('#bannerArea').innerHTML = `<div class="banner err" style="margin-bottom:14px">Sačuvani rasporedi trenutno nisu dostupni. Proveri vezu i osveži stranicu.</div>`;
   }
-  rebuild(); pickInitialMonth(); S.loaded = true; refresh();
+  try { await Me.load(); }
+  catch (err) { $('#bannerArea').insertAdjacentHTML('beforeend', `<div class="banner err" style="margin-bottom:14px">Tvoj plan trenutno nije dostupan. Osveži stranicu za koji trenutak.</div>`); Me.loadFailed = true; }
+  rebuild(); derive(); applyFilters(); pickInitialMonth(); S.loaded = true; refresh();
+  if (!Me.loadFailed && (!prof() || !prof().onboarded) && S.exams.length) openWizard(true, null);
 })();
+window.addEventListener('pagehide', () => { if (Me.dirty) Me.flush(); });
 })();
 </script>
