@@ -12,3 +12,10 @@ Jedan PDF = jedan ispitni rok. Rok i školska godina se pogađaju iz naziva fajl
 
 Format podataka po roku: metapodaci `{id, rok, godina, fileName, uploadedAt, count, od, do}` i redovi
 `[nivo, akreditacija, semestar, modul, šifra, predmet, "YYYY-MM-DD", "HH:MM"]`.
+
+## Dizajn
+
+Stil prati flow.remenex.com: Chillax (naslovi, dugmad; ugrađen kao woff2 u `src/fonts/`), Instrument Sans (tekst),
+plava `#1a3ffb`, narandžasta `#f77d44`, svetla (`#f7f7f7`) i tamna (`#04081f` / `#1a1f3f`) tema.
+Squircle uglovi: nativno preko `corner-shape: squircle` gde pregledač to podržava, inače `src/squircle.js`
+crta isti oblik kao SVG pozadinu (sa ivicom i senkom).
