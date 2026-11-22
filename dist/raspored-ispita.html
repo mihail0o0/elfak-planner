@@ -1,0 +1,933 @@
+<title>Raspored ispita</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: radni sto - levo filteri, u sredini kalendar, desno detalji izabranog dana */
+:root {
+  --bg: #f3f5f8;
+  --surface: #ffffff;
+  --surface-2: #eaeef4;
+  --line: #d6dce6;
+  --ink: #18202e;
+  --ink-2: #4a5568;
+  --ink-3: #7a8597;
+  --accent: #1f4fd1;
+  --accent-ink: #ffffff;
+  --accent-soft: #e3eafc;
+  --danger: #b42318;
+  --danger-soft: #fdecea;
+  --ok: #157f3b;
+  --r1: #1f4fd1; --r2: #c2410c; --r3: #0f766e; --r4: #9333ea; --r5: #be123c; --r6: #a16207;
+  --f-display: "Manrope", "Segoe UI", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --radius: 8px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f141c; --surface: #161d28; --surface-2: #1e2734; --line: #2b3646; --ink: #e6ebf2; --ink-2: #aab4c3; --ink-3: #7c8799;
+  --accent: #7c9cff; --accent-ink: #0b1220; --accent-soft: #1d2a4d; --danger: #ff8a7a; --danger-soft: #3a1d1a; --ok: #5fd08a;
+  --r1: #7c9cff; --r2: #fb923c; --r3: #2dd4bf; --r4: #c084fc; --r5: #fb7185; --r6: #facc15; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0f141c; --surface: #161d28; --surface-2: #1e2734; --line: #2b3646; --ink: #e6ebf2; --ink-2: #aab4c3; --ink-3: #7c8799;
+  --accent: #7c9cff; --accent-ink: #0b1220; --accent-soft: #1d2a4d; --danger: #ff8a7a; --danger-soft: #3a1d1a; --ok: #5fd08a;
+  --r1: #7c9cff; --r2: #fb923c; --r3: #2dd4bf; --r4: #c084fc; --r5: #fb7185; --r6: #facc15; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 14px; line-height: 1.45; }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+
+.wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 18px 40px; max-width: 1640px; margin: 0 auto; }
+
+header.top { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+header.top h1 { font-family: var(--f-display); font-weight: 800; font-size: 22px; letter-spacing: -0.01em; margin: 0; }
+header.top .sub { color: var(--ink-3); font-size: 13px; }
+header.top .grow { flex: 1; }
+
+.btn { border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius); padding: 7px 12px; display: inline-flex; align-items: center; gap: 6px; }
+.btn:hover { border-color: var(--ink-3); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.ghost { background: transparent; border-color: transparent; }
+.btn.danger { color: var(--danger); }
+.btn.danger.solid { background: var(--danger); color: var(--surface); border-color: var(--danger); }
+.btn:disabled { opacity: .5; cursor: default; }
+
+.layout { display: grid; grid-template-columns: 272px minmax(0, 1fr) 360px; gap: 18px; align-items: start; }
+@media (max-width: 1260px) { .layout { grid-template-columns: 260px minmax(0, 1fr); } .day-panel { grid-column: 2; } }
+@media (max-width: 820px) { .layout { grid-template-columns: minmax(0, 1fr); } .day-panel { grid-column: 1; } }
+
+/* filteri */
+.filters { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; gap: 16px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); max-height: calc(100vh - 24px); overflow: auto; }
+.filters-toggle { display: none; }
+@media (max-width: 820px) {
+  .filters { position: static; max-height: none; }
+  .filters-toggle { display: inline-flex; }
+  .filters.collapsed { display: none; }
+}
+.fgroup { display: flex; flex-direction: column; gap: 7px; }
+.flabel { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); display: flex; justify-content: space-between; align-items: baseline; }
+.flabel button { border: 0; background: none; color: var(--accent); font-size: 11px; letter-spacing: 0; text-transform: none; padding: 0; }
+.search { position: relative; }
+.search input { width: 100%; border: 1px solid var(--line); background: var(--bg); border-radius: var(--radius); padding: 9px 10px 9px 32px; }
+.search svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--ink-3); }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 3px 10px; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; }
+.chip:hover { border-color: var(--ink-3); }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c, var(--ink-3)); }
+.chip[aria-pressed="true"] .dot { box-shadow: 0 0 0 1.5px var(--accent-ink); }
+.chip .n { font-family: var(--f-mono); font-size: 11px; opacity: .65; }
+.dates { display: grid; grid-template-columns: 1fr; gap: 6px; }
+.dates label { flex-direction: row !important; align-items: center; gap: 8px !important; }
+.dates label span { width: 22px; }
+.dates label { font-size: 12px; color: var(--ink-3); display: flex; flex-direction: column; gap: 3px; }
+.dates input { border: 1px solid var(--line); background: var(--bg); border-radius: var(--radius); padding: 6px 7px; width: 100%; min-width: 0; }
+.fsummary { font-size: 13px; color: var(--ink-2); border-top: 1px solid var(--line); padding-top: 12px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+
+/* glavni deo */
+.main { min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); padding: 2px; }
+.seg button { border: 0; background: transparent; padding: 6px 12px; border-radius: 6px; color: var(--ink-2); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); font-weight: 600; }
+.period { font-family: var(--f-display); font-weight: 700; font-size: 20px; min-width: 0; }
+.period small { font-family: var(--f-body); font-weight: 400; color: var(--ink-3); font-size: 13px; margin-left: 6px; }
+.navbtns { display: inline-flex; gap: 4px; }
+.iconbtn { border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius); width: 34px; height: 34px; display: inline-grid; place-items: center; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+
+/* mesecni prikaz */
+.month { overflow-x: auto; }
+.mgrid { display: grid; grid-template-columns: repeat(7, minmax(92px, 1fr)); min-width: 660px; }
+.mhead { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); padding: 9px 10px; border-bottom: 1px solid var(--line); }
+.mcell { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); min-height: 112px; padding: 7px 8px; display: flex; flex-direction: column; gap: 4px; background: var(--surface); text-align: left; border-top: 0; border-left: 0; border-radius: 0; }
+.mcell:nth-child(7n) { border-right: 0; }
+.mcell.out { background: var(--surface-2); color: var(--ink-3); }
+.mcell.weekend .dn { color: var(--ink-3); }
+.mcell.has { cursor: pointer; }
+.mcell.has:hover { background: var(--accent-soft); }
+.mcell.sel { box-shadow: inset 0 0 0 2px var(--accent); }
+.mcell .dn { font-family: var(--f-display); font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: space-between; gap: 4px; }
+.mcell.today .dn span:first-child { background: var(--ink); color: var(--bg); border-radius: 999px; padding: 0 7px; }
+.mcell .total { font-family: var(--f-mono); font-size: 11px; font-weight: 500; color: var(--accent); }
+.slot { font-size: 12px; display: flex; gap: 6px; align-items: baseline; color: var(--ink-2); }
+.slot b { font-family: var(--f-mono); font-weight: 500; color: var(--ink); font-size: 11.5px; }
+.mini { font-size: 12px; line-height: 1.3; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-left: 3px solid var(--c, var(--accent)); padding-left: 5px; }
+@media (max-width: 600px) {
+  .mgrid { min-width: 0; grid-template-columns: repeat(7, minmax(0, 1fr)); }
+  .mhead { padding: 8px 2px; text-align: center; letter-spacing: .02em; }
+  .mcell { min-height: 58px; padding: 5px 4px; align-items: center; }
+  .mcell .dn { flex-direction: column; gap: 2px; }
+  .mcell .total { background: var(--accent); color: var(--accent-ink); border-radius: 999px; padding: 0 5px; }
+  .slot, .mini { display: none; }
+}
+.rokdots { display: flex; gap: 3px; margin-top: auto; }
+.rokdots i { width: 6px; height: 6px; border-radius: 50%; background: var(--c); }
+
+/* godisnji prikaz */
+.year { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; padding: 14px; }
+.ym h3 { font-family: var(--f-display); font-size: 14px; font-weight: 700; margin: 0 0 6px; display: flex; justify-content: space-between; }
+.ym h3 span { font-family: var(--f-mono); font-weight: 400; font-size: 11px; color: var(--ink-3); }
+.ym h3 button { border: 0; background: none; padding: 0; font: inherit; color: inherit; }
+.ym h3 button:hover { color: var(--accent); }
+.ygrid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.ygrid .h { font-size: 10px; color: var(--ink-3); text-align: center; padding-bottom: 2px; }
+.yd { aspect-ratio: 1; max-width: 100%; border-radius: 4px; border: 0; padding: 0; font-size: 11px; font-family: var(--f-mono); display: grid; place-items: center; background: var(--surface-2); color: var(--ink-2); }
+.yd.e { background: transparent; }
+.yd.has { color: var(--ink); font-weight: 500; background: color-mix(in srgb, var(--accent) var(--p), var(--surface-2)); }
+.yd.has.hot { color: var(--accent-ink); }
+.yd.today { box-shadow: inset 0 0 0 1.5px var(--ink); }
+.ylegend { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-3); padding: 0 14px 14px; flex-wrap: wrap; }
+.ylegend i { width: 14px; height: 14px; border-radius: 3px; display: inline-block; }
+
+/* lista */
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th { text-align: left; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); padding: 9px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; position: sticky; top: 0; background: var(--surface); }
+td { padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+td.nowrap { white-space: nowrap; }
+tr.dayrow td { background: var(--surface-2); font-family: var(--f-display); font-weight: 700; font-size: 13px; }
+.more { padding: 12px; text-align: center; }
+
+/* dan */
+.day-panel { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); max-height: calc(100vh - 24px); overflow: auto; }
+@media (max-width: 1260px) { .day-panel { position: static; max-height: none; } }
+.day-panel .dh { padding: 14px 16px 10px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--surface); z-index: 1; }
+.day-panel h2 { font-family: var(--f-display); font-size: 18px; margin: 0; text-wrap: balance; }
+.day-panel .dsub { color: var(--ink-3); font-size: 13px; }
+.tslot { padding: 10px 16px 4px; font-family: var(--f-mono); font-size: 12px; color: var(--ink-3); display: flex; gap: 8px; align-items: center; }
+.tslot b { color: var(--ink); font-size: 15px; font-weight: 500; }
+.tslot::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.subj { padding: 8px 16px; border-left: 3px solid transparent; }
+.subj + .subj { border-top: 1px dashed var(--line); }
+.subj .nm { font-weight: 600; }
+.subj .vs { display: flex; flex-direction: column; gap: 3px; margin-top: 4px; }
+.v { display: flex; flex-wrap: wrap; gap: 4px; font-size: 12px; align-items: center; }
+.tag { border-radius: 4px; padding: 0 6px; background: var(--surface-2); color: var(--ink-2); white-space: nowrap; }
+.tag.code { font-family: var(--f-mono); font-size: 11.5px; }
+.tag.rok { background: color-mix(in srgb, var(--c) 16%, var(--surface)); color: var(--ink); }
+.empty { padding: 28px 18px; color: var(--ink-3); text-align: center; }
+.empty strong { display: block; color: var(--ink); font-family: var(--f-display); font-size: 16px; margin-bottom: 4px; }
+
+/* prazno stanje / poruke */
+.banner { border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; font-size: 13px; background: var(--surface); color: var(--ink-2); }
+.banner.err { border-color: var(--danger); background: var(--danger-soft); color: var(--danger); }
+.hero-empty { padding: 40px 24px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.hero-empty h2 { font-family: var(--f-display); margin: 0; font-size: 20px; }
+.hero-empty p { margin: 0; color: var(--ink-2); max-width: 46ch; }
+
+/* dijalog */
+dialog { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink); padding: 0; width: min(720px, calc(100vw - 32px)); max-height: calc(100vh - 48px); }
+dialog::backdrop { background: rgb(10 15 25 / .45); }
+.dlg { display: flex; flex-direction: column; max-height: calc(100vh - 50px); }
+.dlg header { padding: 16px 18px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.dlg header h2 { font-family: var(--f-display); margin: 0; font-size: 18px; }
+.dlg .body { padding: 16px 18px; overflow: auto; display: flex; flex-direction: column; gap: 16px; }
+.drop { border: 1.5px dashed var(--line); border-radius: var(--radius); padding: 26px 16px; text-align: center; color: var(--ink-2); background: var(--bg); display: flex; flex-direction: column; gap: 6px; align-items: center; }
+.drop.over { border-color: var(--accent); background: var(--accent-soft); }
+.drop strong { color: var(--ink); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 520px) { .form-row { grid-template-columns: 1fr; } }
+.field { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--ink-3); }
+.field select, .field input { border: 1px solid var(--line); background: var(--bg); border-radius: var(--radius); padding: 8px 9px; font-size: 14px; color: var(--ink); }
+.stat { display: flex; gap: 18px; flex-wrap: wrap; font-size: 13px; color: var(--ink-2); }
+.stat b { font-family: var(--f-display); font-size: 18px; color: var(--ink); display: block; }
+.preview { max-height: 200px; overflow: auto; border: 1px solid var(--line); border-radius: var(--radius); }
+.preview table { font-size: 12px; }
+.warn { color: var(--danger); font-size: 13px; }
+.doclist { display: flex; flex-direction: column; }
+.doc { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.doc:last-child { border-bottom: 0; }
+.doc .sw { width: 10px; height: 10px; border-radius: 3px; background: var(--c); flex: none; }
+.doc .info { flex: 1; min-width: 180px; }
+.doc .info b { font-family: var(--f-display); }
+.doc .info div { font-size: 12px; color: var(--ink-3); }
+.actions { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+h3.sec { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin: 0; }
+.spinner { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--line); border-top-color: var(--accent); animation: spin .8s linear infinite; display: inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+.toast { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 18px); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 9px 14px; border-radius: var(--radius); font-size: 13px; z-index: 50; max-width: calc(100vw - 32px); }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Raspored ispita</h1>
+      <div class="sub" id="storeInfo">Učitavanje…</div>
+    </div>
+    <div class="grow"></div>
+    <button class="btn filters-toggle" id="filtersToggle" aria-expanded="false">Filteri <span id="fcount" class="mono"></span></button>
+    <button class="btn" id="manageBtn">Učitani rokovi</button>
+    <button class="btn primary" id="uploadBtn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M6 10l6-6 6 6M4 20h16"/></svg>
+      Dodaj rok (PDF)
+    </button>
+  </header>
+
+  <div id="bannerArea"></div>
+
+  <div class="layout">
+    <aside class="filters collapsed" id="filters" aria-label="Filteri">
+      <div class="fgroup">
+        <div class="flabel">Pretraga</div>
+        <div class="search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="q" type="search" placeholder="Naziv predmeta ili šifra" autocomplete="off">
+        </div>
+      </div>
+      <div class="fgroup"><div class="flabel">Rok <button data-clear="rok">sve</button></div><div class="chips" id="f-rok"></div></div>
+      <div class="fgroup"><div class="flabel">Nivo <button data-clear="nivo">sve</button></div><div class="chips" id="f-nivo"></div></div>
+      <div class="fgroup"><div class="flabel">Semestar <button data-clear="sem">sve</button></div><div class="chips" id="f-sem"></div></div>
+      <div class="fgroup"><div class="flabel">Modul <button data-clear="modul">sve</button></div><div class="chips" id="f-modul"></div></div>
+      <div class="fgroup"><div class="flabel">Akreditacija <button data-clear="akred">sve</button></div><div class="chips" id="f-akred"></div></div>
+      <div class="fgroup">
+        <div class="flabel">Datum <button data-clear="datum">obriši</button></div>
+        <div class="dates">
+          <label for="od"><span>od</span><input type="date" id="od"></label>
+          <label for="do"><span>do</span><input type="date" id="do"></label>
+        </div>
+      </div>
+      <div class="fsummary"><span id="resultCount">0 ispita</span><button class="btn ghost" id="resetAll">Poništi sve</button></div>
+    </aside>
+
+    <section class="main">
+      <div class="toolbar">
+        <div class="seg" role="group" aria-label="Prikaz">
+          <button data-view="mesec" aria-pressed="true">Mesec</button>
+          <button data-view="godina" aria-pressed="false">Godina</button>
+          <button data-view="lista" aria-pressed="false">Lista</button>
+        </div>
+        <div class="navbtns" id="navbtns">
+          <button class="iconbtn" id="prev" aria-label="Prethodni">‹</button>
+          <button class="iconbtn" id="next" aria-label="Sledeći">›</button>
+        </div>
+        <button class="btn" id="todayBtn">Danas</button>
+        <div class="period" id="period"></div>
+      </div>
+      <div class="card" id="viewArea"></div>
+    </section>
+
+    <aside class="card day-panel" id="dayPanel" aria-live="polite"></aside>
+  </div>
+</div>
+
+<dialog id="uploadDlg" aria-labelledby="uploadTitle">
+  <div class="dlg">
+    <header><h2 id="uploadTitle">Dodaj rok iz PDF-a</h2><button class="btn ghost" data-close>Zatvori</button></header>
+    <div class="body" id="uploadBody"></div>
+  </div>
+</dialog>
+
+<dialog id="manageDlg" aria-labelledby="manageTitle">
+  <div class="dlg">
+    <header><h2 id="manageTitle">Učitani rokovi</h2><button class="btn ghost" data-close>Zatvori</button></header>
+    <div class="body" id="manageBody"></div>
+  </div>
+</dialog>
+
+<script>
+// ===== Jezgro: transliteracija + parsiranje rasporeda ispita =====
+const CYR = {
+  'А':'A','Б':'B','В':'V','Г':'G','Д':'D','Ђ':'Đ','Е':'E','Ж':'Ž','З':'Z','И':'I','Ј':'J','К':'K','Л':'L','Љ':'Lj','М':'M','Н':'N','Њ':'Nj','О':'O','П':'P','Р':'R','С':'S','Т':'T','Ћ':'Ć','У':'U','Ф':'F','Х':'H','Ц':'C','Ч':'Č','Џ':'Dž','Ш':'Š',
+  'а':'a','б':'b','в':'v','г':'g','д':'d','ђ':'đ','е':'e','ж':'ž','з':'z','и':'i','ј':'j','к':'k','л':'l','љ':'lj','м':'m','н':'n','њ':'nj','о':'o','п':'p','р':'r','с':'s','т':'t','ћ':'ć','у':'u','ф':'f','х':'h','ц':'c','ч':'č','џ':'dž','ш':'š'
+};
+function toLatin(s) {
+  if (!s) return '';
+  let out = '';
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i], t = CYR[ch];
+    if (t === undefined) { out += ch; continue; }
+    // Lj/Nj/Dž u reči pisanoj velikim slovima -> LJ/NJ/DŽ
+    if (t.length === 2 && ch === ch.toUpperCase()) {
+      const nx = s[i + 1] || '', pv = s[i - 1] || '';
+      const isUp = c => c && c !== c.toLowerCase();
+      if (isUp(nx) || (!nx.trim() && isUp(pv))) { out += t.toUpperCase(); continue; }
+    }
+    out += t;
+  }
+  return out;
+}
+// za pretragu: latinica, mala slova, bez dijakritika
+function fold(s) {
+  return toLatin(String(s || '')).toLowerCase()
+    .replace(/đ/g, 'dj').normalize('NFD').replace(/[̀-ͯ]/g, '');
+}
+
+const MONTHS = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'avg', 'sep', 'okt', 'nov', 'dec'];
+function monthFromWord(w) {
+  const f = fold(w);
+  for (let i = 0; i < 12; i++) if (f.startsWith(MONTHS[i])) return i + 1;
+  if (f.startsWith('aug')) return 8;
+  return 0;
+}
+const pad = n => String(n).padStart(2, '0');
+
+// "OAS 2026 1 SVI 4OEZ1O01 Matematika 1 subota, 5. decembar 2026. 9:00:00"
+const RE_WORD = /^(\S+)\s+(\d{4})\s+(\d{1,2})\s+(\S+)\s+(\S+)\s+(.+?)\s+(?:\S+,\s*)?(\d{1,2})\.\s*([^\s\d.]+)\s+(\d{4})\.?\s+(\d{1,2})[:.](\d{2})(?:[:.]\d{2})?\s*h?$/;
+// "... 05.12.2026. 9:00"
+const RE_NUM = /^(\S+)\s+(\d{4})\s+(\d{1,2})\s+(\S+)\s+(\S+)\s+(.+?)\s+(?:\S+,\s*)?(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{4})\.?\s+(\d{1,2})[:.](\d{2})(?:[:.]\d{2})?\s*h?$/;
+
+// Jedan red teksta -> red ispita (kompaktni niz) ili null
+// Red: [nivo, akreditacija, semestar, modul, sifra, predmet, 'YYYY-MM-DD', 'HH:MM']
+function parseLine(raw) {
+  const line = toLatin(raw).replace(/\s+/g, ' ').trim();
+  if (!line) return null;
+  let m = line.match(RE_WORD), mon;
+  if (m) mon = monthFromWord(m[8]);
+  else if ((m = line.match(RE_NUM))) mon = +m[8];
+  if (!m || !mon || mon > 12) return null;
+  const day = +m[7];
+  if (day < 1 || day > 31) return null;
+  return [m[1], +m[2], +m[3], m[4], m[5], m[6].trim(),
+    `${m[9]}-${pad(mon)}-${pad(day)}`, `${pad(+m[10])}:${m[11]}`];
+}
+function isHeader(raw) { return /nivo|predmet|šifra|sifra/i.test(toLatin(raw)) && !/\d{4}\./.test(raw); }
+
+function parseLines(lines) {
+  const rows = [], bad = [];
+  for (const l of lines) {
+    if (!l.trim() || isHeader(l)) continue;
+    const r = parseLine(l);
+    if (r) rows.push(r); else bad.push(toLatin(l).replace(/\s+/g, ' ').trim());
+  }
+  return { rows, bad };
+}
+
+// pdf.js dokument -> redovi teksta (grupisanje po y, sortiranje po x)
+async function pdfToLines(pdf) {
+  const lines = [];
+  for (let p = 1; p <= pdf.numPages; p++) {
+    const page = await pdf.getPage(p);
+    const tc = await page.getTextContent();
+    const items = tc.items.filter(it => it.str && it.str.trim() !== '' || (it.str === ' '))
+      .map(it => ({ s: it.str, x: it.transform[4], y: it.transform[5], w: it.width, h: Math.abs(it.transform[3]) || 8 }));
+    items.sort((a, b) => b.y - a.y || a.x - b.x);
+    const groups = [];
+    for (const it of items) {
+      const g = groups.find(g => Math.abs(g.y - it.y) <= Math.max(2, it.h * 0.35));
+      if (g) g.items.push(it); else groups.push({ y: it.y, items: [it] });
+    }
+    groups.sort((a, b) => b.y - a.y);
+    for (const g of groups) {
+      g.items.sort((a, b) => a.x - b.x);
+      let s = '', end = null;
+      for (const it of g.items) {
+        if (end !== null && it.x - end > 1) s += ' ';
+        s += it.s; end = it.x + it.w;
+      }
+      lines.push(s);
+    }
+    page.cleanup && page.cleanup();
+  }
+  return lines;
+}
+
+// pogađanje roka i školske godine
+const ROKOVI = [
+  ['januarski', 'Januarski'], ['februarski', 'Februarski'], ['martovski', 'Martovski'], ['aprilski', 'Aprilski'],
+  ['majski', 'Majski'], ['junski', 'Junski'], ['julski', 'Julski'], ['avgustovski', 'Avgustovski'],
+  ['septembarski', 'Septembarski'], ['oktobarski', 'Oktobarski'], ['oktobarski2', 'Oktobarski 2'],
+  ['novembarski', 'Novembarski'], ['decembarski', 'Decembarski']
+];
+const ROK_BY_MONTH = { 1: 'januarski', 2: 'februarski', 3: 'martovski', 4: 'aprilski', 5: 'majski', 6: 'junski', 7: 'julski', 8: 'avgustovski', 9: 'septembarski', 10: 'oktobarski', 11: 'novembarski', 12: 'decembarski' };
+function guessMeta(fileName, rows) {
+  const f = fold(fileName || '');
+  let rok = '';
+  for (const [k] of ROKOVI) if (k !== 'oktobarski2' && f.includes(k.slice(0, 5))) { rok = k; break; }
+  if (!rok) { const mm = f.match(/(jan|feb|mart|apr|maj|jun|jul|avg|sept|okt|nov|dec)/); if (mm) rok = ROK_BY_MONTH[monthFromWord(mm[1])]; }
+  if (/okt\w*\s*(2|ii)\b|oktobarski[-_ ]?2/.test(f)) rok = 'oktobarski2';
+  const cnt = {};
+  for (const r of rows) { const k = r[6].slice(0, 7); cnt[k] = (cnt[k] || 0) + 1; }
+  const top = Object.entries(cnt).sort((a, b) => b[1] - a[1])[0];
+  if (!rok && top) rok = ROK_BY_MONTH[+top[0].slice(5, 7)];
+  let godina = '';
+  const gm = f.match(/(20\d\d)\s*[-_/]\s*(20\d\d)/);
+  if (gm) godina = `${gm[1]}/${gm[2]}`;
+  else if (top) { const y = +top[0].slice(0, 4), mo = +top[0].slice(5, 7); godina = mo >= 10 ? `${y}/${y + 1}` : `${y - 1}/${y}`; }
+  return { rok: rok || 'januarski', godina };
+}
+function rokLabel(k) { const r = ROKOVI.find(r => r[0] === k); return r ? r[1] : k; }
+function rokId(godina, rok) { return `${godina.replace('/', '-')}__${rok}`; }
+
+if (typeof module !== 'undefined') module.exports = { toLatin, fold, parseLine, parseLines, pdfToLines, guessMeta, rokLabel, rokId, ROKOVI };
+
+</script>
+<script>
+(() => {
+// ================= Konstante =================
+const PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
+const NIVO_NAZIV = { OAS: 'Osnovne akademske studije', MAS: 'Master akademske studije', DAS: 'Doktorske akademske studije', OSS: 'Osnovne strukovne studije', MSS: 'Master strukovne studije', SAS: 'Specijalističke akademske studije' };
+const DANI = ['Pon', 'Uto', 'Sre', 'Čet', 'Pet', 'Sub', 'Ned'];
+const DANI_PUNO = ['nedelja', 'ponedeljak', 'utorak', 'sreda', 'četvrtak', 'petak', 'subota'];
+const MESECI = ['januar', 'februar', 'mart', 'april', 'maj', 'jun', 'jul', 'avgust', 'septembar', 'oktobar', 'novembar', 'decembar'];
+const ROK_COLORS = ['var(--r1)', 'var(--r2)', 'var(--r3)', 'var(--r4)', 'var(--r5)', 'var(--r6)'];
+const CHUNK = 600;
+const LS_KEY = 'raspored-ispita:v1';
+const LS_UI = 'raspored-ispita:ui';
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const pad = n => String(n).padStart(2, '0');
+const iso = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const parseIso = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const todayIso = iso(new Date());
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+const fmtDay = s => { const d = parseIso(s); return `${DANI_PUNO[d.getDay()]}, ${d.getDate()}. ${MESECI[d.getMonth()]} ${d.getFullYear()}.`; };
+const num = (n, one, few, many) => { const a = n % 10, b = n % 100; return `${n} ${a === 1 && b !== 11 ? one : (a >= 2 && a <= 4 && (b < 12 || b > 14) ? few : many)}`; };
+const ispita = n => num(n, 'ispit', 'ispita', 'ispita');
+const lsGet = k => { try { return localStorage.getItem(k); } catch { return null; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v); return true; } catch { return false; } };
+
+function toast(msg) {
+  const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3200);
+}
+function withTimeout(p, ms) {
+  return Promise.race([p, new Promise((_, rej) => setTimeout(() => rej({ code: 'timeout' }), ms))]);
+}
+
+// ================= Skladište =================
+// U artifaktu: deljena baza (rokovi/{id} = metapodaci, ispiti/{id}__{n} = delovi sa redovima).
+// Van artifakta: localStorage u ovom pregledaču.
+const Store = {
+  mode: 'memory', db: null, mem: {},
+  async init() {
+    try { if (window.claude && typeof window.claude.use === 'function') this.db = await window.claude.use('db'); } catch { this.db = null; }
+    if (this.db) this.mode = 'db';
+    else { this.mode = lsSet('raspored-ispita:test', '1') ? 'local' : 'memory'; }
+  },
+  async loadAll() {
+    if (this.mode === 'db') {
+      const [rs, cs] = await withTimeout(Promise.all([
+        this.db.collection('rokovi').get(),
+        this.db.collection('ispiti').limit(1000).get()
+      ]), 12000);
+      const byRok = {};
+      for (const d of cs.docs) { const v = d.data(); (byRok[v.rokId] = byRok[v.rokId] || []).push(v); }
+      const out = [];
+      for (const d of rs.docs) {
+        const meta = d.data();
+        const parts = (byRok[meta.id] || []).filter(p => p.idx < meta.chunks).sort((a, b) => a.idx - b.idx);
+        if (parts.length !== meta.chunks) continue; // nepotpun upis
+        out.push({ meta, rows: parts.flatMap(p => p.rows) });
+      }
+      return out;
+    }
+    if (this.mode === 'local') {
+      try { this.mem = JSON.parse(lsGet(LS_KEY) || '{}') || {}; } catch { this.mem = {}; }
+    }
+    return Object.values(this.mem);
+  },
+  async saveRok(meta, rows, oldChunks) {
+    if (this.mode === 'db') {
+      const n = Math.ceil(rows.length / CHUNK);
+      for (let i = 0; i < n; i++) {
+        await this.db.doc(`ispiti/${meta.id}__${i}`).set({ rokId: meta.id, idx: i, rows: rows.slice(i * CHUNK, (i + 1) * CHUNK) });
+      }
+      for (let i = n; i < (oldChunks || 0); i++) await this.db.doc(`ispiti/${meta.id}__${i}`).delete();
+      await this.db.doc(`rokovi/${meta.id}`).set({ ...meta, chunks: n });
+      return;
+    }
+    this.mem[meta.id] = { meta, rows };
+    if (this.mode === 'local' && !lsSet(LS_KEY, JSON.stringify(this.mem))) throw { code: 'local_full' };
+  },
+  async deleteRok(meta) {
+    if (this.mode === 'db') {
+      await this.db.doc(`rokovi/${meta.id}`).delete();
+      for (let i = 0; i < (meta.chunks || 0); i++) await this.db.doc(`ispiti/${meta.id}__${i}`).delete();
+      return;
+    }
+    delete this.mem[meta.id];
+    if (this.mode === 'local') lsSet(LS_KEY, JSON.stringify(this.mem));
+  }
+};
+
+// ================= Stanje =================
+const S = {
+  rokovi: [],      // [{meta, rows}]
+  exams: [],       // normalizovani objekti
+  rokColor: {},
+  f: { q: '', rok: new Set(), nivo: new Set(), sem: new Set(), modul: new Set(), akred: new Set(), od: '', do: '' },
+  view: 'mesec', y: new Date().getFullYear(), m: new Date().getMonth(), selDay: null,
+  listLimit: 300, loaded: false, error: null
+};
+try { const ui = JSON.parse(lsGet(LS_UI) || '{}'); if (['mesec', 'godina', 'lista'].includes(ui.view)) S.view = ui.view; } catch {}
+
+function rebuild() {
+  S.rokovi.sort((a, b) => (a.meta.od || '').localeCompare(b.meta.od || ''));
+  S.rokColor = {};
+  S.rokovi.forEach((r, i) => { S.rokColor[r.meta.id] = ROK_COLORS[i % ROK_COLORS.length]; });
+  const ex = [];
+  for (const { meta, rows } of S.rokovi) {
+    rows.forEach((r, i) => {
+      ex.push({ id: meta.id + ':' + i, rokId: meta.id, nivo: r[0], akred: r[1], sem: r[2], modul: r[3], sifra: r[4], predmet: r[5], datum: r[6], vreme: r[7], key: fold(r[5] + ' ' + r[4]) });
+    });
+  }
+  ex.sort((a, b) => a.datum.localeCompare(b.datum) || a.vreme.localeCompare(b.vreme) || a.predmet.localeCompare(b.predmet, 'sr'));
+  S.exams = ex;
+  // ukloni filtere koji više ne postoje
+  for (const k of ['rok']) for (const v of [...S.f[k]]) if (!S.rokovi.some(r => r.meta.id === v)) S.f[k].delete(v);
+}
+const rokName = id => { const r = S.rokovi.find(r => r.meta.id === id); return r ? `${rokLabel(r.meta.rok)} ${r.meta.godina}` : id; };
+const rokShort = id => { const r = S.rokovi.find(r => r.meta.id === id); return r ? rokLabel(r.meta.rok) : id; };
+
+function matches(e, skip) {
+  const f = S.f;
+  if (skip !== 'rok' && f.rok.size && !f.rok.has(e.rokId)) return false;
+  if (skip !== 'nivo' && f.nivo.size && !f.nivo.has(e.nivo)) return false;
+  if (skip !== 'sem' && f.sem.size && !f.sem.has(String(e.sem))) return false;
+  if (skip !== 'modul' && f.modul.size && !f.modul.has(e.modul)) return false;
+  if (skip !== 'akred' && f.akred.size && !f.akred.has(String(e.akred))) return false;
+  if (f.od && e.datum < f.od) return false;
+  if (f.do && e.datum > f.do) return false;
+  if (f.q) { const words = fold(f.q).split(/\s+/).filter(Boolean); for (const w of words) if (!e.key.includes(w)) return false; }
+  return true;
+}
+let FILTERED = [];
+function applyFilters() { FILTERED = S.exams.filter(e => matches(e)); }
+
+// ================= Filteri (UI) =================
+function chipGroup(el, key, values, labelFn, titleFn, colorFn) {
+  // brojevi pokazuju koliko bi ispita ostalo uz ostale aktivne filtere
+  const counts = {};
+  for (const e of S.exams) if (matches(e, key)) { const v = key === 'rok' ? e.rokId : String(e[key]); counts[v] = (counts[v] || 0) + 1; }
+  el.innerHTML = values.map(v => {
+    const on = S.f[key].has(v);
+    const c = colorFn ? ` style="--c:${colorFn(v)}"` : '';
+    return `<button class="chip" data-k="${key}" data-v="${esc(v)}" aria-pressed="${on}"${titleFn ? ` title="${esc(titleFn(v))}"` : ''}${c}>${colorFn ? '<span class="dot"></span>' : ''}${esc(labelFn(v))}<span class="n">${counts[v] || 0}</span></button>`;
+  }).join('') || '<span class="sub" style="color:var(--ink-3);font-size:12px">—</span>';
+}
+const uniq = (arr) => [...new Set(arr)];
+function renderFilters() {
+  chipGroup($('#f-rok'), 'rok', S.rokovi.map(r => r.meta.id), rokName, null, id => S.rokColor[id]);
+  chipGroup($('#f-nivo'), 'nivo', uniq(S.exams.map(e => e.nivo)).sort(), v => v, v => NIVO_NAZIV[v] || v);
+  chipGroup($('#f-sem'), 'sem', uniq(S.exams.map(e => String(e.sem))).sort((a, b) => a - b), v => v + '.');
+  chipGroup($('#f-modul'), 'modul', uniq(S.exams.map(e => e.modul)).sort((a, b) => a === 'SVI' ? -1 : b === 'SVI' ? 1 : a.localeCompare(b)), v => v, v => v === 'SVI' ? 'Zajednički predmeti (svi moduli)' : 'Modul ' + v);
+  chipGroup($('#f-akred'), 'akred', uniq(S.exams.map(e => String(e.akred))).sort((a, b) => b - a), v => v, v => 'Akreditacija ' + v);
+  $('#resultCount').textContent = ispita(FILTERED.length) + (FILTERED.length !== S.exams.length ? ` od ${S.exams.length}` : '');
+  const n = activeFilterCount();
+  $('#fcount').textContent = n ? `(${n})` : '';
+}
+function activeFilterCount() {
+  const f = S.f; return (f.q ? 1 : 0) + f.rok.size + f.nivo.size + f.sem.size + f.modul.size + f.akred.size + (f.od ? 1 : 0) + (f.do ? 1 : 0);
+}
+document.getElementById('filters').addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if (chip) { const set = S.f[chip.dataset.k]; set.has(chip.dataset.v) ? set.delete(chip.dataset.v) : set.add(chip.dataset.v); refresh(); return; }
+  const clr = e.target.closest('[data-clear]');
+  if (clr) { const k = clr.dataset.clear; if (k === 'datum') { S.f.od = S.f.do = ''; $('#od').value = $('#do').value = ''; } else S.f[k].clear(); refresh(); }
+});
+let qTimer;
+$('#q').addEventListener('input', e => { clearTimeout(qTimer); qTimer = setTimeout(() => { S.f.q = e.target.value.trim(); S.listLimit = 300; refresh(true); }, 150); });
+$('#od').addEventListener('change', e => { S.f.od = e.target.value; refresh(true); });
+$('#do').addEventListener('change', e => { S.f.do = e.target.value; refresh(true); });
+$('#resetAll').addEventListener('click', () => {
+  Object.assign(S.f, { q: '', od: '', do: '' }); ['rok', 'nivo', 'sem', 'modul', 'akred'].forEach(k => S.f[k].clear());
+  $('#q').value = $('#od').value = $('#do').value = ''; refresh();
+});
+$('#filtersToggle').addEventListener('click', e => {
+  const f = $('#filters'); const open = f.classList.toggle('collapsed') === false; e.currentTarget.setAttribute('aria-expanded', open);
+});
+
+// ================= Pogledi =================
+function byDay(list) { const m = {}; for (const e of list) (m[e.datum] = m[e.datum] || []).push(e); return m; }
+
+function renderMonth() {
+  const days = byDay(FILTERED);
+  const first = new Date(S.y, S.m, 1);
+  const start = new Date(first); start.setDate(1 - ((first.getDay() + 6) % 7));
+  let h = '<div class="month"><div class="mgrid">' + DANI.map(d => `<div class="mhead">${d}</div>`).join('');
+  for (let i = 0; i < 42; i++) {
+    const d = new Date(start); d.setDate(start.getDate() + i);
+    if (i === 35 && d.getMonth() !== S.m) break;
+    const k = iso(d), list = days[k] || [], out = d.getMonth() !== S.m;
+    const cls = ['mcell', out && 'out', list.length && 'has', k === todayIso && 'today', k === S.selDay && 'sel', (d.getDay() % 6 === 0) && 'weekend'].filter(Boolean).join(' ');
+    let inner = `<div class="dn"><span>${d.getDate()}</span>${list.length ? `<span class="total">${list.length}</span>` : ''}</div>`;
+    if (list.length) {
+      const names = uniq(list.map(e => e.predmet));
+      if (names.length <= 3) {
+        const seen = new Set();
+        for (const e of list) { if (seen.has(e.predmet)) continue; seen.add(e.predmet); inner += `<div class="mini" style="--c:${S.rokColor[e.rokId]}" title="${esc(e.predmet)}"><span class="mono">${e.vreme}</span> ${esc(e.predmet)}</div>`; }
+      } else {
+        const slots = {}; for (const e of list) slots[e.vreme] = (slots[e.vreme] || 0) + 1;
+        for (const [t, n] of Object.entries(slots).sort()) inner += `<div class="slot"><b>${t}</b>${n}</div>`;
+      }
+      const roks = uniq(list.map(e => e.rokId));
+      if (S.rokovi.length > 1) inner += `<div class="rokdots">${roks.map(r => `<i style="--c:${S.rokColor[r]}" title="${esc(rokName(r))}"></i>`).join('')}</div>`;
+    }
+    h += list.length ? `<button class="${cls}" data-day="${k}" aria-label="${fmtDay(k)}: ${ispita(list.length)}">${inner}</button>` : `<div class="${cls}">${inner}</div>`;
+  }
+  h += '</div></div>';
+  $('#viewArea').innerHTML = h;
+  const cnt = FILTERED.filter(e => e.datum.startsWith(`${S.y}-${pad(S.m + 1)}`)).length;
+  $('#period').innerHTML = `${cap(MESECI[S.m])} ${S.y}.<small>${ispita(cnt)}</small>`;
+}
+
+function schoolYearStart() { return S.m >= 9 ? S.y : S.y - 1; }
+function renderYear() {
+  const y0 = schoolYearStart();
+  const days = byDay(FILTERED);
+  let max = 0; for (const k in days) max = Math.max(max, days[k].length);
+  let h = '<div class="year">', total = 0;
+  for (let i = 0; i < 12; i++) {
+    const mm = (9 + i) % 12, yy = mm >= 9 ? y0 : y0 + 1;
+    const first = new Date(yy, mm, 1), dim = new Date(yy, mm + 1, 0).getDate(), off = (first.getDay() + 6) % 7;
+    let mcount = 0, cells = '';
+    for (let j = 0; j < off; j++) cells += '<span class="yd e"></span>';
+    for (let d = 1; d <= dim; d++) {
+      const k = `${yy}-${pad(mm + 1)}-${pad(d)}`, n = (days[k] || []).length; mcount += n;
+      const p = n ? Math.round(18 + 82 * Math.sqrt(n / max)) : 0;
+      const cls = ['yd', n && 'has', p > 55 && 'hot', k === todayIso && 'today'].filter(Boolean).join(' ');
+      cells += n ? `<button class="${cls}" style="--p:${p}%" data-day="${k}" title="${fmtDay(k)} · ${ispita(n)}">${d}</button>` : `<span class="${cls}">${d}</span>`;
+    }
+    total += mcount;
+    h += `<div class="ym"><h3><button data-month="${yy}-${mm}">${cap(MESECI[mm])} ${yy}.</button><span>${mcount || ''}</span></h3><div class="ygrid">${DANI.map(x => `<span class="h">${x[0]}</span>`).join('')}${cells}</div></div>`;
+  }
+  h += '</div>';
+  const leg = [18, 45, 72, 100].map(p => `<i style="background:color-mix(in srgb, var(--accent) ${p}%, var(--surface-2))"></i>`).join('');
+  h += `<div class="ylegend">Manje ${leg} više ispita u danu${max ? ` · najviše ${max}` : ''}</div>`;
+  $('#viewArea').innerHTML = h;
+  $('#period').innerHTML = `Školska ${y0}/${String(y0 + 1).slice(2)}.<small>${ispita(total)}</small>`;
+}
+
+function renderList() {
+  const list = FILTERED.slice(0, S.listLimit);
+  if (!FILTERED.length) { $('#viewArea').innerHTML = emptyFiltered(); $('#period').innerHTML = 'Lista'; return; }
+  let h = '<div class="tablewrap"><table><thead><tr><th>Vreme</th><th>Predmet</th><th>Šifra</th><th>Nivo</th><th>Sem.</th><th>Modul</th><th>Akred.</th><th>Rok</th></tr></thead><tbody>';
+  let last = '';
+  for (const e of list) {
+    if (e.datum !== last) { last = e.datum; h += `<tr class="dayrow"><td colspan="8">${cap(fmtDay(e.datum))}</td></tr>`; }
+    h += `<tr><td class="mono nowrap">${e.vreme}</td><td>${esc(e.predmet)}</td><td class="mono nowrap">${esc(e.sifra)}</td><td title="${esc(NIVO_NAZIV[e.nivo] || '')}">${esc(e.nivo)}</td><td class="mono">${e.sem}</td><td>${esc(e.modul)}</td><td class="mono">${e.akred}</td><td class="nowrap"><span class="tag rok" style="--c:${S.rokColor[e.rokId]}">${esc(rokShort(e.rokId))}</span></td></tr>`;
+  }
+  h += '</tbody></table></div>';
+  if (FILTERED.length > list.length) h += `<div class="more"><button class="btn" id="moreBtn">Prikaži još (${FILTERED.length - list.length} preostalo)</button></div>`;
+  $('#viewArea').innerHTML = h;
+  $('#period').innerHTML = `Lista<small>${ispita(FILTERED.length)}</small>`;
+}
+
+function emptyFiltered() {
+  return `<div class="empty"><strong>Nema ispita za izabrane filtere</strong>Promeni ili poništi filtere da vidiš više.</div>`;
+}
+
+function renderDay() {
+  const p = $('#dayPanel');
+  if (!S.selDay) {
+    const upcoming = FILTERED.find(e => e.datum >= todayIso);
+    p.innerHTML = `<div class="empty"><strong>Izaberi dan</strong>Klikni na dan u kalendaru da vidiš sve ispite tog dana.${upcoming ? `<div style="margin-top:12px"><button class="btn" data-day="${upcoming.datum}">Sledeći ispitni dan: ${upcoming.datum.slice(8)}.${upcoming.datum.slice(5, 7)}.</button></div>` : ''}</div>`;
+    return;
+  }
+  const list = FILTERED.filter(e => e.datum === S.selDay);
+  let h = `<div class="dh"><h2>${cap(fmtDay(S.selDay))}</h2><div class="dsub">${ispita(list.length)}${list.length ? ' · ' + num(uniq(list.map(e => e.predmet)).length, 'predmet', 'predmeta', 'predmeta') : ''}</div></div>`;
+  if (!list.length) { p.innerHTML = h + '<div class="empty">Nema ispita ovog dana uz trenutne filtere.</div>'; return; }
+  const slots = {};
+  for (const e of list) ((slots[e.vreme] = slots[e.vreme] || {})[e.predmet] = slots[e.vreme][e.predmet] || []).push(e);
+  for (const t of Object.keys(slots).sort()) {
+    const subj = slots[t];
+    h += `<div class="tslot"><b>${t}</b>${ispita(Object.values(subj).reduce((a, b) => a + b.length, 0))}</div>`;
+    for (const name of Object.keys(subj).sort((a, b) => a.localeCompare(b, 'sr'))) {
+      const vs = subj[name];
+      h += `<div class="subj"><div class="nm">${esc(name)}</div><div class="vs">` + vs.map(e =>
+        `<div class="v"><span class="tag" title="${esc(NIVO_NAZIV[e.nivo] || '')}">${esc(e.nivo)}</span><span class="tag">${e.sem}. sem.</span><span class="tag">${esc(e.modul)}</span><span class="tag code">${esc(e.sifra)}</span><span class="tag">ak. ${e.akred}</span>${S.rokovi.length > 1 ? `<span class="tag rok" style="--c:${S.rokColor[e.rokId]}">${esc(rokShort(e.rokId))}</span>` : ''}</div>`
+      ).join('') + '</div></div>';
+    }
+  }
+  p.innerHTML = h;
+}
+
+function renderView() {
+  document.querySelectorAll('[data-view]').forEach(b => b.setAttribute('aria-pressed', b.dataset.view === S.view));
+  $('#navbtns').hidden = $('#todayBtn').hidden = S.view === 'lista';
+  if (!S.loaded) { $('#viewArea').innerHTML = `<div class="empty"><span class="spinner"></span><div style="margin-top:8px">Učitavanje rasporeda…</div></div>`; $('#period').textContent = ''; return; }
+  if (!S.exams.length) {
+    $('#viewArea').innerHTML = `<div class="hero-empty"><h2>Još nema učitanih rokova</h2><p>Dodaj PDF raspored ispita za jedan rok (npr. decembarski). Podaci se izvlače automatski, prevode na latinicu i prikazuju u kalendaru.</p><button class="btn primary" data-open-upload>Dodaj rok (PDF)</button></div>`;
+    $('#period').textContent = ''; return;
+  }
+  if (S.view === 'mesec') renderMonth(); else if (S.view === 'godina') renderYear(); else renderList();
+}
+
+function refresh(keepDay) {
+  applyFilters();
+  renderFilters();
+  renderView();
+  renderDay();
+}
+
+document.querySelector('.seg').addEventListener('click', e => {
+  const b = e.target.closest('[data-view]'); if (!b) return;
+  S.view = b.dataset.view; lsSet(LS_UI, JSON.stringify({ view: S.view })); renderView();
+});
+$('#prev').addEventListener('click', () => step(-1));
+$('#next').addEventListener('click', () => step(1));
+$('#todayBtn').addEventListener('click', () => { const d = new Date(); S.y = d.getFullYear(); S.m = d.getMonth(); renderView(); });
+function step(dir) {
+  if (S.view === 'godina') S.y += dir; else { S.m += dir; if (S.m < 0) { S.m = 11; S.y--; } if (S.m > 11) { S.m = 0; S.y++; } }
+  renderView();
+}
+document.addEventListener('click', e => {
+  const d = e.target.closest('[data-day]');
+  if (d) {
+    const k = d.dataset.day; S.selDay = k; const dt = parseIso(k);
+    if (S.view === 'godina' || S.y !== dt.getFullYear() || S.m !== dt.getMonth()) { S.y = dt.getFullYear(); S.m = dt.getMonth(); if (S.view === 'godina') S.view = 'mesec'; }
+    renderView(); renderDay();
+    if (window.matchMedia('(max-width: 1260px)').matches) $('#dayPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+  const mo = e.target.closest('[data-month]');
+  if (mo) { const [y, m] = mo.dataset.month.split('-').map(Number); S.y = y; S.m = m; S.view = 'mesec'; renderView(); return; }
+  if (e.target.closest('#moreBtn')) { S.listLimit += 500; renderList(); return; }
+  if (e.target.closest('[data-open-upload]')) { openUpload(); return; }
+  const close = e.target.closest('[data-close]'); if (close) close.closest('dialog').close();
+});
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input, select, textarea') || document.querySelector('dialog[open]')) return;
+  if (e.key === 'ArrowLeft') step(-1); else if (e.key === 'ArrowRight') step(1);
+});
+
+// ================= Upload =================
+let pdfLibPromise = null;
+function loadScript(src) { return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = () => rej(new Error('Ne mogu da učitam ' + src)); document.head.appendChild(s); }); }
+function loadPdfJs() {
+  if (!pdfLibPromise) pdfLibPromise = (async () => {
+    await loadScript(PDFJS + 'pdf.min.js');
+    await loadScript(PDFJS + 'pdf.worker.min.js'); // radi u glavnoj niti (bez zasebnog workera)
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS + 'pdf.worker.min.js';
+    return window.pdfjsLib;
+  })().catch(e => { pdfLibPromise = null; throw e; });
+  return pdfLibPromise;
+}
+
+let UP = null; // {fileName, rows, bad, rok, godina}
+function openUpload() { UP = null; renderUpload(); $('#uploadDlg').showModal(); }
+$('#uploadBtn').addEventListener('click', openUpload);
+
+function renderUpload(state) {
+  const b = $('#uploadBody');
+  if (state === 'parsing') { b.innerHTML = `<div class="empty"><span class="spinner"></span><div style="margin-top:8px">Čitam PDF i izvlačim ispite…</div></div>`; return; }
+  if (state === 'saving') { b.innerHTML = `<div class="empty"><span class="spinner"></span><div style="margin-top:8px">Čuvam ${ispita(UP.rows.length)}…</div></div>`; return; }
+  if (!UP) {
+    b.innerHTML = `
+      <label class="drop" id="drop" for="file">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M12 18v-6M9 15l3-3 3 3"/></svg>
+        <strong>Prevuci PDF ovde ili klikni da izabereš fajl</strong>
+        <span>Jedan dokument = jedan ispitni rok. Ćirilica se automatski prebacuje u latinicu.</span>
+      </label>
+      <input type="file" id="file" accept="application/pdf,.pdf" hidden>
+      <div id="upErr"></div>`;
+    const drop = $('#drop'), inp = $('#file');
+    inp.addEventListener('change', () => inp.files[0] && handleFile(inp.files[0]));
+    ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+    ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+    drop.addEventListener('drop', e => { const f = e.dataTransfer.files[0]; if (f) handleFile(f); });
+    return;
+  }
+  const dates = UP.rows.map(r => r[6]).sort();
+  const id = rokId(UP.godina, UP.rok);
+  const existing = S.rokovi.find(r => r.meta.id === id);
+  const validYear = /^20\d\d\/20\d\d$/.test(UP.godina);
+  b.innerHTML = `
+    <div class="stat">
+      <div><b>${UP.rows.length}</b>prepoznatih ispita</div>
+      <div><b>${uniq(UP.rows.map(r => r[5])).length}</b>predmeta</div>
+      <div><b>${uniq(dates).length}</b>ispitnih dana</div>
+      <div><b class="mono" style="font-size:15px">${dates[0] ? dates[0].split('-').reverse().join('.') : '—'} – ${dates.length ? dates[dates.length - 1].split('-').reverse().join('.') : ''}</b>period</div>
+    </div>
+    ${UP.bad.length ? `<details><summary class="warn">${UP.bad.length} redova nije prepoznato (preskočeni)</summary><div class="preview" style="padding:8px;font-size:12px">${UP.bad.slice(0, 50).map(esc).join('<br>')}</div></details>` : ''}
+    <div class="form-row">
+      <label class="field" for="upRok">Ispitni rok
+        <select id="upRok">${ROKOVI.map(([k, l]) => `<option value="${k}"${k === UP.rok ? ' selected' : ''}>${l}</option>`).join('')}</select>
+      </label>
+      <label class="field" for="upGod">Školska godina
+        <input id="upGod" value="${esc(UP.godina)}" placeholder="2026/2027" inputmode="numeric">
+      </label>
+    </div>
+    ${!validYear ? '<div class="warn">Upiši školsku godinu u obliku 2026/2027.</div>' : ''}
+    ${existing ? `<div class="warn">Rok „${esc(rokName(id))}“ je već učitan (${ispita(existing.rows.length)}). Čuvanjem ćeš ga zameniti novim podacima.</div>` : ''}
+    <div><h3 class="sec" style="margin-bottom:6px">Pregled · ${esc(UP.fileName)}</h3>
+      <div class="preview"><table><thead><tr><th>Nivo</th><th>Ak.</th><th>Sem.</th><th>Modul</th><th>Šifra</th><th>Predmet</th><th>Datum</th><th>Vreme</th></tr></thead><tbody>
+      ${UP.rows.slice(0, 40).map(r => `<tr><td>${esc(r[0])}</td><td class="mono">${r[1]}</td><td class="mono">${r[2]}</td><td>${esc(r[3])}</td><td class="mono">${esc(r[4])}</td><td>${esc(r[5])}</td><td class="mono nowrap">${r[6].split('-').reverse().join('.')}</td><td class="mono">${r[7]}</td></tr>`).join('')}
+      </tbody></table></div>
+    </div>
+    <div id="upErr"></div>
+    <div class="actions">
+      <button class="btn" id="upAgain">Izaberi drugi fajl</button>
+      <button class="btn primary" id="upSave" ${validYear && UP.rows.length ? '' : 'disabled'}>${existing ? 'Zameni rok' : 'Sačuvaj rok'}</button>
+    </div>`;
+  $('#upRok').addEventListener('change', e => { UP.rok = e.target.value; renderUpload(); });
+  $('#upGod').addEventListener('change', e => { UP.godina = e.target.value.trim().replace(/\s*[-–]\s*/, '/'); renderUpload(); });
+  $('#upAgain').addEventListener('click', () => { UP = null; renderUpload(); });
+  $('#upSave').addEventListener('click', saveUpload);
+}
+
+async function handleFile(file) {
+  if (!/\.pdf$/i.test(file.name) && file.type !== 'application/pdf') { showUpErr('Izabrani fajl nije PDF. Izaberi PDF dokument sa rasporedom ispita.'); return; }
+  renderUpload('parsing');
+  try {
+    const lib = await loadPdfJs();
+    const data = new Uint8Array(await file.arrayBuffer());
+    const pdf = await lib.getDocument({ data, isEvalSupported: false }).promise;
+    const lines = await pdfToLines(pdf);
+    const { rows, bad } = parseLines(lines);
+    if (!rows.length) { UP = null; renderUpload(); showUpErr('U ovom PDF-u nisam našao nijedan red rasporeda. Očekujem kolone: Nivo, Akred., Sem., Modul, Šifra, Predmet, Datum, Vreme. Ako je PDF skeniran (slika), tekst se ne može pročitati.'); return; }
+    const g = guessMeta(file.name, rows);
+    UP = { fileName: file.name, rows, bad, rok: g.rok, godina: g.godina };
+    renderUpload();
+  } catch (err) {
+    UP = null; renderUpload();
+    showUpErr('PDF nije mogao da se pročita: ' + (err && err.message ? err.message : 'nepoznata greška') + '. Proveri da li je fajl ispravan i pokušaj ponovo.');
+  }
+}
+function showUpErr(msg) { const el = $('#upErr'); if (el) el.innerHTML = `<div class="banner err">${esc(msg)}</div>`; }
+
+async function saveUpload() {
+  const id = rokId(UP.godina, UP.rok);
+  const existing = S.rokovi.find(r => r.meta.id === id);
+  const dates = UP.rows.map(r => r[6]).sort();
+  const meta = { id, rok: UP.rok, godina: UP.godina, fileName: UP.fileName, uploadedAt: new Date().toISOString(), count: UP.rows.length, od: dates[0], do: dates[dates.length - 1], chunks: Math.ceil(UP.rows.length / CHUNK) };
+  const rows = UP.rows;
+  renderUpload('saving');
+  try {
+    await Store.saveRok(meta, rows, existing ? existing.meta.chunks : 0);
+    S.rokovi = S.rokovi.filter(r => r.meta.id !== id).concat([{ meta, rows }]);
+    rebuild();
+    const d = parseIso(meta.od); S.y = d.getFullYear(); S.m = d.getMonth(); S.selDay = null;
+    $('#uploadDlg').close();
+    refresh();
+    toast(`Sačuvano: ${rokName(id)} · ${ispita(rows.length)}`);
+  } catch (err) {
+    renderUpload();
+    const code = err && err.code;
+    showUpErr(code === 'quota_exceeded' ? 'Baza je puna. Obriši neki stari rok pa pokušaj ponovo.'
+      : code === 'local_full' ? 'Pregledač nema više mesta za čuvanje. Obriši neki stari rok pa pokušaj ponovo.'
+      : code === 'not_granted' || code === 'revoked' ? 'Nemaš dozvolu za čuvanje u ovoj aplikaciji. Zamoli vlasnika da ti da pristup za izmene.'
+      : 'Čuvanje nije uspelo (' + (err && (err.message || code) || 'greška') + '). Pokušaj ponovo.');
+  }
+}
+
+// ================= Upravljanje rokovima =================
+let confirmId = null;
+function renderManage() {
+  const b = $('#manageBody');
+  if (!S.rokovi.length) { b.innerHTML = `<div class="empty"><strong>Nema učitanih rokova</strong>Dodaj prvi PDF raspored.</div><div class="actions"><button class="btn primary" data-open-upload>Dodaj rok (PDF)</button></div>`; return; }
+  b.innerHTML = `<div class="doclist">` + S.rokovi.map(({ meta }) => `
+    <div class="doc" style="--c:${S.rokColor[meta.id]}">
+      <span class="sw"></span>
+      <div class="info"><b>${esc(rokLabel(meta.rok))} rok ${esc(meta.godina)}</b>
+        <div>${ispita(meta.count)} · ${meta.od.split('-').reverse().join('.')} – ${meta.do.split('-').reverse().join('.')} · ${esc(meta.fileName || '')}</div></div>
+      ${confirmId === meta.id
+        ? `<span class="warn">Obrisati ovaj rok?</span><button class="btn" data-cancel>Otkaži</button><button class="btn danger solid" data-del="${esc(meta.id)}">Obriši</button>`
+        : `<button class="btn danger" data-ask="${esc(meta.id)}">Obriši</button>`}
+    </div>`).join('') + `</div>
+    <div class="actions"><button class="btn primary" data-open-upload>Dodaj još jedan rok</button></div>`;
+}
+$('#manageBtn').addEventListener('click', () => { confirmId = null; renderManage(); $('#manageDlg').showModal(); });
+$('#manageBody').addEventListener('click', async e => {
+  if (e.target.closest('[data-open-upload]')) { $('#manageDlg').close(); return; }
+  const ask = e.target.closest('[data-ask]'); if (ask) { confirmId = ask.dataset.ask; renderManage(); return; }
+  if (e.target.closest('[data-cancel]')) { confirmId = null; renderManage(); return; }
+  const del = e.target.closest('[data-del]');
+  if (del) {
+    const r = S.rokovi.find(r => r.meta.id === del.dataset.del); if (!r) return;
+    del.disabled = true; del.textContent = 'Brišem…';
+    try {
+      await Store.deleteRok(r.meta);
+      S.rokovi = S.rokovi.filter(x => x !== r); confirmId = null; rebuild(); refresh(); renderManage();
+      toast('Obrisano: ' + rokLabel(r.meta.rok) + ' ' + r.meta.godina);
+    } catch (err) { confirmId = null; renderManage(); toast('Brisanje nije uspelo. Pokušaj ponovo.'); }
+  }
+});
+
+// ================= Start =================
+function storeInfo() {
+  const n = S.rokovi.length;
+  const where = Store.mode === 'db' ? 'sačuvano u aplikaciji' : Store.mode === 'local' ? 'sačuvano samo u ovom pregledaču' : 'nije sačuvano (privatni prozor)';
+  $('#storeInfo').textContent = `${num(n, 'rok', 'roka', 'rokova')} · ${ispita(S.exams.length)} · ${where}`;
+}
+const _refresh = refresh;
+refresh = function (k) { _refresh(k); storeInfo(); };
+
+function pickInitialMonth() {
+  if (!S.exams.length) return;
+  const next = S.exams.find(e => e.datum >= todayIso) || S.exams[S.exams.length - 1];
+  const d = parseIso(next.datum); S.y = d.getFullYear(); S.m = d.getMonth();
+}
+
+(async function start() {
+  renderView(); renderDay();
+  await Store.init();
+  try {
+    S.rokovi = await Store.loadAll();
+  } catch (err) {
+    S.rokovi = [];
+    $('#bannerArea').innerHTML = `<div class="banner err" style="margin-bottom:14px">Sačuvani rasporedi trenutno nisu dostupni. Proveri vezu i osveži stranicu.</div>`;
+  }
+  rebuild(); pickInitialMonth(); S.loaded = true; refresh();
+})();
+})();
+</script>
