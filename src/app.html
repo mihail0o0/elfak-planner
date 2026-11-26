@@ -793,6 +793,19 @@ body.gate-open { overflow: hidden; }
 .authbar span { flex: 1; min-width: 220px; }
 .authbar b { color: var(--warn); }
 .provic { width: 34px; height: 34px; border-radius: 10px; background: var(--surface); display: grid; place-items: center; font-weight: 800; color: var(--brand-fg); flex: none; }
+
+/* omiljeni i redosled */
+.mi { padding: 0; gap: 0; align-items: stretch; }
+.mi .mimain { flex: 1; min-width: 0; display: flex; align-items: flex-start; gap: 10px; text-align: left; border: 0; background: transparent; padding: 9px 4px 9px 10px; color: inherit; border-radius: var(--rad-sm); }
+.star { flex: none; border: 0; background: transparent; color: var(--ink-3); width: 34px; display: grid; place-items: center; border-radius: 10px; opacity: .55; transition: opacity .15s, color .15s; }
+.mi:hover .star, .star[aria-pressed="true"], .star:focus-visible { opacity: 1; }
+.star:hover { color: var(--orange); }
+.star[aria-pressed="true"] { color: var(--orange); }
+.star.inl { display: inline-grid; width: 26px; height: 26px; vertical-align: -6px; margin-left: 4px; opacity: .5; }
+.ucard:hover .star.inl, .titem:hover .star.inl, .star.inl[aria-pressed="true"] { opacity: 1; }
+@media (hover: none) { .star { opacity: 1; } }
+.fl-acts { display: inline-flex; gap: 2px; align-items: center; }
+.fl-acts button { display: inline-flex; align-items: center; gap: 4px; }
 </style>
 
 <div class="app">
@@ -1136,8 +1149,31 @@ function derive() {
       if (lvl === 'major') s.conf = 'major'; else if (!s.conf) s.conf = 'minor';
     }
   }
-  MY.sort((a, b) => a.sem - b.sem || a.predmet.localeCompare(b.predmet, 'sr'));
+  MY.sort(cmpSubj);
 }
+// ---- redosled ispita: isti svuda u aplikaciji ----
+const favSet = () => new Set(((prof() || {}).fav) || []);
+const sortDir = () => ((prof() || {}).sortDir === 'desc' ? 'desc' : 'asc');
+function cmpSubj(a, b) {
+  const f = favSet(), fa = f.has(a.sifra), fb = f.has(b.sifra);
+  if (fa !== fb) return fa ? -1 : 1;
+  return (sortDir() === 'desc' ? b.sem - a.sem : a.sem - b.sem) || a.predmet.localeCompare(b.predmet, 'sr');
+}
+// za redove rasporeda: moji ispiti po istom pravilu, pa ostali po nazivu
+function cmpExam(a, b) {
+  const sa = MYMAP.get(a.sifra), sb = MYMAP.get(b.sifra);
+  if (sa && sb) return cmpSubj(sa, sb);
+  if (sa || sb) return sa ? -1 : 1;
+  return a.predmet.localeCompare(b.predmet, 'sr');
+}
+function toggleFav(sifra) {
+  const p = prof(); if (!p) return;
+  const f = new Set(p.fav || []); f.has(sifra) ? f.delete(sifra) : f.add(sifra);
+  p.fav = [...f]; Me.save(); derive(); refresh();
+}
+function setSortDir(d) { const p = prof(); if (!p) return; p.sortDir = d; Me.save(); derive(); refresh(); if ($('#setupDlg').open && $('#wizList')) renderWizList(); }
+const starBtn = (sifra, cls = '') => { const on = favSet().has(sifra); return `<button type="button" class="star ${cls}" data-fav="${esc(sifra)}" aria-pressed="${on}" aria-label="${on ? 'Ukloni iz omiljenih' : 'Dodaj u omiljene'}" title="${on ? 'Ukloni iz omiljenih' : 'Dodaj u omiljene'}">${on ? '{{i:star-bold:18}}' : '{{i:star:18}}'}</button>`; };
+
 function conflictsFor(inst, exclude) {
   return MY.filter(s => s.plan && s.sifra !== exclude && s.plan.datum === inst.datum)
     .map(s => ({ s, lvl: s.plan.vreme === inst.vreme ? 'major' : 'minor' }))
@@ -1162,7 +1198,7 @@ function baseExams() {
   return S.exams.filter(e => (!mine || MYEX.has(e.id)) && (!S.f.rok.size || S.f.rok.has(e.rokId)));
 }
 let FILTERED = [];
-function applyFilters() { FILTERED = baseExams().filter(matchesQ); }
+function applyFilters() { FILTERED = baseExams().filter(matchesQ).sort((a, b) => a.datum.localeCompare(b.datum) || a.vreme.localeCompare(b.vreme) || cmpExam(a, b)); }
 
 // ================= Bočni meni: profil, pretraga, moji ispiti =================
 const SEARCH_ICON = '{{i:magnifier:16}}';
@@ -1190,26 +1226,27 @@ function renderSide() {
   else {
     const q = S.f.q ? fold(S.f.q) : '';
     const hit = s => !q || q.split(/\s+/).every(w => fold(s.predmet + ' ' + s.sifra).includes(w));
-    const todo = MY.filter(s => !s.plan), done = MY.filter(s => s.plan).sort((a, b) => a.plan.datum.localeCompare(b.plan.datum) || a.plan.vreme.localeCompare(b.plan.vreme));
+    const todo = MY.filter(s => !s.plan), done = MY.filter(s => s.plan);
     const list = (S.tab === 'todo' ? todo : S.tab === 'done' ? done : MY).filter(hit);
     let items = '';
     if (!MY.length) items = `<div class="muted" style="padding:8px 4px">Nisi označio/la nijedan ispit. <button class="linkbtn" data-open-settings="ispiti">Izaberi ispite</button></div>`;
     else if (!list.length) items = `<div class="muted" style="padding:8px 4px">${S.tab === 'todo' ? (q ? 'Nema rezultata.' : 'Svi ispiti su zakazani.') : S.tab === 'done' ? (q ? 'Nema rezultata.' : 'Još ništa nije zakazano. Klikni na ispit u kartici „Bez termina".') : 'Nema rezultata.'}</div>`;
     else {
-      let lastSem = null;
+      let lastGroup = null; const favs = favSet();
       for (const s of list) {
-        if (S.tab !== 'done' && s.sem !== lastSem) { lastSem = s.sem; items += `<div class="semhead">${s.sem}. semestar</div>`; }
+        const g = favs.has(s.sifra) ? 'fav' : s.sem;
+        if (g !== lastGroup) { lastGroup = g; items += `<div class="semhead">${g === 'fav' ? 'Omiljeni' : g + '. semestar'}</div>`; }
         const st = s.plan ? (s.conf || 'planned') : '';
         const meta = s.plan
           ? `<b>${fmtShort(s.plan.datum)} ${s.plan.vreme}</b>${s.conf ? ` · <span style="color:var(--${s.conf === 'major' ? 'bad' : 'warn'})">${s.conf === 'major' ? 'isto vreme' : 'isti dan'}</span>` : ''}`
           : s.stale ? 'Termin više ne postoji, izaberi ponovo'
           : s.inst.length ? termina(s.inst.length) + ' u rokovima' : 'nema termina u učitanim rokovima';
         const fw = S.showFriends ? friendsWithSubject(s) : [];
-        items += `<button class="mi${S.pick === s.sifra ? ' on' : ''}" data-pick="${esc(s.sifra)}"><span class="st ${st}"></span><span class="mt"><span class="mn">${esc(s.predmet)}</span><span class="mm">${meta}</span></span>${fw.length ? avatarStack(fw, 20, 2) : ''}</button>`;
+        items += `<div class="mi${S.pick === s.sifra ? ' on' : ''}"><button class="mimain" data-pick="${esc(s.sifra)}"><span class="st ${st}"></span><span class="mt"><span class="mn">${esc(s.predmet)}</span><span class="mm">${meta}</span></span>${fw.length ? avatarStack(fw, 20, 2) : ''}</button>${starBtn(s.sifra)}</div>`;
       }
     }
     box.innerHTML = `
-      <div class="flabel">Moji ispiti <button data-open-settings="ispiti">uredi listu</button></div>
+      <div class="flabel">Moji ispiti <span class="fl-acts"><button data-sort="${sortDir() === 'asc' ? 'desc' : 'asc'}" title="Redosled po semestru (važi svuda u aplikaciji)" aria-label="Semestri ${sortDir() === 'asc' ? 'rastuće, promeni na opadajuće' : 'opadajuće, promeni na rastuće'}">${sortDir() === 'asc' ? '{{i:sort-from-top-to-bottom:14}} Sem. 1→8' : '{{i:sort-from-bottom-to-top:14}} Sem. 8→1'}</button><button data-open-settings="ispiti">uredi listu</button></span></div>
       <div class="seg sm" role="group" aria-label="Moji ispiti">
         <button data-tab="todo" aria-pressed="${S.tab === 'todo'}">Bez termina<span class="n">${todo.length}</span></button>
         <button data-tab="done" aria-pressed="${S.tab === 'done'}">Zakazani<span class="n">${done.length}</span></button>
@@ -1232,6 +1269,7 @@ function renderSide() {
 }
 
 $('#filters').addEventListener('click', e => {
+  if (e.target.closest('[data-fav], [data-sort]')) return; // obrađuje globalni rukovalac
   const t = e.target.closest('[data-tab]'); if (t) { S.tab = t.dataset.tab; renderSide(); return; }
   const r = e.target.closest('[data-rok]'); if (r) { const v = r.dataset.rok; S.f.rok.has(v) ? S.f.rok.delete(v) : S.f.rok.add(v); refresh(); return; }
   if (e.target.closest('[data-clear-rok]')) { S.f.rok.clear(); refresh(); return; }
@@ -1453,7 +1491,7 @@ function renderPlan() {
       const d = parseIso(s.plan.datum), past = s.plan.datum < todayIso;
       h += `<div class="titem">
         <div class="dbadge ${s.conf || ''}${past ? ' past' : ''}"><span>${DANI_KRATKO[d.getDay()]}</span><b>${d.getDate()}</b><span>${MES_KRATKO[d.getMonth()]}</span></div>
-        <div class="tinfo"><div class="tn">${esc(s.predmet)}</div>
+        <div class="tinfo"><div class="tn">${esc(s.predmet)}${starBtn(s.sifra, 'inl')}</div>
           <div class="tm"><span class="mono"><b style="color:var(--ink)">${s.plan.vreme}</b></span><span>${s.sem}. sem.</span>${rokTag(s.plan.rokId)}<span>${countdown(s.plan.datum)}</span>${(() => { const fw = friendsOnTerm(s, s.plan); return fw.length ? `<span class="fwith">${avatarStack(fw, 20, 3)} sa ${esc(fw.map(f => f.ime || fullName(f)).join(', '))}</span>` : ''; })()}</div>
           ${s.conf ? `<div class="note ${s.conf}" style="font-size:12.5px;margin-top:4px;font-weight:600">${s.conf === 'major' ? 'Konflikt' : 'Upozorenje'}: ${esc(conflictText(s.confWith).replace(/^I/, 'i'))}</div>` : ''}
         </div>
@@ -1466,7 +1504,7 @@ function renderPlan() {
     h += `<div><div class="sechead"><h3>Bez termina</h3><span class="muted">${ispita(unplanned.length)}</span></div><div class="ucards" style="margin-top:10px">`;
     for (const s of unplanned) {
       const n = s.inst.length;
-      h += `<div class="ucard"><div class="un">${esc(s.predmet)}</div><div class="um">${s.sem}. sem. · ${TIP_NAZIV[s.tip]}${s.stale ? ' · stari termin više ne postoji' : ''}<br>${n ? termina(n) + ': ' + s.inst.slice(0, 3).map(i => fmtShort(i.datum)).join(', ') + (n > 3 ? '…' : '') : 'nema termina u učitanim rokovima'}</div>
+      h += `<div class="ucard"><div class="un">${esc(s.predmet)}${starBtn(s.sifra, 'inl')}</div><div class="um">${s.sem}. sem. · ${TIP_NAZIV[s.tip]}${s.stale ? ' · stari termin više ne postoji' : ''}<br>${n ? termina(n) + ': ' + s.inst.slice(0, 3).map(i => fmtShort(i.datum)).join(', ') + (n > 3 ? '…' : '') : 'nema termina u učitanim rokovima'}</div>
         ${n ? `<button class="btn primary sm" data-pick="${esc(s.sifra)}">Izaberi termin</button>` : (S.isAdmin ? `<button class="btn sm" data-manage>Dodaj rok</button>` : '')}</div>`;
     }
     h += '</div></div>';
@@ -1489,7 +1527,7 @@ function renderMonth() {
   for (let i = 0; i < 42; i++) {
     const d = new Date(start); d.setDate(start.getDate() + i);
     if (i === 35 && d.getMonth() !== S.m) break;
-    const k = iso(d), list = days[k] || [], pl = plannedBy[k] || [], out = d.getMonth() !== S.m;
+    const k = iso(d), list = days[k] || [], pl = (plannedBy[k] || []).slice().sort((a, b) => a.plan.vreme.localeCompare(b.plan.vreme) || cmpSubj(a, b)), out = d.getMonth() !== S.m;
     const chips = pl.slice(0, 3).map(s => `<div class="pchip ${s.conf || ''}" title="${esc(s.predmet)} · ${s.plan.vreme}${s.conf ? ' · ' + esc(conflictText(s.confWith)) : ''}"><b>${s.plan.vreme}</b> ${esc(s.predmet)}</div>`).join('') + (pl.length > 3 ? `<div class="opts">+${pl.length - 3} zakazano</div>` : '');
     const base = ['mcell', out && 'out', k === todayIso && 'today', k === S.selDay && 'sel', d.getDay() % 6 === 0 && 'weekend'];
     let inner = `<div class="dn"><span>${d.getDate()}</span>`, cls, clickable = false, attr = `data-day="${k}"`;
@@ -1621,7 +1659,7 @@ function renderDay() {
     return;
   }
   const k = S.selDay;
-  const pl = MY.filter(s => s.plan && s.plan.datum === k).sort((a, b) => a.plan.vreme.localeCompare(b.plan.vreme));
+  const pl = MY.filter(s => s.plan && s.plan.datum === k).sort((a, b) => a.plan.vreme.localeCompare(b.plan.vreme) || cmpSubj(a, b));
   const list = FILTERED.filter(e => e.datum === k && !(MYMAP.get(e.sifra) && MYMAP.get(e.sifra).plan && MYMAP.get(e.sifra).plan.rokId === e.rokId));
   let h = `<div class="dh"><h2>${cap(fmtDay(k))}</h2><div class="dsub">${pl.length ? `${pl.length} zakazano · ` : ''}${ispita(list.length)} ${S.scope === 'moji' && prof() ? 'sa tvoje liste' : 'u rasporedu'}</div></div>`;
   if (pl.length) {
@@ -1634,7 +1672,7 @@ function renderDay() {
     for (const t of Object.keys(slots).sort()) {
       const seen = new Set();
       h += `<div class="tslot"><b>${t}</b>${ispita(slots[t].length)}</div><div class="dsec" style="padding-top:0">`;
-      for (const e of slots[t].sort((a, b) => a.predmet.localeCompare(b.predmet, 'sr'))) {
+      for (const e of slots[t].sort(cmpExam)) {
         if (seen.has(e.sifra)) continue; seen.add(e.sifra);
         const s = MYMAP.get(e.sifra);
         if (s) h += schedRow(s, CAT.get(e.sifra) ? (CAT.get(e.sifra).inst.find(i => i.rokId === e.rokId) || e) : e);
@@ -1713,6 +1751,8 @@ function selectDay(k) {
 }
 document.addEventListener('click', e => {
   const t = e.target;
+  const fv = t.closest('[data-fav]'); if (fv) { e.stopPropagation(); toggleFav(fv.dataset.fav); return; }
+  const so = t.closest('[data-sort]'); if (so) { setSortDir(so.dataset.sort); return; }
   const pd = t.closest('[data-pickday]');
   if (pd) {
     const pick = MYMAP.get(S.pick), k = pd.dataset.pickday;
@@ -1988,13 +2028,11 @@ function renderWizList() {
   const cat = wizCatalog(), d = W.d, q = fold(W.q || '');
   const words = q.split(/\s+/).filter(Boolean);
   const items = [...cat.values()].filter(s => !words.length || words.every(w => fold(s.predmet + ' ' + s.sifra).includes(w)));
-  const sems = uniq(items.map(s => s.sem)).sort((a, b) => {
-    const ga = Math.ceil(a / 2) === d.godina, gb = Math.ceil(b / 2) === d.godina;
-    return ga !== gb ? (ga ? -1 : 1) : (ga ? a - b : b - a);
-  });
+  const sems = uniq(items.map(s => s.sem)).sort((a, b) => sortDir() === 'desc' ? b - a : a - b);
+  const favs = favSet();
   let h = '';
   for (const sem of sems) {
-    const list = items.filter(s => s.sem === sem).sort((a, b) => ({ O: 0, Z: 1, I: 2 }[a.tip] - { O: 0, Z: 1, I: 2 }[b.tip]) || a.predmet.localeCompare(b.predmet, 'sr'));
+    const list = items.filter(s => s.sem === sem).sort((a, b) => (favs.has(b.sifra) - favs.has(a.sifra)) || ({ O: 0, Z: 1, I: 2 }[a.tip] - { O: 0, Z: 1, I: 2 }[b.tip]) || a.predmet.localeCompare(b.predmet, 'sr'));
     const allOn = list.every(s => d.remaining.has(s.sifra));
     h += `<div class="semgroup"><div class="sh"><div><b>${sem}. semestar</b><span>${Math.ceil(sem / 2)}. godina${Math.ceil(sem / 2) === d.godina ? ' · tekuća' : ''}</span></div><button type="button" class="linkbtn" data-wsem="${sem}" data-on="${allOn ? 0 : 1}">${allOn ? 'Poništi sve' : 'Označi sve'}</button></div><div class="subjgrid">` +
       list.map(s => `<button type="button" class="sopt" data-wsub="${esc(s.sifra)}" aria-pressed="${d.remaining.has(s.sifra)}"><span class="box">{{i:check:14}}</span><span><span class="sn2">${esc(s.predmet)}</span><span class="sm2"><span>${esc(s.sifra)}</span><span>${TIP_NAZIV[s.tip]}</span><span>${s.inst.length ? termina(s.inst.length) : 'bez termina'}</span></span></span></button>`).join('') + '</div></div>';
