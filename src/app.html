@@ -806,6 +806,8 @@ body.gate-open { overflow: hidden; }
 @media (hover: none) { .star { opacity: 1; } }
 .fl-acts { display: inline-flex; gap: 2px; align-items: center; }
 .fl-acts button { display: inline-flex; align-items: center; gap: 4px; }
+.fl-acts [data-sort] { padding: 4px; border-radius: 8px; color: var(--ink-2); }
+.fl-acts [data-sort]:hover { color: var(--ink); }
 </style>
 
 <div class="app">
@@ -1246,7 +1248,7 @@ function renderSide() {
       }
     }
     box.innerHTML = `
-      <div class="flabel">Moji ispiti <span class="fl-acts"><button data-sort="${sortDir() === 'asc' ? 'desc' : 'asc'}" title="Redosled po semestru (važi svuda u aplikaciji)" aria-label="Semestri ${sortDir() === 'asc' ? 'rastuće, promeni na opadajuće' : 'opadajuće, promeni na rastuće'}">${sortDir() === 'asc' ? '{{i:sort-from-top-to-bottom:14}} Sem. 1→8' : '{{i:sort-from-bottom-to-top:14}} Sem. 8→1'}</button><button data-open-settings="ispiti">uredi listu</button></span></div>
+      <div class="flabel">Moji ispiti <span class="fl-acts"><button data-sort="${sortDir() === 'asc' ? 'desc' : 'asc'}" title="${sortDir() === 'asc' ? 'Semestri rastuće (1→8)' : 'Semestri opadajuće (8→1)'} · klikni da obrneš" aria-label="Semestri ${sortDir() === 'asc' ? 'rastuće, promeni na opadajuće' : 'opadajuće, promeni na rastuće'}">${sortDir() === 'asc' ? '{{i:sort-from-top-to-bottom:18}}' : '{{i:sort-from-bottom-to-top:18}}'}</button><button data-open-settings="ispiti">uredi listu</button></span></div>
       <div class="seg sm" role="group" aria-label="Moji ispiti">
         <button data-tab="todo" aria-pressed="${S.tab === 'todo'}">Bez termina<span class="n">${todo.length}</span></button>
         <button data-tab="done" aria-pressed="${S.tab === 'done'}">Zakazani<span class="n">${done.length}</span></button>
