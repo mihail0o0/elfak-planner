@@ -112,9 +112,8 @@ header.top .grow { flex: 1; }
 .iconbtn:active { transform: translateY(1px); box-shadow: var(--shadow-press); }
 
 /* ---------- raspored ---------- */
-.layout { display: grid; grid-template-columns: 292px minmax(0, 1fr) 380px; gap: 20px; align-items: start; }
-@media (max-width: 1320px) { .layout { grid-template-columns: 280px minmax(0, 1fr); } .day-panel { grid-column: 2; } }
-@media (max-width: 860px) { .layout { grid-template-columns: minmax(0, 1fr); } .day-panel { grid-column: 1; } }
+.layout { display: grid; grid-template-columns: 264px minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 860px) { .layout { grid-template-columns: minmax(0, 1fr); } }
 
 .card { background: var(--surface); border-radius: var(--rad-xl); box-shadow: var(--shadow-card); }
 
@@ -914,6 +913,70 @@ body.gate-open { overflow: hidden; }
 .photobtn > span { position: absolute; right: -4px; bottom: -4px; width: 28px; height: 28px; border-radius: 10px; background: var(--surface); color: var(--ink); display: grid; place-items: center; box-shadow: var(--shadow-btn-2); }
 .photobtn:hover .av { filter: brightness(.92); }
 @media (max-width: 560px) { .cropbody { flex-direction: column; align-items: center; } .cropside { flex-direction: row; } }
+
+/* ================= Raspored: fioka, lista, kalendar ================= */
+/* fioka desno – prelazi preko kalendara, samo kad je nešto izabrano */
+.day-panel { position: fixed !important; top: calc(env(safe-area-inset-top, 0px) + 16px); right: max(16px, env(safe-area-inset-right, 0px)); bottom: 16px; width: min(400px, calc(100vw - 32px)); max-height: none !important; z-index: 25; overflow: auto; box-shadow: var(--shadow-pop); transform: translateX(calc(100% + 32px)); visibility: hidden; transition: transform .24s cubic-bezier(.2, .8, .2, 1), visibility 0s linear .24s; }
+.day-panel.open { transform: none; visibility: visible; transition: transform .24s cubic-bezier(.2, .8, .2, 1); }
+.day-panel .dh { padding-right: 52px; }
+.dclose { position: absolute; top: 10px; right: 10px; }
+.deyebrow { font-size: 11.5px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--brand-fg); margin-bottom: 2px; }
+#sec-planer .main { transition: padding-right .24s cubic-bezier(.2, .8, .2, 1); }
+@media (min-width: 1101px) { #sec-planer .main.shifted { padding-right: 416px; } }
+@media (max-width: 860px) {
+  .day-panel { top: auto; left: 0; right: 0; width: auto; bottom: calc(env(safe-area-inset-bottom, 0px) + 68px); max-height: 64vh !important; border-radius: var(--rad-xl) var(--rad-xl) 0 0; transform: translateY(calc(100% + 80px)); }
+}
+/* kalendar preko visine ekrana */
+@media (min-width: 861px) {
+  .month .mgrid { min-height: calc(100vh - 220px - env(safe-area-inset-top, 0px)); grid-auto-rows: minmax(96px, 1fr); grid-template-rows: auto; }
+  .mcell { min-height: 0; }
+}
+/* pretraga u zaglavlju */
+.hsearch { width: min(340px, 40vw); }
+.hsearch input { height: 42px; background: var(--surface); box-shadow: var(--shadow-btn-2); }
+@media (max-width: 860px) { .hsearch { order: 5; width: 100%; } }
+/* Prikaz ▾ */
+.vmenu-wrap { position: relative; margin-left: auto; }
+#viewMenuBtn.on { color: var(--brand-fg); border-color: var(--brand-line); }
+.vmenu { position: absolute; right: 0; top: calc(100% + 8px); z-index: 20; width: 300px; background: var(--surface); border-radius: var(--rad-lg); box-shadow: var(--shadow-pop); padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.vmenu[hidden] { display: none; }
+/* lista: grupe i redovi u jednom redu */
+.progress { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--ink-3); padding: 0 2px; }
+.progress b { color: var(--ink); }
+.pbar { height: 6px; border-radius: 4px; background: var(--tile-hover); overflow: hidden; }
+.pbar i { display: block; height: 100%; background: var(--brand); border-radius: 4px; transition: width .3s; }
+.grp { display: flex; flex-direction: column; }
+.ghead { display: flex; align-items: center; gap: 6px; border: 0; background: none; padding: 8px 4px 4px; color: var(--ink-3); font-size: 11.5px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; text-align: left; }
+.ghead svg { transition: transform .15s; }
+.ghead[aria-expanded="true"] svg { transform: rotate(90deg); }
+.ghead b { margin-left: auto; font-weight: 600; letter-spacing: 0; background: var(--tile); border-radius: 7px; padding: 0 7px; color: var(--ink-2); }
+.ghead:hover { color: var(--ink); }
+.mi .mimain { align-items: center; padding: 7px 4px 7px 10px; gap: 9px; text-decoration: none; }
+.mi .st { margin-top: 0; }
+.mi .mn { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 14px; }
+.mi .mr { flex: none; font-size: 12.5px; font-weight: 600; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.mi .mr.muted { font-weight: 500; color: var(--ink-3); }
+.mi .mr.major { color: var(--bad); } .mi .mr.minor { color: var(--warn); }
+.mi .avs { display: none; }
+.mi:hover .avs { display: inline-flex; }
+.mi.passed .mn { color: var(--ink-2); }
+.mi .st.ok { background: var(--ok); box-shadow: none; }
+.mi .star, .mi .mimore { width: 28px; }
+
+/* kompaktni ispiti u kalendaru (kao Google Calendar) */
+.mcell { gap: 2px; }
+.mcell .dn { margin-bottom: 2px; }
+.pchip { display: flex !important; align-items: center; gap: 5px; font-size: 11.5px; line-height: 1.35; padding: 1px 6px; border-radius: 6px; white-space: nowrap; overflow: hidden; -webkit-line-clamp: unset; min-width: 0; }
+.pchip b { font-weight: 600; font-variant-numeric: tabular-nums; opacity: .85; flex: none; }
+.pchip span { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.opts { font-size: 11.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--brand-fg); padding: 0 2px; }
+.opts.more { color: var(--ink-3); margin-top: 0; }
+.mcell.sel .opts { color: var(--on-brand); }
+
+/* dorade rasporeda */
+@media (min-width: 861px) { .day-panel { top: calc(env(safe-area-inset-top, 0px) + 96px); } }
+@media (hover: hover) { .mi .star:not([aria-pressed="true"]), .mi .mimore { opacity: 0; } .mi:hover .star, .mi:hover .mimore, .mi.menu .mimore, .mi .star:focus-visible, .mi .mimore:focus-visible { opacity: 1; } .mi:not(:hover):not(.menu) .star:not([aria-pressed="true"]) { width: 0; overflow: hidden; } .mi:not(:hover):not(.menu) .mimore { width: 0; overflow: hidden; } }
+@media (max-width: 860px) { .hsearch { order: 5; flex: 1; width: auto; min-width: 0; } .filters-toggle { order: 6; } header.top { row-gap: 10px; } }
 </style>
 
 <div class="app">
@@ -934,6 +997,10 @@ body.gate-open { overflow: hidden; }
     <header class="top">
       <div class="ptitle"><h1 id="pageTitle">Moj plan</h1><div class="sub" id="storeInfo">Učitavanje…</div></div>
       <div class="grow"></div>
+      <div class="search hsearch" id="hSearch">{{i:magnifier:16}}
+        <input id="q" type="search" placeholder="Pretraži predmete" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sugg" aria-label="Pretraga predmeta">
+        <ul class="sugg" id="sugg" role="listbox" hidden></ul>
+      </div>
       <button class="btn filters-toggle" id="filtersToggle" aria-expanded="false">Moji ispiti <span id="fcount" class="mono"></span></button>
     </header>
 
@@ -957,6 +1024,7 @@ body.gate-open { overflow: hidden; }
             </div>
             <button class="btn" id="todayBtn">Danas</button>
             <div class="period" id="period"></div>
+            <div class="vmenu-wrap"><button class="btn" id="viewMenuBtn" aria-haspopup="true" aria-expanded="false" aria-controls="viewMenu">{{i:tuning-2:18}} Prikaz</button><div class="vmenu" id="viewMenu" hidden></div></div>
           </div>
           <div class="card" id="viewArea"></div>
         </section>
@@ -1340,78 +1408,76 @@ function applyFilters() { FILTERED = baseExams().filter(matchesQ).sort((a, b) =>
 
 // ================= Bočni meni: profil, pretraga, moji ispiti =================
 const SEARCH_ICON = '{{i:magnifier:16}}';
-$('#filters').innerHTML = `
-  <div id="profileBox"></div>
-  <div class="search">${SEARCH_ICON}
-    <input id="q" type="search" placeholder="Pretraži predmete" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sugg" aria-label="Pretraga predmeta">
-    <ul class="sugg" id="sugg" role="listbox" hidden></ul>
-  </div>
-  <div class="fgroup" id="myBox"></div>
-  <div class="fgroup" id="viewOpts"></div>`;
+$('#filters').innerHTML = `<div class="fgroup" id="myBox"></div>`;
 
 function profileSummary(p) {
   if (!p) return '';
   return [p.nivo, `ak. ${p.akred}`, `${p.godina}. godina`, p.modul ? `modul ${p.modul}` : null].filter(Boolean).join(' · ');
 }
+const LS_GROUPS = 'raspored-ispita:groups';
+S.closed = (() => { try { return JSON.parse(lsGet(LS_GROUPS) || '{"passed":true}'); } catch { return { passed: true }; } })();
+function rowHtml(s) {
+  const st = s.plan ? (s.conf || 'planned') : '';
+  const meta = s.plan ? `<span class="mr ${s.conf || ''}">${fmtShort(s.plan.datum)}</span>` : `<span class="mr muted">${s.stale ? 'izaberi ponovo' : s.inst.length ? s.sem + '. sem' : 'bez termina'}</span>`;
+  const tip = s.plan ? `${s.predmet} · ${fmtDay(s.plan.datum)} u ${s.plan.vreme}${s.conf ? ' · ' + conflictText(s.confWith) : ''}` : `${s.predmet} · ${s.sem}. semestar · ${s.inst.length ? termina(s.inst.length) + ' u rokovima' : 'nema termina u objavljenim rokovima'}`;
+  const fw = S.showFriends ? friendsWithSubject(s) : [];
+  const menu = S.menuFor === s.sifra ? `<div class="mimenu" role="menu">
+      <button role="menuitem" data-pick="${esc(s.sifra)}">{{i:calendar:16}} ${s.plan ? 'Promeni termin' : 'Izaberi termin'}</button>
+      <button role="menuitem" data-fav="${esc(s.sifra)}">${favSet().has(s.sifra) ? '{{i:star-bold:16}} Ukloni iz omiljenih' : '{{i:star:16}} Dodaj u omiljene'}</button>
+      <button role="menuitem" data-passed="${esc(s.sifra)}">{{i:check-circle:16}} Položen</button>
+      <button role="menuitem" class="danger" data-remove="${esc(s.sifra)}">{{i:trash-bin-minimalistic:16}} Ukloni sa liste</button></div>` : '';
+  return `<div class="mi${S.pick === s.sifra ? ' on' : ''}${S.menuFor === s.sifra ? ' menu' : ''}"><button class="mimain" data-pick="${esc(s.sifra)}" title="${esc(tip)}"><span class="st ${st}"></span><span class="mn">${esc(s.predmet)}</span>${fw.length ? avatarStack(fw, 18, 2) : ''}${meta}</button>${starBtn(s.sifra)}<button type="button" class="mimore" data-mimenu="${esc(s.sifra)}" aria-label="Opcije za ${esc(s.predmet)}" aria-expanded="${S.menuFor === s.sifra}">{{i:menu-dots:18}}</button>${menu}</div>`;
+}
+function groupHtml(id, title, n, body) {
+  const closed = !!S.closed[id];
+  return `<div class="grp"><button type="button" class="ghead" data-grp="${id}" aria-expanded="${!closed}">{{i:alt-arrow-right:14}}<span>${title}</span><b>${n}</b></button>${closed ? '' : `<div class="mylist">${body}</div>`}</div>`;
+}
 function renderSide() {
   const p = prof();
-  $('#profileBox').innerHTML = p
-    ? `<div class="profile">${p.ime ? avatarHtml({ uid: Me.uid, ...p }, 40) : '<span class="pic">{{i:square-academic-cap:22}}</span>'}<div class="pi"><div class="pt">${p.ime ? esc(fullName(p)) : `${esc(p.nivo)} · ${p.godina}. godina`}</div><div class="ps" title="${esc(NIVO_NAZIV[p.nivo] || '')}">${esc([p.ime ? `${p.nivo} · ${p.godina}. godina` : null, p.modul ? 'modul ' + p.modul : 'zajednički predmeti', p.ime ? null : 'ak. ' + p.akred].filter(Boolean).join(' · '))}</div></div><button class="iconbtn sm" data-open-settings aria-label="Izmeni profil" title="Izmeni profil">{{i:pen:18}}</button></div>`
-    : `<div class="profile"><div class="pi"><div class="pt">Podesi profil</div><div class="ps">Studije, godina, modul i ispiti koji su ti ostali.</div></div><button class="btn primary sm" data-open-settings>Podesi</button></div>`;
-
   const box = $('#myBox');
-  if (!p) { box.innerHTML = ''; }
-  else {
-    const q = S.f.q ? fold(S.f.q) : '';
-    const hit = s => !q || q.split(/\s+/).every(w => fold(s.predmet + ' ' + s.sifra).includes(w));
-    const todo = MY.filter(s => !s.plan), done = MY.filter(s => s.plan);
-    const list = (S.tab === 'todo' ? todo : S.tab === 'done' ? done : MY).filter(hit);
-    let items = '';
-    if (!MY.length) items = `<div class="muted" style="padding:8px 4px">Nemaš ispita na listi. Dodaj ih ispod.</div>`;
-    else if (!list.length) items = `<div class="muted" style="padding:8px 4px">${S.tab === 'todo' ? (q ? 'Nema rezultata.' : 'Svi ispiti su zakazani.') : S.tab === 'done' ? (q ? 'Nema rezultata.' : 'Još ništa nije zakazano. Klikni na ispit u kartici „Bez termina".') : 'Nema rezultata.'}</div>`;
-    else {
-      let lastGroup = null; const favs = favSet();
-      for (const s of list) {
-        const g = favs.has(s.sifra) ? 'fav' : s.sem;
-        if (g !== lastGroup) { lastGroup = g; items += `<div class="semhead">${g === 'fav' ? 'Omiljeni' : g + '. semestar'}</div>`; }
-        const st = s.plan ? (s.conf || 'planned') : '';
-        const meta = s.plan
-          ? `<b>${fmtShort(s.plan.datum)} ${s.plan.vreme}</b>${s.conf ? ` · <span style="color:var(--${s.conf === 'major' ? 'bad' : 'warn'})">${s.conf === 'major' ? 'isto vreme' : 'isti dan'}</span>` : ''}`
-          : s.stale ? 'Termin više ne postoji, izaberi ponovo'
-          : s.inst.length ? termina(s.inst.length) + ' u rokovima' : 'nema termina u učitanim rokovima';
-        const fw = S.showFriends ? friendsWithSubject(s) : [];
-        const menu = S.menuFor === s.sifra ? `<div class="mimenu" role="menu">
-            <button role="menuitem" data-pick="${esc(s.sifra)}">{{i:calendar:16}} ${s.plan ? 'Promeni termin' : 'Izaberi termin'}</button>
-            <button role="menuitem" data-fav="${esc(s.sifra)}">${favSet().has(s.sifra) ? '{{i:star-bold:16}} Ukloni iz omiljenih' : '{{i:star:16}} Dodaj u omiljene'}</button>
-            <button role="menuitem" data-passed="${esc(s.sifra)}">{{i:check-circle:16}} Položen</button>
-            <button role="menuitem" class="danger" data-remove="${esc(s.sifra)}">{{i:trash-bin-minimalistic:16}} Ukloni sa liste</button></div>` : '';
-        items += `<div class="mi${S.pick === s.sifra ? ' on' : ''}${S.menuFor === s.sifra ? ' menu' : ''}"><button class="mimain" data-pick="${esc(s.sifra)}"><span class="st ${st}"></span><span class="mt"><span class="mn">${esc(s.predmet)}</span><span class="mm">${meta}</span></span>${fw.length ? avatarStack(fw, 20, 2) : ''}</button>${starBtn(s.sifra)}<button type="button" class="mimore" data-mimenu="${esc(s.sifra)}" aria-label="Opcije za ${esc(s.predmet)}" aria-expanded="${S.menuFor === s.sifra}">{{i:menu-dots:18}}</button>${menu}</div>`;
-      }
-    }
-    box.innerHTML = `
-      <div class="flabel">Moji ispiti <span class="fl-acts"><button data-sort="${sortDir() === 'asc' ? 'desc' : 'asc'}" title="${sortDir() === 'asc' ? 'Semestri rastuće (1→8)' : 'Semestri opadajuće (8→1)'} · klikni da obrneš" aria-label="Semestri ${sortDir() === 'asc' ? 'rastuće, promeni na opadajuće' : 'opadajuće, promeni na rastuće'}">${sortDir() === 'asc' ? '{{i:sort-from-top-to-bottom:18}}' : '{{i:sort-from-bottom-to-top:18}}'}</button></span></div>
-      <div class="seg sm" role="group" aria-label="Moji ispiti">
-        <button data-tab="todo" aria-pressed="${S.tab === 'todo'}">Bez termina<span class="n">${todo.length}</span></button>
-        <button data-tab="done" aria-pressed="${S.tab === 'done'}">Zakazani<span class="n">${done.length}</span></button>
-        <button data-tab="all" aria-pressed="${S.tab === 'all'}">Svi<span class="n">${MY.length}</span></button>
-      </div>
-      <div class="mylist">${items}</div>
-      ${S.tab !== 'done' ? (S.adding ? `<div class="addbox"><div class="search">${SEARCH_ICON}<input id="addQ" type="search" placeholder="Pronađi predmet iz svog programa" autocomplete="off" aria-label="Pronađi predmet" value="${esc(S.addQ || '')}"></div><div id="addList" class="addlist"></div><button type="button" class="btn ghost sm" data-add-close>Gotovo</button></div>` : `<button type="button" class="addbtn" data-add-open>{{i:add-circle:18}} Dodaj ispit</button>`) : ''}`;
-    if (S.adding) { renderAddList(); const aq = $('#addQ'); aq.addEventListener('input', e => { S.addQ = e.target.value; renderAddList(); }); }
-  }
-
+  if (!p) { box.innerHTML = `<div class="empty"><strong>Podesi profil</strong>Studije, godina, modul i ispiti koji su ti ostali.<div><button class="btn primary" data-open-settings>Podesi</button></div></div>`; $('#fcount').textContent = ''; return; }
+  const q = S.f.q ? fold(S.f.q) : '';
+  const hit = s => !q || q.split(/\s+/).every(w => fold(s.predmet + ' ' + s.sifra).includes(w));
+  const favs = favSet(), list = MY.filter(hit);
+  const fav = list.filter(s => favs.has(s.sifra)), todo = list.filter(s => !favs.has(s.sifra) && !s.plan), done = list.filter(s => !favs.has(s.sifra) && s.plan);
+  const passed = Object.entries(p.passed || {}).map(([k, v]) => ({ sifra: k, ...v })).filter(x => !q || fold(x.n).includes(q)).sort((a, b) => (b.at || '').localeCompare(a.at || ''));
+  const planned = MY.filter(s => s.plan).length, pct = MY.length ? Math.round(100 * planned / MY.length) : 0;
+  let h = `<div class="flabel">Moji ispiti <span class="fl-acts"><button data-sort="${sortDir() === 'asc' ? 'desc' : 'asc'}" title="${sortDir() === 'asc' ? 'Semestri rastuće (1→8)' : 'Semestri opadajuće (8→1)'} · klikni da obrneš" aria-label="Semestri ${sortDir() === 'asc' ? 'rastuće, promeni na opadajuće' : 'opadajuće, promeni na rastuće'}">${sortDir() === 'asc' ? '{{i:sort-from-top-to-bottom:18}}' : '{{i:sort-from-bottom-to-top:18}}'}</button></span></div>`;
+  if (MY.length) h += `<div class="progress" title="${planned} od ${MY.length} zakazano"><div class="pbar"><i style="width:${pct}%"></i></div><span><b>${planned}</b> od ${MY.length} zakazano</span></div>`;
+  if (!MY.length && !passed.length) h += `<div class="muted" style="padding:8px 4px">Nemaš ispita na listi. Dodaj ih ispod.</div>`;
+  else if (q && !list.length && !passed.length) h += `<div class="muted" style="padding:8px 4px">Nema rezultata za „${esc(S.f.q)}".</div>`;
+  if (fav.length) h += groupHtml('fav', 'Omiljeni', fav.length, fav.map(rowHtml).join(''));
+  if (todo.length || (!q && MY.length)) h += groupHtml('todo', 'Bez termina', todo.length, todo.length ? todo.map(rowHtml).join('') : '<div class="muted" style="padding:6px 10px">Svi ispiti su zakazani.</div>');
+  if (done.length) h += groupHtml('done', 'Zakazani', done.length, done.map(rowHtml).join(''));
+  if (passed.length) h += groupHtml('passed', 'Položeni', passed.length, passed.map(x => `<div class="mi passed"><a class="mimain" href="#podesavanja-polozeni" title="${esc(x.n)} · položen"><span class="st ok"></span><span class="mn">${esc(x.n)}</span><span class="mr muted">${x.ocena ? 'ocena ' + x.ocena : '✓'}</span></a></div>`).join(''));
+  h += S.adding ? `<div class="addbox"><div class="search">${SEARCH_ICON}<input id="addQ" type="search" placeholder="Pronađi predmet iz svog programa" autocomplete="off" aria-label="Pronađi predmet" value="${esc(S.addQ || '')}"></div><div id="addList" class="addlist"></div><button type="button" class="btn ghost sm" data-add-close>Gotovo</button></div>` : `<button type="button" class="addbtn" data-add-open>{{i:add-circle:18}} Dodaj ispit</button>`;
+  box.innerHTML = h;
+  if (S.adding) { renderAddList(); const aq = $('#addQ'); aq.addEventListener('input', e => { S.addQ = e.target.value; renderAddList(); }); }
+  $('#fcount').textContent = `(${MY.filter(s => !s.plan).length})`;
+  renderViewMenu();
+}
+// ---- Prikaz ▾ (u traci kalendara) ----
+function renderViewMenu() {
+  const p = prof(), m = $('#viewMenu'); if (!m) return;
   let vo = '';
   if (p) vo += `<label class="switch" for="scopeSw">Prikaži i ostale ispite<input type="checkbox" id="scopeSw" ${S.scope === 'svi' ? 'checked' : ''}></label>`;
   if (p && FR.friends.length) vo += `<label class="switch" for="friendsSw">Prikaži ispite prijatelja<input type="checkbox" id="friendsSw" ${S.showFriends ? 'checked' : ''}></label>`;
-  if (S.rokovi.length > 1) {
-    vo += `<div class="flabel" style="margin-top:6px">Rokovi <button data-clear-rok ${S.f.rok.size ? '' : 'hidden'}>poništi</button></div><div class="chips">` +
-      S.rokovi.map(r => `<button class="chip" data-rok="${esc(r.meta.id)}" aria-pressed="${S.f.rok.has(r.meta.id)}" style="--c:${S.rokColor[r.meta.id]}"><span class="dot"></span>${esc(rokName(r.meta.id))}</button>`).join('') + '</div>';
-  }
-  $('#viewOpts').innerHTML = vo;
-  $('#viewOpts').hidden = !vo;
-  const todoN = MY.filter(s => !s.plan).length;
-  $('#fcount').textContent = p ? `(${todoN})` : '';
+  if (S.rokovi.length > 1) vo += `<div class="flabel" style="margin-top:4px">Rokovi <button data-clear-rok ${S.f.rok.size ? '' : 'hidden'}>poništi</button></div><div class="chips">` + S.rokovi.map(r => `<button class="chip" data-rok="${esc(r.meta.id)}" aria-pressed="${S.f.rok.has(r.meta.id)}" style="--c:${S.rokColor[r.meta.id]}"><span class="dot"></span>${esc(rokName(r.meta.id))}</button>`).join('') + '</div>';
+  m.innerHTML = vo || '<span class="muted">Nema dodatnih opcija.</span>';
+  const n = (S.scope === 'svi' ? 1 : 0) + S.f.rok.size;
+  $('#viewMenuBtn').classList.toggle('on', !!n);
 }
+function setViewMenu(open) { $('#viewMenu').hidden = !open; $('#viewMenuBtn').setAttribute('aria-expanded', open); }
+$('#viewMenuBtn').addEventListener('click', e => { e.stopPropagation(); setViewMenu($('#viewMenu').hidden); });
+document.addEventListener('click', e => { if (!$('#viewMenu').hidden && !e.target.closest('.vmenu-wrap')) setViewMenu(false); });
+$('#viewMenu').addEventListener('click', e => {
+  const r = e.target.closest('[data-rok]'); if (r) { const v = r.dataset.rok; S.f.rok.has(v) ? S.f.rok.delete(v) : S.f.rok.add(v); refresh(); return; }
+  if (e.target.closest('[data-clear-rok]')) { S.f.rok.clear(); refresh(); }
+});
+$('#viewMenu').addEventListener('change', e => {
+  if (e.target.id === 'scopeSw') { S.scope = e.target.checked ? 'svi' : 'moji'; saveUi(); refresh(); }
+  if (e.target.id === 'friendsSw') { S.showFriends = e.target.checked; saveUi(); refresh(); }
+});
 
 $('#filters').addEventListener('click', e => {
   const mm = e.target.closest('[data-mimenu]'); if (mm) { S.menuFor = S.menuFor === mm.dataset.mimenu ? null : mm.dataset.mimenu; renderSide(); return; }
@@ -1421,14 +1487,8 @@ $('#filters').addEventListener('click', e => {
   const ad = e.target.closest('[data-addsub]'); if (ad) { addToList(ad.dataset.addsub); setTimeout(() => { const aq = $('#addQ'); if (aq) aq.focus(); }, 20); return; }
   if (e.target.closest('[data-pick]') && S.menuFor) S.menuFor = null;
   if (e.target.closest('[data-fav], [data-sort], [data-passed]')) { S.menuFor = null; return; } // obrađuje globalni rukovalac
-  const t = e.target.closest('[data-tab]'); if (t) { S.tab = t.dataset.tab; renderSide(); return; }
-  const r = e.target.closest('[data-rok]'); if (r) { const v = r.dataset.rok; S.f.rok.has(v) ? S.f.rok.delete(v) : S.f.rok.add(v); refresh(); return; }
-  if (e.target.closest('[data-clear-rok]')) { S.f.rok.clear(); refresh(); return; }
+  const gh = e.target.closest('[data-grp]'); if (gh) { S.closed[gh.dataset.grp] = !S.closed[gh.dataset.grp]; lsSet(LS_GROUPS, JSON.stringify(S.closed)); renderSide(); return; }
   const pk = e.target.closest('[data-pick]'); if (pk) { S.pick === pk.dataset.pick ? cancelPick() : startPick(pk.dataset.pick); return; }
-});
-$('#filters').addEventListener('change', e => {
-  if (e.target.id === 'scopeSw') { S.scope = e.target.checked ? 'svi' : 'moji'; saveUi(); refresh(); }
-  if (e.target.id === 'friendsSw') { S.showFriends = e.target.checked; saveUi(); refresh(); }
 });
 $('#filtersToggle').addEventListener('click', e => {
   const f = $('#filters'); const open = f.classList.toggle('collapsed') === false; e.currentTarget.setAttribute('aria-expanded', open);
@@ -1519,6 +1579,8 @@ function startPick(sifra) {
   if (window.matchMedia('(max-width: 860px)').matches) $('#pickArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 function cancelPick() { S.pick = null; refresh(); }
+// klik na prazan deo kalendara zatvara fioku (osim dok biraš termin)
+$('#viewArea').addEventListener('click', e => { if (S.selDay && !S.pick && !e.target.closest('button, a, input, select, label, .mcell, tr, .yd')) closeDrawer(); });
 let pendingConfirm = null;
 // svako zakazivanje ide preko potvrde (sa pregledom konflikata)
 function schedule(sifra, inst, confirmed) {
@@ -1630,6 +1692,7 @@ function confPill(s) {
 }
 
 function renderPickBar() {
+  $('#pickArea').innerHTML = ''; return; // biranje termina se prikazuje u fioci
   const s = S.pick ? MYMAP.get(S.pick) : null;
   if (!s) { $('#pickArea').innerHTML = ''; return; }
   const n = s.inst.length;
@@ -1706,7 +1769,7 @@ function renderMonth() {
     const d = new Date(start); d.setDate(start.getDate() + i);
     if (i === 35 && d.getMonth() !== S.m) break;
     const k = iso(d), list = days[k] || [], pl = (plannedBy[k] || []).slice().sort((a, b) => a.plan.vreme.localeCompare(b.plan.vreme) || cmpSubj(a, b)), out = d.getMonth() !== S.m;
-    const chips = pl.slice(0, 3).map(s => `<div class="pchip ${s.conf || ''}" title="${esc(s.predmet)} · ${s.plan.vreme}${s.conf ? ' · ' + esc(conflictText(s.confWith)) : ''}"><b>${s.plan.vreme}</b> ${esc(s.predmet)}</div>`).join('') + (pl.length > 3 ? `<div class="opts">+${pl.length - 3} zakazano</div>` : '');
+    const MAXC = 4, chips = pl.slice(0, pl.length > MAXC ? MAXC - 1 : MAXC).map(s => `<div class="pchip ${s.conf || ''}" title="${esc(s.predmet)} · ${s.plan.vreme}${s.conf ? ' · ' + esc(conflictText(s.confWith)) : ''}"><b>${s.plan.vreme}</b><span>${esc(s.predmet)}</span></div>`).join('') + (pl.length > MAXC ? `<div class="opts more">+${pl.length - MAXC + 1} zakazano</div>` : '');
     const base = ['mcell', out && 'out', k === todayIso && 'today', k === S.selDay && 'sel', d.getDay() % 6 === 0 && 'weekend'];
     let inner = `<div class="dn"><span>${d.getDate()}</span>`, cls, clickable = false, attr = `data-day="${k}"`;
     if (pick) {
@@ -1723,7 +1786,7 @@ function renderMonth() {
     } else if (mine) {
       const options = uniq(list.filter(e => { const s = MYMAP.get(e.sifra); return s && !s.plan; }).map(e => e.sifra)).length;
       cls = [...base, (pl.length || list.length) && 'has'];
-      inner += `</div>${chips}` + (options ? `<div class="opts">${num(options, 'ispit za izbor', 'ispita za izbor', 'ispita za izbor')}</div>` : '');
+      inner += `</div>${chips}` + (options ? `<div class="opts" title="${num(options, 'ispit sa tvoje liste može', 'ispita sa tvoje liste mogu', 'ispita sa tvoje liste može')} da se zakaže ovog dana">+${options} za izbor</div>` : '');
       clickable = pl.length || list.length;
     } else {
       cls = [...base, list.length && 'has'];
@@ -1820,14 +1883,31 @@ function schedRow(s, inst, opts = {}) {
     ${(isCur ? s.confWith.length : cs.length) ? `<div class="note ${isCur ? s.conf : lvl}">${esc(conflictText(isCur ? s.confWith : cs))}</div>` : ''}
   </div>${btn}</div>`;
 }
+const DCLOSE = '<button type="button" class="iconbtn sm dclose" data-close-drawer aria-label="Zatvori">{{i:close:18}}</button>';
+function drawerOpen() { return ROUTES[route] && ROUTES[route].sec === 'planer' && !!(S.pick || S.selDay); }
+function closeDrawer() { S.pick = null; S.selDay = null; refresh(); }
+// kalendar se pomeri ulevo samo ako bi fioka prekrila izabrani dan ili označene termine
+function fitDrawer(open) {
+  const main = document.querySelector('#sec-planer .main');
+  if (!open || !window.matchMedia('(min-width: 1101px)').matches || S.view !== 'mesec') { main.classList.remove('shifted'); return; }
+  main.classList.remove('shifted');
+  const edge = window.innerWidth - 16 - Math.min(400, window.innerWidth - 32) - 8;
+  const targets = document.querySelectorAll(S.pick ? '#viewArea .mcell.opt' : '#viewArea .mcell.sel');
+  const hidden = [...targets].some(el => el.getBoundingClientRect().right > edge);
+  main.classList.toggle('shifted', hidden);
+}
 function renderDay() {
   const p = $('#dayPanel');
+  const open = drawerOpen();
+  p.classList.toggle('open', open); p.setAttribute('aria-hidden', !open);
+  fitDrawer(open);
+  if (!open) { p.innerHTML = ''; return; }
   const pick = S.pick ? MYMAP.get(S.pick) : null;
   if (pick) {
-    let h = `<div class="dh"><h2>${esc(pick.predmet)}</h2><div class="dsub">${pick.sem}. semestar · ${termina(pick.inst.length)}</div></div><div class="dsec">`;
+    let h = `<div class="dh">${DCLOSE}<div class="deyebrow">Biraš termin</div><h2>${esc(pick.predmet)}</h2><div class="dsub">${pick.sem}. semestar · ${pick.inst.length ? termina(pick.inst.length) + ' · klikni označen dan ili termin ispod' : 'nema termina'}</div></div><div class="dsec">`;
     if (!pick.inst.length) h += `<div class="empty">Nema termina u objavljenim rokovima.${S.isAdmin ? '<br><button class="btn sm" data-manage>Dodaj rok</button>' : ''}</div>`;
     for (const i of pick.inst) h += schedRow(pick, i, { dateTitle: true });
-    h += `<div class="actions" style="margin-top:8px;justify-content:space-between"><button class="btn ghost sm" data-passed="${esc(pick.sifra)}">Položen, ukloni sa liste</button><button class="btn sm" data-cancel-pick>Gotovo</button></div></div>`;
+    h += `<div class="actions" style="margin-top:8px;justify-content:space-between"><button class="btn ghost sm" data-passed="${esc(pick.sifra)}">Položen</button><span style="flex:1"></span>${pick.plan ? `<button class="btn sm" data-unplan="${esc(pick.sifra)}">Ukloni termin</button>` : ''}<button class="btn sm" data-cancel-pick>Gotovo</button></div></div>`;
     p.innerHTML = h; return;
   }
   if (!S.selDay) {
@@ -1839,7 +1919,7 @@ function renderDay() {
   const k = S.selDay;
   const pl = MY.filter(s => s.plan && s.plan.datum === k).sort((a, b) => a.plan.vreme.localeCompare(b.plan.vreme) || cmpSubj(a, b));
   const list = FILTERED.filter(e => e.datum === k && !(MYMAP.get(e.sifra) && MYMAP.get(e.sifra).plan && MYMAP.get(e.sifra).plan.rokId === e.rokId));
-  let h = `<div class="dh"><h2>${cap(fmtDay(k))}</h2><div class="dsub">${pl.length ? `${pl.length} zakazano · ` : ''}${ispita(list.length)} ${S.scope === 'moji' && prof() ? 'sa tvoje liste' : 'u rasporedu'}</div></div>`;
+  let h = `<div class="dh">${DCLOSE}<h2>${cap(fmtDay(k))}</h2><div class="dsub">${pl.length ? `${pl.length} zakazano · ` : ''}${ispita(list.length)} ${S.scope === 'moji' && prof() ? 'sa tvoje liste' : 'u rasporedu'}</div></div>`;
   if (pl.length) {
     h += `<div class="dsec"><h4>Moj plan</h4>`;
     for (const s of pl) h += `<div class="xrow mine ${s.conf || ''}"><div class="xi"><div class="xn">${esc(s.predmet)}</div><div class="xm"><span class="tag mono">${s.plan.vreme}</span><span class="tag">${s.sem}. sem.</span>${rokTag(s.plan.rokId)}</div>${s.conf ? `<div class="note ${s.conf}">${esc(conflictText(s.confWith))}</div>` : ''}</div><button class="btn sm" data-pick="${esc(s.sifra)}">Promeni</button></div>`;
@@ -1926,7 +2006,6 @@ function selectDay(k) {
   S.selDay = k; const dt = parseIso(k);
   if (S.view === 'godina' || S.view === 'plan' || S.y !== dt.getFullYear() || S.m !== dt.getMonth()) { S.y = dt.getFullYear(); S.m = dt.getMonth(); if (S.view !== 'lista') S.view = 'mesec'; }
   renderView(); renderDay();
-  if (window.matchMedia('(max-width: 1320px)').matches) $('#dayPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 document.addEventListener('click', e => {
   const t = e.target;
@@ -1940,7 +2019,8 @@ document.addEventListener('click', e => {
     else { S.selDay = k; renderView(); }
     return;
   }
-  const d = t.closest('[data-day]'); if (d) { selectDay(d.dataset.day); return; }
+  if (t.closest('[data-close-drawer]')) { closeDrawer(); return; }
+  const d = t.closest('[data-day]'); if (d) { if (S.selDay === d.dataset.day && !S.pick && S.view === 'mesec') { closeDrawer(); return; } selectDay(d.dataset.day); return; }
   const fj = t.closest('[data-fjoin2]'); if (fj) { const ex = examById(fj.dataset.fjoin2); if (ex) schedule(fj.dataset.fsifra, ex); return; }
   const fo = t.closest('[data-fopen-main]'); if (fo) { openFriends(fo.dataset.fopenMain); return; }
   const sc = t.closest('[data-sched]');
@@ -1961,7 +2041,7 @@ document.addEventListener('click', e => { if (S.menuFor && !e.target.closest('.m
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && S.menuFor) { S.menuFor = null; renderSide(); return; }
   if (e.target.matches('input, select, textarea') || document.querySelector('dialog[open]')) return;
-  if (e.key === 'Escape' && S.pick) { cancelPick(); return; }
+  if (e.key === 'Escape' && (S.pick || S.selDay)) { closeDrawer(); return; }
   if (S.view !== 'mesec' && S.view !== 'godina') return;
   if (e.key === 'ArrowLeft') step(-1); else if (e.key === 'ArrowRight') step(1);
 });
@@ -2957,6 +3037,7 @@ function setRouteUi() {
   $('#pageTitle').textContent = ROUTES[route].title;
   document.body.dataset.route = route;
   $('#filtersToggle').hidden = sec !== 'planer';
+  $('#hSearch').hidden = sec !== 'planer';
 }
 function applyRoute() {
   let r = hashRoute() || 'plan';

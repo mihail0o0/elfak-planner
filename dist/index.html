@@ -120,9 +120,8 @@ header.top .grow { flex: 1; }
 .iconbtn:active { transform: translateY(1px); box-shadow: var(--shadow-press); }
 
 /* ---------- raspored ---------- */
-.layout { display: grid; grid-template-columns: 292px minmax(0, 1fr) 380px; gap: 20px; align-items: start; }
-@media (max-width: 1320px) { .layout { grid-template-columns: 280px minmax(0, 1fr); } .day-panel { grid-column: 2; } }
-@media (max-width: 860px) { .layout { grid-template-columns: minmax(0, 1fr); } .day-panel { grid-column: 1; } }
+.layout { display: grid; grid-template-columns: 264px minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 860px) { .layout { grid-template-columns: minmax(0, 1fr); } }
 
 .card { background: var(--surface); border-radius: var(--rad-xl); box-shadow: var(--shadow-card); }
 
@@ -922,6 +921,70 @@ body.gate-open { overflow: hidden; }
 .photobtn > span { position: absolute; right: -4px; bottom: -4px; width: 28px; height: 28px; border-radius: 10px; background: var(--surface); color: var(--ink); display: grid; place-items: center; box-shadow: var(--shadow-btn-2); }
 .photobtn:hover .av { filter: brightness(.92); }
 @media (max-width: 560px) { .cropbody { flex-direction: column; align-items: center; } .cropside { flex-direction: row; } }
+
+/* ================= Raspored: fioka, lista, kalendar ================= */
+/* fioka desno – prelazi preko kalendara, samo kad je nešto izabrano */
+.day-panel { position: fixed !important; top: calc(env(safe-area-inset-top, 0px) + 16px); right: max(16px, env(safe-area-inset-right, 0px)); bottom: 16px; width: min(400px, calc(100vw - 32px)); max-height: none !important; z-index: 25; overflow: auto; box-shadow: var(--shadow-pop); transform: translateX(calc(100% + 32px)); visibility: hidden; transition: transform .24s cubic-bezier(.2, .8, .2, 1), visibility 0s linear .24s; }
+.day-panel.open { transform: none; visibility: visible; transition: transform .24s cubic-bezier(.2, .8, .2, 1); }
+.day-panel .dh { padding-right: 52px; }
+.dclose { position: absolute; top: 10px; right: 10px; }
+.deyebrow { font-size: 11.5px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--brand-fg); margin-bottom: 2px; }
+#sec-planer .main { transition: padding-right .24s cubic-bezier(.2, .8, .2, 1); }
+@media (min-width: 1101px) { #sec-planer .main.shifted { padding-right: 416px; } }
+@media (max-width: 860px) {
+  .day-panel { top: auto; left: 0; right: 0; width: auto; bottom: calc(env(safe-area-inset-bottom, 0px) + 68px); max-height: 64vh !important; border-radius: var(--rad-xl) var(--rad-xl) 0 0; transform: translateY(calc(100% + 80px)); }
+}
+/* kalendar preko visine ekrana */
+@media (min-width: 861px) {
+  .month .mgrid { min-height: calc(100vh - 220px - env(safe-area-inset-top, 0px)); grid-auto-rows: minmax(96px, 1fr); grid-template-rows: auto; }
+  .mcell { min-height: 0; }
+}
+/* pretraga u zaglavlju */
+.hsearch { width: min(340px, 40vw); }
+.hsearch input { height: 42px; background: var(--surface); box-shadow: var(--shadow-btn-2); }
+@media (max-width: 860px) { .hsearch { order: 5; width: 100%; } }
+/* Prikaz ▾ */
+.vmenu-wrap { position: relative; margin-left: auto; }
+#viewMenuBtn.on { color: var(--brand-fg); border-color: var(--brand-line); }
+.vmenu { position: absolute; right: 0; top: calc(100% + 8px); z-index: 20; width: 300px; background: var(--surface); border-radius: var(--rad-lg); box-shadow: var(--shadow-pop); padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.vmenu[hidden] { display: none; }
+/* lista: grupe i redovi u jednom redu */
+.progress { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--ink-3); padding: 0 2px; }
+.progress b { color: var(--ink); }
+.pbar { height: 6px; border-radius: 4px; background: var(--tile-hover); overflow: hidden; }
+.pbar i { display: block; height: 100%; background: var(--brand); border-radius: 4px; transition: width .3s; }
+.grp { display: flex; flex-direction: column; }
+.ghead { display: flex; align-items: center; gap: 6px; border: 0; background: none; padding: 8px 4px 4px; color: var(--ink-3); font-size: 11.5px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; text-align: left; }
+.ghead svg { transition: transform .15s; }
+.ghead[aria-expanded="true"] svg { transform: rotate(90deg); }
+.ghead b { margin-left: auto; font-weight: 600; letter-spacing: 0; background: var(--tile); border-radius: 7px; padding: 0 7px; color: var(--ink-2); }
+.ghead:hover { color: var(--ink); }
+.mi .mimain { align-items: center; padding: 7px 4px 7px 10px; gap: 9px; text-decoration: none; }
+.mi .st { margin-top: 0; }
+.mi .mn { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 14px; }
+.mi .mr { flex: none; font-size: 12.5px; font-weight: 600; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.mi .mr.muted { font-weight: 500; color: var(--ink-3); }
+.mi .mr.major { color: var(--bad); } .mi .mr.minor { color: var(--warn); }
+.mi .avs { display: none; }
+.mi:hover .avs { display: inline-flex; }
+.mi.passed .mn { color: var(--ink-2); }
+.mi .st.ok { background: var(--ok); box-shadow: none; }
+.mi .star, .mi .mimore { width: 28px; }
+
+/* kompaktni ispiti u kalendaru (kao Google Calendar) */
+.mcell { gap: 2px; }
+.mcell .dn { margin-bottom: 2px; }
+.pchip { display: flex !important; align-items: center; gap: 5px; font-size: 11.5px; line-height: 1.35; padding: 1px 6px; border-radius: 6px; white-space: nowrap; overflow: hidden; -webkit-line-clamp: unset; min-width: 0; }
+.pchip b { font-weight: 600; font-variant-numeric: tabular-nums; opacity: .85; flex: none; }
+.pchip span { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.opts { font-size: 11.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--brand-fg); padding: 0 2px; }
+.opts.more { color: var(--ink-3); margin-top: 0; }
+.mcell.sel .opts { color: var(--on-brand); }
+
+/* dorade rasporeda */
+@media (min-width: 861px) { .day-panel { top: calc(env(safe-area-inset-top, 0px) + 96px); } }
+@media (hover: hover) { .mi .star:not([aria-pressed="true"]), .mi .mimore { opacity: 0; } .mi:hover .star, .mi:hover .mimore, .mi.menu .mimore, .mi .star:focus-visible, .mi .mimore:focus-visible { opacity: 1; } .mi:not(:hover):not(.menu) .star:not([aria-pressed="true"]) { width: 0; overflow: hidden; } .mi:not(:hover):not(.menu) .mimore { width: 0; overflow: hidden; } }
+@media (max-width: 860px) { .hsearch { order: 5; flex: 1; width: auto; min-width: 0; } .filters-toggle { order: 6; } header.top { row-gap: 10px; } }
 </style>
 </head>
 <body>
@@ -945,6 +1008,10 @@ body.gate-open { overflow: hidden; }
     <header class="top">
       <div class="ptitle"><h1 id="pageTitle">Moj plan</h1><div class="sub" id="storeInfo">Učitavanje…</div></div>
       <div class="grow"></div>
+      <div class="search hsearch" id="hSearch"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="11.5" cy="11.5" r="9.5"/><path d="M18.2168 18.2178L21.9994 22.0004"/></g></svg>
+        <input id="q" type="search" placeholder="Pretraži predmete" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sugg" aria-label="Pretraga predmeta">
+        <ul class="sugg" id="sugg" role="listbox" hidden></ul>
+      </div>
       <button class="btn filters-toggle" id="filtersToggle" aria-expanded="false">Moji ispiti <span id="fcount" class="mono"></span></button>
     </header>
 
@@ -968,6 +1035,7 @@ body.gate-open { overflow: hidden; }
             </div>
             <button class="btn" id="todayBtn">Danas</button>
             <div class="period" id="period"></div>
+            <div class="vmenu-wrap"><button class="btn" id="viewMenuBtn" aria-haspopup="true" aria-expanded="false" aria-controls="viewMenu"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M9.5 14C11.1569 14 12.5 15.3431 12.5 17C12.5 18.6568 11.1569 20 9.5 20C7.84315 20 6.5 18.6568 6.5 17C6.5 15.3431 7.84315 14 9.5 14Z"/><path d="M14.5 3.99998C12.8431 3.99998 11.5 5.34312 11.5 6.99998C11.5 8.65683 12.8431 9.99998 14.5 9.99998C16.1569 9.99998 17.5 8.65683 17.5 6.99998C17.5 5.34312 16.1569 3.99998 14.5 3.99998Z"/><path d="M15 16.9585L22 16.9585"/><path d="M9 6.9585L2 6.9585"/><path d="M2 16.9585L4 16.9585"/><path d="M22 6.9585L20 6.9585"/></g></svg> Prikaz</button><div class="vmenu" id="viewMenu" hidden></div></div>
           </div>
           <div class="card" id="viewArea"></div>
         </section>
@@ -1577,78 +1645,76 @@ function applyFilters() { FILTERED = baseExams().filter(matchesQ).sort((a, b) =>
 
 // ================= Bočni meni: profil, pretraga, moji ispiti =================
 const SEARCH_ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="11.5" cy="11.5" r="9.5"/><path d="M18.2168 18.2178L21.9994 22.0004"/></g></svg>';
-$('#filters').innerHTML = `
-  <div id="profileBox"></div>
-  <div class="search">${SEARCH_ICON}
-    <input id="q" type="search" placeholder="Pretraži predmete" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sugg" aria-label="Pretraga predmeta">
-    <ul class="sugg" id="sugg" role="listbox" hidden></ul>
-  </div>
-  <div class="fgroup" id="myBox"></div>
-  <div class="fgroup" id="viewOpts"></div>`;
+$('#filters').innerHTML = `<div class="fgroup" id="myBox"></div>`;
 
 function profileSummary(p) {
   if (!p) return '';
   return [p.nivo, `ak. ${p.akred}`, `${p.godina}. godina`, p.modul ? `modul ${p.modul}` : null].filter(Boolean).join(' · ');
 }
+const LS_GROUPS = 'raspored-ispita:groups';
+S.closed = (() => { try { return JSON.parse(lsGet(LS_GROUPS) || '{"passed":true}'); } catch { return { passed: true }; } })();
+function rowHtml(s) {
+  const st = s.plan ? (s.conf || 'planned') : '';
+  const meta = s.plan ? `<span class="mr ${s.conf || ''}">${fmtShort(s.plan.datum)}</span>` : `<span class="mr muted">${s.stale ? 'izaberi ponovo' : s.inst.length ? s.sem + '. sem' : 'bez termina'}</span>`;
+  const tip = s.plan ? `${s.predmet} · ${fmtDay(s.plan.datum)} u ${s.plan.vreme}${s.conf ? ' · ' + conflictText(s.confWith) : ''}` : `${s.predmet} · ${s.sem}. semestar · ${s.inst.length ? termina(s.inst.length) + ' u rokovima' : 'nema termina u objavljenim rokovima'}`;
+  const fw = S.showFriends ? friendsWithSubject(s) : [];
+  const menu = S.menuFor === s.sifra ? `<div class="mimenu" role="menu">
+      <button role="menuitem" data-pick="${esc(s.sifra)}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M10 21.75H14C17.7712 21.75 19.6569 21.75 20.8284 20.5784C22 19.4069 22 17.5212 22 13.75V11.75C22 7.97876 22 6.09315 20.8284 4.92157C19.6569 3.75 17.7712 3.75 14 3.75H10C6.22876 3.75 4.34315 3.75 3.17157 4.92157C2 6.09315 2 7.97876 2 11.75V13.75C2 17.5212 2 19.4069 3.17157 20.5784C4.34315 21.75 6.22876 21.75 10 21.75Z"/><path d="M2.03516 8.75H21.965"/><path stroke-linejoin="round" d="M17 12.75H17.0001"/><path stroke-linejoin="round" d="M12 12.75H12.0001"/><path stroke-linejoin="round" d="M7 12.75H7.0001"/><path stroke-linejoin="round" d="M17 16.7734H17.0001"/><path stroke-linejoin="round" d="M12 16.7734H12.0001"/><path stroke-linejoin="round" d="M7 16.7734H7.0001"/><path d="M7 3.78496V2.25"/><path d="M17 3.78496V2.25"/></g></svg> ${s.plan ? 'Promeni termin' : 'Izaberi termin'}</button>
+      <button role="menuitem" data-fav="${esc(s.sifra)}">${favSet().has(s.sifra) ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg> Ukloni iz omiljenih' : '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M6.67589 7.62805L6.03954 7.77203C3.57986 8.32856 2.35002 8.60682 2.05742 9.54773C1.76482 10.4886 2.60325 11.4691 4.2801 13.4299L4.71392 13.9372C5.19043 14.4944 5.42868 14.773 5.53586 15.1177C5.64305 15.4624 5.60703 15.8341 5.53498 16.5776L5.4694 17.2544C5.21588 19.8706 5.08912 21.1787 5.85515 21.7602C6.62118 22.3417 7.77268 21.8115 10.0757 20.7512L10.6715 20.4768C11.3259 20.1755 11.6531 20.0248 12 20.0248C12.3469 20.0248 12.6741 20.1755 13.3285 20.4768L13.9243 20.7512C16.2273 21.8115 17.3788 22.3417 18.1449 21.7602C18.9109 21.1787 18.7841 19.8706 18.5306 17.2544L18.465 16.5776C18.393 15.8341 18.357 15.4624 18.4641 15.1177C18.5713 14.773 18.8096 14.4944 19.2861 13.9372L19.7199 13.4299C21.3968 11.4691 22.2352 10.4886 21.9426 9.54773C21.65 8.60682 20.4201 8.32856 17.9605 7.77203L17.3241 7.62805C16.6251 7.4699 16.2757 7.39083 15.9951 7.17781C15.7144 6.96479 15.5345 6.64193 15.1745 5.99623L14.8468 5.40837C13.5802 3.13612 12.9469 2 12 2C11.0531 2 10.4198 3.13613 9.15316 5.40838L8.82547 5.99623C8.46553 6.64194 8.28555 6.96479 8.00494 7.17781C7.72433 7.39083 7.37485 7.4699 6.67589 7.62805Z"/></svg> Dodaj u omiljene'}</button>
+      <button role="menuitem" data-passed="${esc(s.sifra)}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path stroke-linejoin="round" d="M8.5 12.5L10.5 14.5L15.5 9.5"/></g></svg> Položen</button>
+      <button role="menuitem" class="danger" data-remove="${esc(s.sifra)}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M9.1709 4C9.58273 2.83481 10.694 2 12.0002 2C13.3064 2 14.4177 2.83481 14.8295 4"/><path d="M20.5001 6H3.5"/><path d="M18.8332 8.5L18.3732 15.3991C18.1962 18.054 18.1077 19.3815 17.2427 20.1907C16.3777 21 15.0473 21 12.3865 21H11.6132C8.95235 21 7.62195 21 6.75694 20.1907C5.89194 19.3815 5.80344 18.054 5.62644 15.3991L5.1665 8.5"/><path d="M9.5 11L10 16"/><path d="M14.5 11L14 16"/></g></svg> Ukloni sa liste</button></div>` : '';
+  return `<div class="mi${S.pick === s.sifra ? ' on' : ''}${S.menuFor === s.sifra ? ' menu' : ''}"><button class="mimain" data-pick="${esc(s.sifra)}" title="${esc(tip)}"><span class="st ${st}"></span><span class="mn">${esc(s.predmet)}</span>${fw.length ? avatarStack(fw, 18, 2) : ''}${meta}</button>${starBtn(s.sifra)}<button type="button" class="mimore" data-mimenu="${esc(s.sifra)}" aria-label="Opcije za ${esc(s.predmet)}" aria-expanded="${S.menuFor === s.sifra}"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></g></svg></button>${menu}</div>`;
+}
+function groupHtml(id, title, n, body) {
+  const closed = !!S.closed[id];
+  return `<div class="grp"><button type="button" class="ghead" data-grp="${id}" aria-expanded="${!closed}"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5L15 12L9 19"/></svg><span>${title}</span><b>${n}</b></button>${closed ? '' : `<div class="mylist">${body}</div>`}</div>`;
+}
 function renderSide() {
   const p = prof();
-  $('#profileBox').innerHTML = p
-    ? `<div class="profile">${p.ime ? avatarHtml({ uid: Me.uid, ...p }, 40) : '<span class="pic"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M3.0916 10.3634L9.78281 13.5004C11.2038 14.1665 12.7963 14.1665 14.2173 13.5004L20.9084 10.3634C22.3639 9.68105 22.3639 7.31899 20.9084 6.63664L14.2172 3.49965C12.7962 2.83345 11.2037 2.83345 9.78272 3.49965L3.0916 6.63659C1.63614 7.31895 1.63613 9.68101 3.0916 10.3634Z"/><path d="M2 8.5V14"/><path d="M19 11.5V16.6254C19 17.6334 18.4965 18.5772 17.6147 19.0656C16.1463 19.8787 13.796 21 12 21C10.204 21 7.8537 19.8787 6.38533 19.0656C5.5035 18.5772 5 17.6334 5 16.6254V11.5"/></g></svg></span>'}<div class="pi"><div class="pt">${p.ime ? esc(fullName(p)) : `${esc(p.nivo)} · ${p.godina}. godina`}</div><div class="ps" title="${esc(NIVO_NAZIV[p.nivo] || '')}">${esc([p.ime ? `${p.nivo} · ${p.godina}. godina` : null, p.modul ? 'modul ' + p.modul : 'zajednički predmeti', p.ime ? null : 'ak. ' + p.akred].filter(Boolean).join(' · '))}</div></div><button class="iconbtn sm" data-open-settings aria-label="Izmeni profil" title="Izmeni profil"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M14.3601 4.07866L15.2869 3.15178C16.8226 1.61607 19.3125 1.61607 20.8482 3.15178C22.3839 4.68748 22.3839 7.17735 20.8482 8.71306L19.9213 9.63993M14.3601 4.07866C14.3601 4.07866 14.4759 6.04828 16.2138 7.78618C17.9517 9.52407 19.9213 9.63993 19.9213 9.63993M19.9213 9.63993L11.4001 18.1612C10.8229 18.7383 10.5344 19.0269 10.2162 19.2751C9.84082 19.5679 9.43469 19.8189 9.00498 20.0237C8.6407 20.1973 8.25352 20.3263 7.47918 20.5844L4.19792 21.6782L3.39584 21.9456C3.01478 22.0726 2.59466 21.9734 2.31063 21.6894C2.0266 21.4053 1.92743 20.9852 2.05445 20.6042L2.32181 19.8021L3.41556 16.5208C3.67368 15.7465 3.80273 15.3593 3.97634 14.995C4.18114 14.5653 4.43213 14.1592 4.7249 13.7838C4.97308 13.4656 5.26166 13.1771 5.83882 12.5999L14.3601 4.07866M4.19792 21.6782L2.32181 19.8021"/></svg></button></div>`
-    : `<div class="profile"><div class="pi"><div class="pt">Podesi profil</div><div class="ps">Studije, godina, modul i ispiti koji su ti ostali.</div></div><button class="btn primary sm" data-open-settings>Podesi</button></div>`;
-
   const box = $('#myBox');
-  if (!p) { box.innerHTML = ''; }
-  else {
-    const q = S.f.q ? fold(S.f.q) : '';
-    const hit = s => !q || q.split(/\s+/).every(w => fold(s.predmet + ' ' + s.sifra).includes(w));
-    const todo = MY.filter(s => !s.plan), done = MY.filter(s => s.plan);
-    const list = (S.tab === 'todo' ? todo : S.tab === 'done' ? done : MY).filter(hit);
-    let items = '';
-    if (!MY.length) items = `<div class="muted" style="padding:8px 4px">Nemaš ispita na listi. Dodaj ih ispod.</div>`;
-    else if (!list.length) items = `<div class="muted" style="padding:8px 4px">${S.tab === 'todo' ? (q ? 'Nema rezultata.' : 'Svi ispiti su zakazani.') : S.tab === 'done' ? (q ? 'Nema rezultata.' : 'Još ništa nije zakazano. Klikni na ispit u kartici „Bez termina".') : 'Nema rezultata.'}</div>`;
-    else {
-      let lastGroup = null; const favs = favSet();
-      for (const s of list) {
-        const g = favs.has(s.sifra) ? 'fav' : s.sem;
-        if (g !== lastGroup) { lastGroup = g; items += `<div class="semhead">${g === 'fav' ? 'Omiljeni' : g + '. semestar'}</div>`; }
-        const st = s.plan ? (s.conf || 'planned') : '';
-        const meta = s.plan
-          ? `<b>${fmtShort(s.plan.datum)} ${s.plan.vreme}</b>${s.conf ? ` · <span style="color:var(--${s.conf === 'major' ? 'bad' : 'warn'})">${s.conf === 'major' ? 'isto vreme' : 'isti dan'}</span>` : ''}`
-          : s.stale ? 'Termin više ne postoji, izaberi ponovo'
-          : s.inst.length ? termina(s.inst.length) + ' u rokovima' : 'nema termina u učitanim rokovima';
-        const fw = S.showFriends ? friendsWithSubject(s) : [];
-        const menu = S.menuFor === s.sifra ? `<div class="mimenu" role="menu">
-            <button role="menuitem" data-pick="${esc(s.sifra)}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M10 21.75H14C17.7712 21.75 19.6569 21.75 20.8284 20.5784C22 19.4069 22 17.5212 22 13.75V11.75C22 7.97876 22 6.09315 20.8284 4.92157C19.6569 3.75 17.7712 3.75 14 3.75H10C6.22876 3.75 4.34315 3.75 3.17157 4.92157C2 6.09315 2 7.97876 2 11.75V13.75C2 17.5212 2 19.4069 3.17157 20.5784C4.34315 21.75 6.22876 21.75 10 21.75Z"/><path d="M2.03516 8.75H21.965"/><path stroke-linejoin="round" d="M17 12.75H17.0001"/><path stroke-linejoin="round" d="M12 12.75H12.0001"/><path stroke-linejoin="round" d="M7 12.75H7.0001"/><path stroke-linejoin="round" d="M17 16.7734H17.0001"/><path stroke-linejoin="round" d="M12 16.7734H12.0001"/><path stroke-linejoin="round" d="M7 16.7734H7.0001"/><path d="M7 3.78496V2.25"/><path d="M17 3.78496V2.25"/></g></svg> ${s.plan ? 'Promeni termin' : 'Izaberi termin'}</button>
-            <button role="menuitem" data-fav="${esc(s.sifra)}">${favSet().has(s.sifra) ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg> Ukloni iz omiljenih' : '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M6.67589 7.62805L6.03954 7.77203C3.57986 8.32856 2.35002 8.60682 2.05742 9.54773C1.76482 10.4886 2.60325 11.4691 4.2801 13.4299L4.71392 13.9372C5.19043 14.4944 5.42868 14.773 5.53586 15.1177C5.64305 15.4624 5.60703 15.8341 5.53498 16.5776L5.4694 17.2544C5.21588 19.8706 5.08912 21.1787 5.85515 21.7602C6.62118 22.3417 7.77268 21.8115 10.0757 20.7512L10.6715 20.4768C11.3259 20.1755 11.6531 20.0248 12 20.0248C12.3469 20.0248 12.6741 20.1755 13.3285 20.4768L13.9243 20.7512C16.2273 21.8115 17.3788 22.3417 18.1449 21.7602C18.9109 21.1787 18.7841 19.8706 18.5306 17.2544L18.465 16.5776C18.393 15.8341 18.357 15.4624 18.4641 15.1177C18.5713 14.773 18.8096 14.4944 19.2861 13.9372L19.7199 13.4299C21.3968 11.4691 22.2352 10.4886 21.9426 9.54773C21.65 8.60682 20.4201 8.32856 17.9605 7.77203L17.3241 7.62805C16.6251 7.4699 16.2757 7.39083 15.9951 7.17781C15.7144 6.96479 15.5345 6.64193 15.1745 5.99623L14.8468 5.40837C13.5802 3.13612 12.9469 2 12 2C11.0531 2 10.4198 3.13613 9.15316 5.40838L8.82547 5.99623C8.46553 6.64194 8.28555 6.96479 8.00494 7.17781C7.72433 7.39083 7.37485 7.4699 6.67589 7.62805Z"/></svg> Dodaj u omiljene'}</button>
-            <button role="menuitem" data-passed="${esc(s.sifra)}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path stroke-linejoin="round" d="M8.5 12.5L10.5 14.5L15.5 9.5"/></g></svg> Položen</button>
-            <button role="menuitem" class="danger" data-remove="${esc(s.sifra)}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M9.1709 4C9.58273 2.83481 10.694 2 12.0002 2C13.3064 2 14.4177 2.83481 14.8295 4"/><path d="M20.5001 6H3.5"/><path d="M18.8332 8.5L18.3732 15.3991C18.1962 18.054 18.1077 19.3815 17.2427 20.1907C16.3777 21 15.0473 21 12.3865 21H11.6132C8.95235 21 7.62195 21 6.75694 20.1907C5.89194 19.3815 5.80344 18.054 5.62644 15.3991L5.1665 8.5"/><path d="M9.5 11L10 16"/><path d="M14.5 11L14 16"/></g></svg> Ukloni sa liste</button></div>` : '';
-        items += `<div class="mi${S.pick === s.sifra ? ' on' : ''}${S.menuFor === s.sifra ? ' menu' : ''}"><button class="mimain" data-pick="${esc(s.sifra)}"><span class="st ${st}"></span><span class="mt"><span class="mn">${esc(s.predmet)}</span><span class="mm">${meta}</span></span>${fw.length ? avatarStack(fw, 20, 2) : ''}</button>${starBtn(s.sifra)}<button type="button" class="mimore" data-mimenu="${esc(s.sifra)}" aria-label="Opcije za ${esc(s.predmet)}" aria-expanded="${S.menuFor === s.sifra}"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></g></svg></button>${menu}</div>`;
-      }
-    }
-    box.innerHTML = `
-      <div class="flabel">Moji ispiti <span class="fl-acts"><button data-sort="${sortDir() === 'asc' ? 'desc' : 'asc'}" title="${sortDir() === 'asc' ? 'Semestri rastuće (1→8)' : 'Semestri opadajuće (8→1)'} · klikni da obrneš" aria-label="Semestri ${sortDir() === 'asc' ? 'rastuće, promeni na opadajuće' : 'opadajuće, promeni na rastuće'}">${sortDir() === 'asc' ? '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M4 16L13 16"/><path d="M6 11H13"/><path d="M8 6L13 6"/><path stroke-linejoin="round" d="M17 4V20L20 16"/></g></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M4 8H13"/><path d="M6 13H13"/><path d="M8 18H13"/><path stroke-linejoin="round" d="M17 20V4L20 8"/></g></svg>'}</button></span></div>
-      <div class="seg sm" role="group" aria-label="Moji ispiti">
-        <button data-tab="todo" aria-pressed="${S.tab === 'todo'}">Bez termina<span class="n">${todo.length}</span></button>
-        <button data-tab="done" aria-pressed="${S.tab === 'done'}">Zakazani<span class="n">${done.length}</span></button>
-        <button data-tab="all" aria-pressed="${S.tab === 'all'}">Svi<span class="n">${MY.length}</span></button>
-      </div>
-      <div class="mylist">${items}</div>
-      ${S.tab !== 'done' ? (S.adding ? `<div class="addbox"><div class="search">${SEARCH_ICON}<input id="addQ" type="search" placeholder="Pronađi predmet iz svog programa" autocomplete="off" aria-label="Pronađi predmet" value="${esc(S.addQ || '')}"></div><div id="addList" class="addlist"></div><button type="button" class="btn ghost sm" data-add-close>Gotovo</button></div>` : `<button type="button" class="addbtn" data-add-open><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15"/></g></svg> Dodaj ispit</button>`) : ''}`;
-    if (S.adding) { renderAddList(); const aq = $('#addQ'); aq.addEventListener('input', e => { S.addQ = e.target.value; renderAddList(); }); }
-  }
-
+  if (!p) { box.innerHTML = `<div class="empty"><strong>Podesi profil</strong>Studije, godina, modul i ispiti koji su ti ostali.<div><button class="btn primary" data-open-settings>Podesi</button></div></div>`; $('#fcount').textContent = ''; return; }
+  const q = S.f.q ? fold(S.f.q) : '';
+  const hit = s => !q || q.split(/\s+/).every(w => fold(s.predmet + ' ' + s.sifra).includes(w));
+  const favs = favSet(), list = MY.filter(hit);
+  const fav = list.filter(s => favs.has(s.sifra)), todo = list.filter(s => !favs.has(s.sifra) && !s.plan), done = list.filter(s => !favs.has(s.sifra) && s.plan);
+  const passed = Object.entries(p.passed || {}).map(([k, v]) => ({ sifra: k, ...v })).filter(x => !q || fold(x.n).includes(q)).sort((a, b) => (b.at || '').localeCompare(a.at || ''));
+  const planned = MY.filter(s => s.plan).length, pct = MY.length ? Math.round(100 * planned / MY.length) : 0;
+  let h = `<div class="flabel">Moji ispiti <span class="fl-acts"><button data-sort="${sortDir() === 'asc' ? 'desc' : 'asc'}" title="${sortDir() === 'asc' ? 'Semestri rastuće (1→8)' : 'Semestri opadajuće (8→1)'} · klikni da obrneš" aria-label="Semestri ${sortDir() === 'asc' ? 'rastuće, promeni na opadajuće' : 'opadajuće, promeni na rastuće'}">${sortDir() === 'asc' ? '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M4 16L13 16"/><path d="M6 11H13"/><path d="M8 6L13 6"/><path stroke-linejoin="round" d="M17 4V20L20 16"/></g></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M4 8H13"/><path d="M6 13H13"/><path d="M8 18H13"/><path stroke-linejoin="round" d="M17 20V4L20 8"/></g></svg>'}</button></span></div>`;
+  if (MY.length) h += `<div class="progress" title="${planned} od ${MY.length} zakazano"><div class="pbar"><i style="width:${pct}%"></i></div><span><b>${planned}</b> od ${MY.length} zakazano</span></div>`;
+  if (!MY.length && !passed.length) h += `<div class="muted" style="padding:8px 4px">Nemaš ispita na listi. Dodaj ih ispod.</div>`;
+  else if (q && !list.length && !passed.length) h += `<div class="muted" style="padding:8px 4px">Nema rezultata za „${esc(S.f.q)}".</div>`;
+  if (fav.length) h += groupHtml('fav', 'Omiljeni', fav.length, fav.map(rowHtml).join(''));
+  if (todo.length || (!q && MY.length)) h += groupHtml('todo', 'Bez termina', todo.length, todo.length ? todo.map(rowHtml).join('') : '<div class="muted" style="padding:6px 10px">Svi ispiti su zakazani.</div>');
+  if (done.length) h += groupHtml('done', 'Zakazani', done.length, done.map(rowHtml).join(''));
+  if (passed.length) h += groupHtml('passed', 'Položeni', passed.length, passed.map(x => `<div class="mi passed"><a class="mimain" href="#podesavanja-polozeni" title="${esc(x.n)} · položen"><span class="st ok"></span><span class="mn">${esc(x.n)}</span><span class="mr muted">${x.ocena ? 'ocena ' + x.ocena : '✓'}</span></a></div>`).join(''));
+  h += S.adding ? `<div class="addbox"><div class="search">${SEARCH_ICON}<input id="addQ" type="search" placeholder="Pronađi predmet iz svog programa" autocomplete="off" aria-label="Pronađi predmet" value="${esc(S.addQ || '')}"></div><div id="addList" class="addlist"></div><button type="button" class="btn ghost sm" data-add-close>Gotovo</button></div>` : `<button type="button" class="addbtn" data-add-open><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15"/></g></svg> Dodaj ispit</button>`;
+  box.innerHTML = h;
+  if (S.adding) { renderAddList(); const aq = $('#addQ'); aq.addEventListener('input', e => { S.addQ = e.target.value; renderAddList(); }); }
+  $('#fcount').textContent = `(${MY.filter(s => !s.plan).length})`;
+  renderViewMenu();
+}
+// ---- Prikaz ▾ (u traci kalendara) ----
+function renderViewMenu() {
+  const p = prof(), m = $('#viewMenu'); if (!m) return;
   let vo = '';
   if (p) vo += `<label class="switch" for="scopeSw">Prikaži i ostale ispite<input type="checkbox" id="scopeSw" ${S.scope === 'svi' ? 'checked' : ''}></label>`;
   if (p && FR.friends.length) vo += `<label class="switch" for="friendsSw">Prikaži ispite prijatelja<input type="checkbox" id="friendsSw" ${S.showFriends ? 'checked' : ''}></label>`;
-  if (S.rokovi.length > 1) {
-    vo += `<div class="flabel" style="margin-top:6px">Rokovi <button data-clear-rok ${S.f.rok.size ? '' : 'hidden'}>poništi</button></div><div class="chips">` +
-      S.rokovi.map(r => `<button class="chip" data-rok="${esc(r.meta.id)}" aria-pressed="${S.f.rok.has(r.meta.id)}" style="--c:${S.rokColor[r.meta.id]}"><span class="dot"></span>${esc(rokName(r.meta.id))}</button>`).join('') + '</div>';
-  }
-  $('#viewOpts').innerHTML = vo;
-  $('#viewOpts').hidden = !vo;
-  const todoN = MY.filter(s => !s.plan).length;
-  $('#fcount').textContent = p ? `(${todoN})` : '';
+  if (S.rokovi.length > 1) vo += `<div class="flabel" style="margin-top:4px">Rokovi <button data-clear-rok ${S.f.rok.size ? '' : 'hidden'}>poništi</button></div><div class="chips">` + S.rokovi.map(r => `<button class="chip" data-rok="${esc(r.meta.id)}" aria-pressed="${S.f.rok.has(r.meta.id)}" style="--c:${S.rokColor[r.meta.id]}"><span class="dot"></span>${esc(rokName(r.meta.id))}</button>`).join('') + '</div>';
+  m.innerHTML = vo || '<span class="muted">Nema dodatnih opcija.</span>';
+  const n = (S.scope === 'svi' ? 1 : 0) + S.f.rok.size;
+  $('#viewMenuBtn').classList.toggle('on', !!n);
 }
+function setViewMenu(open) { $('#viewMenu').hidden = !open; $('#viewMenuBtn').setAttribute('aria-expanded', open); }
+$('#viewMenuBtn').addEventListener('click', e => { e.stopPropagation(); setViewMenu($('#viewMenu').hidden); });
+document.addEventListener('click', e => { if (!$('#viewMenu').hidden && !e.target.closest('.vmenu-wrap')) setViewMenu(false); });
+$('#viewMenu').addEventListener('click', e => {
+  const r = e.target.closest('[data-rok]'); if (r) { const v = r.dataset.rok; S.f.rok.has(v) ? S.f.rok.delete(v) : S.f.rok.add(v); refresh(); return; }
+  if (e.target.closest('[data-clear-rok]')) { S.f.rok.clear(); refresh(); }
+});
+$('#viewMenu').addEventListener('change', e => {
+  if (e.target.id === 'scopeSw') { S.scope = e.target.checked ? 'svi' : 'moji'; saveUi(); refresh(); }
+  if (e.target.id === 'friendsSw') { S.showFriends = e.target.checked; saveUi(); refresh(); }
+});
 
 $('#filters').addEventListener('click', e => {
   const mm = e.target.closest('[data-mimenu]'); if (mm) { S.menuFor = S.menuFor === mm.dataset.mimenu ? null : mm.dataset.mimenu; renderSide(); return; }
@@ -1658,14 +1724,8 @@ $('#filters').addEventListener('click', e => {
   const ad = e.target.closest('[data-addsub]'); if (ad) { addToList(ad.dataset.addsub); setTimeout(() => { const aq = $('#addQ'); if (aq) aq.focus(); }, 20); return; }
   if (e.target.closest('[data-pick]') && S.menuFor) S.menuFor = null;
   if (e.target.closest('[data-fav], [data-sort], [data-passed]')) { S.menuFor = null; return; } // obrađuje globalni rukovalac
-  const t = e.target.closest('[data-tab]'); if (t) { S.tab = t.dataset.tab; renderSide(); return; }
-  const r = e.target.closest('[data-rok]'); if (r) { const v = r.dataset.rok; S.f.rok.has(v) ? S.f.rok.delete(v) : S.f.rok.add(v); refresh(); return; }
-  if (e.target.closest('[data-clear-rok]')) { S.f.rok.clear(); refresh(); return; }
+  const gh = e.target.closest('[data-grp]'); if (gh) { S.closed[gh.dataset.grp] = !S.closed[gh.dataset.grp]; lsSet(LS_GROUPS, JSON.stringify(S.closed)); renderSide(); return; }
   const pk = e.target.closest('[data-pick]'); if (pk) { S.pick === pk.dataset.pick ? cancelPick() : startPick(pk.dataset.pick); return; }
-});
-$('#filters').addEventListener('change', e => {
-  if (e.target.id === 'scopeSw') { S.scope = e.target.checked ? 'svi' : 'moji'; saveUi(); refresh(); }
-  if (e.target.id === 'friendsSw') { S.showFriends = e.target.checked; saveUi(); refresh(); }
 });
 $('#filtersToggle').addEventListener('click', e => {
   const f = $('#filters'); const open = f.classList.toggle('collapsed') === false; e.currentTarget.setAttribute('aria-expanded', open);
@@ -1756,6 +1816,8 @@ function startPick(sifra) {
   if (window.matchMedia('(max-width: 860px)').matches) $('#pickArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 function cancelPick() { S.pick = null; refresh(); }
+// klik na prazan deo kalendara zatvara fioku (osim dok biraš termin)
+$('#viewArea').addEventListener('click', e => { if (S.selDay && !S.pick && !e.target.closest('button, a, input, select, label, .mcell, tr, .yd')) closeDrawer(); });
 let pendingConfirm = null;
 // svako zakazivanje ide preko potvrde (sa pregledom konflikata)
 function schedule(sifra, inst, confirmed) {
@@ -1867,6 +1929,7 @@ function confPill(s) {
 }
 
 function renderPickBar() {
+  $('#pickArea').innerHTML = ''; return; // biranje termina se prikazuje u fioci
   const s = S.pick ? MYMAP.get(S.pick) : null;
   if (!s) { $('#pickArea').innerHTML = ''; return; }
   const n = s.inst.length;
@@ -1943,7 +2006,7 @@ function renderMonth() {
     const d = new Date(start); d.setDate(start.getDate() + i);
     if (i === 35 && d.getMonth() !== S.m) break;
     const k = iso(d), list = days[k] || [], pl = (plannedBy[k] || []).slice().sort((a, b) => a.plan.vreme.localeCompare(b.plan.vreme) || cmpSubj(a, b)), out = d.getMonth() !== S.m;
-    const chips = pl.slice(0, 3).map(s => `<div class="pchip ${s.conf || ''}" title="${esc(s.predmet)} · ${s.plan.vreme}${s.conf ? ' · ' + esc(conflictText(s.confWith)) : ''}"><b>${s.plan.vreme}</b> ${esc(s.predmet)}</div>`).join('') + (pl.length > 3 ? `<div class="opts">+${pl.length - 3} zakazano</div>` : '');
+    const MAXC = 4, chips = pl.slice(0, pl.length > MAXC ? MAXC - 1 : MAXC).map(s => `<div class="pchip ${s.conf || ''}" title="${esc(s.predmet)} · ${s.plan.vreme}${s.conf ? ' · ' + esc(conflictText(s.confWith)) : ''}"><b>${s.plan.vreme}</b><span>${esc(s.predmet)}</span></div>`).join('') + (pl.length > MAXC ? `<div class="opts more">+${pl.length - MAXC + 1} zakazano</div>` : '');
     const base = ['mcell', out && 'out', k === todayIso && 'today', k === S.selDay && 'sel', d.getDay() % 6 === 0 && 'weekend'];
     let inner = `<div class="dn"><span>${d.getDate()}</span>`, cls, clickable = false, attr = `data-day="${k}"`;
     if (pick) {
@@ -1960,7 +2023,7 @@ function renderMonth() {
     } else if (mine) {
       const options = uniq(list.filter(e => { const s = MYMAP.get(e.sifra); return s && !s.plan; }).map(e => e.sifra)).length;
       cls = [...base, (pl.length || list.length) && 'has'];
-      inner += `</div>${chips}` + (options ? `<div class="opts">${num(options, 'ispit za izbor', 'ispita za izbor', 'ispita za izbor')}</div>` : '');
+      inner += `</div>${chips}` + (options ? `<div class="opts" title="${num(options, 'ispit sa tvoje liste može', 'ispita sa tvoje liste mogu', 'ispita sa tvoje liste može')} da se zakaže ovog dana">+${options} za izbor</div>` : '');
       clickable = pl.length || list.length;
     } else {
       cls = [...base, list.length && 'has'];
@@ -2057,14 +2120,31 @@ function schedRow(s, inst, opts = {}) {
     ${(isCur ? s.confWith.length : cs.length) ? `<div class="note ${isCur ? s.conf : lvl}">${esc(conflictText(isCur ? s.confWith : cs))}</div>` : ''}
   </div>${btn}</div>`;
 }
+const DCLOSE = '<button type="button" class="iconbtn sm dclose" data-close-drawer aria-label="Zatvori"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M19.0068 5L5.00684 19"/><path d="M19 19L5 5"/></g></svg></button>';
+function drawerOpen() { return ROUTES[route] && ROUTES[route].sec === 'planer' && !!(S.pick || S.selDay); }
+function closeDrawer() { S.pick = null; S.selDay = null; refresh(); }
+// kalendar se pomeri ulevo samo ako bi fioka prekrila izabrani dan ili označene termine
+function fitDrawer(open) {
+  const main = document.querySelector('#sec-planer .main');
+  if (!open || !window.matchMedia('(min-width: 1101px)').matches || S.view !== 'mesec') { main.classList.remove('shifted'); return; }
+  main.classList.remove('shifted');
+  const edge = window.innerWidth - 16 - Math.min(400, window.innerWidth - 32) - 8;
+  const targets = document.querySelectorAll(S.pick ? '#viewArea .mcell.opt' : '#viewArea .mcell.sel');
+  const hidden = [...targets].some(el => el.getBoundingClientRect().right > edge);
+  main.classList.toggle('shifted', hidden);
+}
 function renderDay() {
   const p = $('#dayPanel');
+  const open = drawerOpen();
+  p.classList.toggle('open', open); p.setAttribute('aria-hidden', !open);
+  fitDrawer(open);
+  if (!open) { p.innerHTML = ''; return; }
   const pick = S.pick ? MYMAP.get(S.pick) : null;
   if (pick) {
-    let h = `<div class="dh"><h2>${esc(pick.predmet)}</h2><div class="dsub">${pick.sem}. semestar · ${termina(pick.inst.length)}</div></div><div class="dsec">`;
+    let h = `<div class="dh">${DCLOSE}<div class="deyebrow">Biraš termin</div><h2>${esc(pick.predmet)}</h2><div class="dsub">${pick.sem}. semestar · ${pick.inst.length ? termina(pick.inst.length) + ' · klikni označen dan ili termin ispod' : 'nema termina'}</div></div><div class="dsec">`;
     if (!pick.inst.length) h += `<div class="empty">Nema termina u objavljenim rokovima.${S.isAdmin ? '<br><button class="btn sm" data-manage>Dodaj rok</button>' : ''}</div>`;
     for (const i of pick.inst) h += schedRow(pick, i, { dateTitle: true });
-    h += `<div class="actions" style="margin-top:8px;justify-content:space-between"><button class="btn ghost sm" data-passed="${esc(pick.sifra)}">Položen, ukloni sa liste</button><button class="btn sm" data-cancel-pick>Gotovo</button></div></div>`;
+    h += `<div class="actions" style="margin-top:8px;justify-content:space-between"><button class="btn ghost sm" data-passed="${esc(pick.sifra)}">Položen</button><span style="flex:1"></span>${pick.plan ? `<button class="btn sm" data-unplan="${esc(pick.sifra)}">Ukloni termin</button>` : ''}<button class="btn sm" data-cancel-pick>Gotovo</button></div></div>`;
     p.innerHTML = h; return;
   }
   if (!S.selDay) {
@@ -2076,7 +2156,7 @@ function renderDay() {
   const k = S.selDay;
   const pl = MY.filter(s => s.plan && s.plan.datum === k).sort((a, b) => a.plan.vreme.localeCompare(b.plan.vreme) || cmpSubj(a, b));
   const list = FILTERED.filter(e => e.datum === k && !(MYMAP.get(e.sifra) && MYMAP.get(e.sifra).plan && MYMAP.get(e.sifra).plan.rokId === e.rokId));
-  let h = `<div class="dh"><h2>${cap(fmtDay(k))}</h2><div class="dsub">${pl.length ? `${pl.length} zakazano · ` : ''}${ispita(list.length)} ${S.scope === 'moji' && prof() ? 'sa tvoje liste' : 'u rasporedu'}</div></div>`;
+  let h = `<div class="dh">${DCLOSE}<h2>${cap(fmtDay(k))}</h2><div class="dsub">${pl.length ? `${pl.length} zakazano · ` : ''}${ispita(list.length)} ${S.scope === 'moji' && prof() ? 'sa tvoje liste' : 'u rasporedu'}</div></div>`;
   if (pl.length) {
     h += `<div class="dsec"><h4>Moj plan</h4>`;
     for (const s of pl) h += `<div class="xrow mine ${s.conf || ''}"><div class="xi"><div class="xn">${esc(s.predmet)}</div><div class="xm"><span class="tag mono">${s.plan.vreme}</span><span class="tag">${s.sem}. sem.</span>${rokTag(s.plan.rokId)}</div>${s.conf ? `<div class="note ${s.conf}">${esc(conflictText(s.confWith))}</div>` : ''}</div><button class="btn sm" data-pick="${esc(s.sifra)}">Promeni</button></div>`;
@@ -2163,7 +2243,6 @@ function selectDay(k) {
   S.selDay = k; const dt = parseIso(k);
   if (S.view === 'godina' || S.view === 'plan' || S.y !== dt.getFullYear() || S.m !== dt.getMonth()) { S.y = dt.getFullYear(); S.m = dt.getMonth(); if (S.view !== 'lista') S.view = 'mesec'; }
   renderView(); renderDay();
-  if (window.matchMedia('(max-width: 1320px)').matches) $('#dayPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 document.addEventListener('click', e => {
   const t = e.target;
@@ -2177,7 +2256,8 @@ document.addEventListener('click', e => {
     else { S.selDay = k; renderView(); }
     return;
   }
-  const d = t.closest('[data-day]'); if (d) { selectDay(d.dataset.day); return; }
+  if (t.closest('[data-close-drawer]')) { closeDrawer(); return; }
+  const d = t.closest('[data-day]'); if (d) { if (S.selDay === d.dataset.day && !S.pick && S.view === 'mesec') { closeDrawer(); return; } selectDay(d.dataset.day); return; }
   const fj = t.closest('[data-fjoin2]'); if (fj) { const ex = examById(fj.dataset.fjoin2); if (ex) schedule(fj.dataset.fsifra, ex); return; }
   const fo = t.closest('[data-fopen-main]'); if (fo) { openFriends(fo.dataset.fopenMain); return; }
   const sc = t.closest('[data-sched]');
@@ -2198,7 +2278,7 @@ document.addEventListener('click', e => { if (S.menuFor && !e.target.closest('.m
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && S.menuFor) { S.menuFor = null; renderSide(); return; }
   if (e.target.matches('input, select, textarea') || document.querySelector('dialog[open]')) return;
-  if (e.key === 'Escape' && S.pick) { cancelPick(); return; }
+  if (e.key === 'Escape' && (S.pick || S.selDay)) { closeDrawer(); return; }
   if (S.view !== 'mesec' && S.view !== 'godina') return;
   if (e.key === 'ArrowLeft') step(-1); else if (e.key === 'ArrowRight') step(1);
 });
@@ -3971,6 +4051,7 @@ function setRouteUi() {
   $('#pageTitle').textContent = ROUTES[route].title;
   document.body.dataset.route = route;
   $('#filtersToggle').hidden = sec !== 'planer';
+  $('#hSearch').hidden = sec !== 'planer';
 }
 function applyRoute() {
   let r = hashRoute() || 'plan';
