@@ -901,6 +901,27 @@ body.gate-open { overflow: hidden; }
 @media (max-width: 860px) {
   .memenu { left: auto; right: max(12px, env(safe-area-inset-right, 0px)); bottom: auto; top: calc(env(safe-area-inset-top, 0px) + 66px); width: min(300px, calc(100vw - 24px)); }
 }
+
+/* isecanje slike */
+#cropDlg { width: min(560px, calc(100vw - 24px)); }
+.cropwrap { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 14px; }
+.cropwrap header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.cropwrap h2 { margin: 0; font-size: 22px; }
+.cropwrap > .muted { margin: -6px 0 0; font-size: 13.5px; }
+.cropbody { display: flex; gap: 16px; align-items: flex-start; }
+.cropstage { position: relative; width: min(340px, calc(100vw - 80px)); aspect-ratio: 1; flex: none; overflow: hidden; border-radius: var(--rad-lg); background: #111; touch-action: none; cursor: grab; user-select: none; }
+.cropstage:active { cursor: grabbing; }
+.cropstage img { position: absolute; left: 0; top: 0; max-width: none; transform-origin: 0 0; pointer-events: none; }
+.cropmask { position: absolute; inset: 0; pointer-events: none; border-radius: 36%; box-shadow: 0 0 0 999px rgb(0 0 0 / .45); outline: 2px solid rgb(255 255 255 / .9); outline-offset: -2px; }
+.cropside { display: flex; flex-direction: column; gap: 6px; align-items: center; }
+.cropprev { width: 96px; height: 96px; border-radius: 36%; background: var(--tile); }
+.cropzoom { display: flex; align-items: center; gap: 8px; }
+.cropzoom input { flex: 1; accent-color: var(--brand); }
+.cropzoom .iconbtn { font-size: 18px; font-weight: 600; }
+.photobtn { position: relative; border: 0; background: none; padding: 0; border-radius: 36%; cursor: pointer; }
+.photobtn > span { position: absolute; right: -4px; bottom: -4px; width: 28px; height: 28px; border-radius: 10px; background: var(--surface); color: var(--ink); display: grid; place-items: center; box-shadow: var(--shadow-btn-2); }
+.photobtn:hover .av { filter: brightness(.92); }
+@media (max-width: 560px) { .cropbody { flex-direction: column; align-items: center; } .cropside { flex-direction: row; } }
 </style>
 </head>
 <body>
@@ -971,6 +992,19 @@ body.gate-open { overflow: hidden; }
   <div class="mmsep" id="mmSep" hidden></div>
   <button type="button" role="menuitem" id="mmAuth" hidden></button>
 </div>
+
+<dialog id="cropDlg" aria-labelledby="cropTitle">
+  <div class="cropwrap">
+    <header><h2 id="cropTitle">Podesi profilnu sliku</h2><button type="button" class="iconbtn" data-crop-x aria-label="Zatvori"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M19.0068 5L5.00684 19"/><path d="M19 19L5 5"/></g></svg></button></header>
+    <p class="muted">Prevuci sliku da izabereš deo, a zumiraj točkićem, klizačem ili sa dva prsta.</p>
+    <div class="cropbody">
+      <div class="cropstage" id="cropStage" tabindex="0" aria-label="Oblast isecanja. Strelice pomeraju sliku, plus i minus zumiraju."><img id="cropImg" alt="" draggable="false"><div class="cropmask"></div></div>
+      <div class="cropside"><span class="muted" style="font-size:12.5px">Pregled</span><canvas id="cropPrev" width="96" height="96" class="cropprev"></canvas><canvas width="40" height="40" class="cropprev sm" id="cropPrevSm" hidden></canvas></div>
+    </div>
+    <div class="cropzoom"><button type="button" class="iconbtn sm" data-crop-z="-" aria-label="Umanji">−</button><input type="range" id="cropZoom" min="1" max="5" step="0.01" value="1" aria-label="Zum"><button type="button" class="iconbtn sm" data-crop-z="+" aria-label="Uvećaj">+</button></div>
+    <div class="actions"><button type="button" class="btn ghost" data-crop-reset>Vrati</button><span class="grow" style="flex:1"></span><button type="button" class="btn" data-crop-x>Otkaži</button><button type="button" class="btn primary" data-crop-ok>Primeni</button></div>
+  </div>
+</dialog>
 
 <dialog id="setupDlg" aria-labelledby="wizTitle"><div class="wiz" id="wiz"></div></dialog>
 
@@ -1356,6 +1390,19 @@ const Me = {
     this.mode = db && this.uid ? 'db' : (lsSet('raspored-ispita:test', '1') ? 'local' : 'memory');
   },
   ref() { return this.db.doc(`data/users/${this.uid}/profile`); },
+  // original profilne slike (do 1024 px) + poslednje isecanje, da se kasnije može ponovo podesiti
+  async loadPhoto() {
+    try {
+      if (this.mode === 'db') { const s = await this.db.doc(`data/users/${this.uid}/photo`).get(); return s.exists ? s.data() : null; }
+      return JSON.parse(lsGet('raspored-ispita:photo') || 'null');
+    } catch { return null; }
+  },
+  async savePhoto(v) {
+    try {
+      if (this.mode === 'db') { const r = this.db.doc(`data/users/${this.uid}/photo`); if (v) await r.set(v); else await r.delete(); }
+      else if (v) lsSet('raspored-ispita:photo', JSON.stringify(v)); else { try { localStorage.removeItem('raspored-ispita:photo'); } catch {} }
+    } catch {}
+  },
   async load() {
     if (this.mode === 'db') {
       const s = await withTimeout(this.ref().get(), 10000); this.data = s.exists ? JSON.parse(JSON.stringify(s.data())) : null;
@@ -2277,8 +2324,8 @@ const chipBtn = (field, v, label, title) => `<button type="button" class="chip" 
 function profileFormHtml() {
   const d = W.d;
   return `<div class="pform">
-    <div class="photo">${avatarHtml({ uid: Me.uid, ime: d.ime, prezime: d.prezime, foto: d.foto }, 84)}
-      <div class="pbtns"><div class="row"><label class="btn sm" for="fFoto"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="13" r="3"/><path d="M14.2222 21H9.77778C6.65675 21 5.09624 21 3.97524 20.2646C3.48995 19.9462 3.07328 19.5371 2.74902 19.0607C2 17.9601 2 16.4279 2 13.3636C2 10.2994 2 8.76721 2.74902 7.6666C3.07328 7.19014 3.48995 6.78104 3.97524 6.46268C4.69555 5.99013 5.59733 5.82123 6.978 5.76086C7.63685 5.76086 8.20412 5.27068 8.33333 4.63636C8.52715 3.68489 9.37805 3 10.3663 3H13.6337C14.6219 3 15.4728 3.68489 15.6667 4.63636C15.7959 5.27068 16.3631 5.76086 17.022 5.76086C18.4027 5.82123 19.3044 5.99013 20.0248 6.46268C20.51 6.78104 20.9267 7.19014 21.251 7.6666C22 8.76721 22 10.2994 22 13.3636C22 16.4279 22 17.9601 21.251 19.0607C20.9267 19.5371 20.51 19.9462 20.0248 20.2646C18.9038 21 17.3433 21 14.2222 21Z"/><path d="M19 10H18"/></g></svg> ${d.foto ? 'Promeni sliku' : 'Dodaj sliku'}</label>${d.foto ? '<button type="button" class="btn ghost sm" data-foto-del>Ukloni</button>' : ''}</div>
+    <div class="photo">${d.foto ? `<button type="button" class="photobtn" data-foto-crop aria-label="Podesi sliku">${avatarHtml({ uid: Me.uid, ime: d.ime, prezime: d.prezime, foto: d.foto }, 84)}<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M14.3601 4.07866L15.2869 3.15178C16.8226 1.61607 19.3125 1.61607 20.8482 3.15178C22.3839 4.68748 22.3839 7.17735 20.8482 8.71306L19.9213 9.63993M14.3601 4.07866C14.3601 4.07866 14.4759 6.04828 16.2138 7.78618C17.9517 9.52407 19.9213 9.63993 19.9213 9.63993M19.9213 9.63993L11.4001 18.1612C10.8229 18.7383 10.5344 19.0269 10.2162 19.2751C9.84082 19.5679 9.43469 19.8189 9.00498 20.0237C8.6407 20.1973 8.25352 20.3263 7.47918 20.5844L4.19792 21.6782L3.39584 21.9456C3.01478 22.0726 2.59466 21.9734 2.31063 21.6894C2.0266 21.4053 1.92743 20.9852 2.05445 20.6042L2.32181 19.8021L3.41556 16.5208C3.67368 15.7465 3.80273 15.3593 3.97634 14.995C4.18114 14.5653 4.43213 14.1592 4.7249 13.7838C4.97308 13.4656 5.26166 13.1771 5.83882 12.5999L14.3601 4.07866M4.19792 21.6782L2.32181 19.8021"/></svg></span></button>` : avatarHtml({ uid: Me.uid, ime: d.ime, prezime: d.prezime, foto: d.foto }, 84)}
+      <div class="pbtns"><div class="row"><label class="btn sm" for="fFoto"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="13" r="3"/><path d="M14.2222 21H9.77778C6.65675 21 5.09624 21 3.97524 20.2646C3.48995 19.9462 3.07328 19.5371 2.74902 19.0607C2 17.9601 2 16.4279 2 13.3636C2 10.2994 2 8.76721 2.74902 7.6666C3.07328 7.19014 3.48995 6.78104 3.97524 6.46268C4.69555 5.99013 5.59733 5.82123 6.978 5.76086C7.63685 5.76086 8.20412 5.27068 8.33333 4.63636C8.52715 3.68489 9.37805 3 10.3663 3H13.6337C14.6219 3 15.4728 3.68489 15.6667 4.63636C15.7959 5.27068 16.3631 5.76086 17.022 5.76086C18.4027 5.82123 19.3044 5.99013 20.0248 6.46268C20.51 6.78104 20.9267 7.19014 21.251 7.6666C22 8.76721 22 10.2994 22 13.3636C22 16.4279 22 17.9601 21.251 19.0607C20.9267 19.5371 20.51 19.9462 20.0248 20.2646C18.9038 21 17.3433 21 14.2222 21Z"/><path d="M19 10H18"/></g></svg> ${d.foto ? 'Promeni sliku' : 'Dodaj sliku'}</label>${d.foto ? '<button type="button" class="btn sm" data-foto-crop>Podesi isecanje</button><button type="button" class="btn ghost sm" data-foto-del>Ukloni</button>' : ''}</div>
         <span class="muted">Opciono. Bez slike prikazujemo inicijale.</span><input type="file" id="fFoto" accept="image/*" hidden></div></div>
     <div class="form-row">
       <label class="field" for="fIme">Ime<input id="fIme" data-pf="ime" value="${esc(d.ime)}" autocomplete="given-name" maxlength="40" required></label>
@@ -2442,7 +2489,8 @@ async function fileToAvatar(file) {
   if (e.target.id === 'setFriendsCal') { S.showFriends = e.target.checked; saveUi(); refresh(); return; }
   if (e.target.dataset && e.target.dataset.grade) { const p = prof(), k = e.target.dataset.grade; if (p && p.passed && p.passed[k]) { p.passed[k].ocena = +e.target.value || null; Me.save(); renderSettings(); } return; }
   if (e.target.id === 'fFoto' && e.target.files[0]) {
-    try { W.d.foto = await fileToAvatar(e.target.files[0]); renderWizard(); }
+    const f = e.target.files[0]; e.target.value = '';
+    try { const src = await fileToSource(f); openCropper(src, null); }
     catch { toast('Ovu sliku nije moguće učitati. Probaj JPG ili PNG.'); }
   }
 }));
@@ -2451,7 +2499,8 @@ async function fileToAvatar(file) {
   const ch = t.closest('[data-choose]'); if (ch) { const f = ch.dataset.choose; choose(f, f === 'godina' || f === 'akred' ? +ch.dataset.v : ch.dataset.v); return; }
   const nv = t.closest('[data-wnav]'); if (nv) { wizGo(+nv.dataset.wnav); return; }
   const ws = t.closest('[data-wstep]'); if (ws) { W.step = +ws.dataset.wstep; renderWizard(); return; }
-  if (t.closest('[data-foto-del]')) { W.d.foto = ''; renderWizard(); return; }
+  if (t.closest('[data-foto-del]')) { W.d.foto = ''; W.d.fotoSrc = null; W.d.fotoCrop = null; W.d.fotoChanged = true; renderWizard(); return; }
+  if (t.closest('[data-foto-crop]')) { editCurrentPhoto(); return; }
   const sub = t.closest('[data-wsub]'); if (sub) { const r = W.d.remaining, k = sub.dataset.wsub; r.has(k) ? r.delete(k) : r.add(k); renderWizList(); return; }
   const sm = t.closest('[data-wsem]'); if (sm) { const cat = wizCatalog(), on = sm.dataset.on === '1'; for (const s of cat.values()) if (s.sem === +sm.dataset.wsem) on ? W.d.remaining.add(s.sifra) : W.d.remaining.delete(s.sifra); renderWizList(); return; }
   const bk = t.closest('[data-wbulk]'); if (bk) { const cat = wizCatalog(); W.d.remaining = bk.dataset.wbulk === 'cur' ? defaultRemaining(cat) : new Set(); renderWizList(); return; }
@@ -2477,6 +2526,7 @@ function finishWizard() {
     friends: old.friends || [], ignored: old.ignored || [], onboarded: true
   };
   Me.save();
+  if (d.fotoChanged) { Me.savePhoto(d.fotoSrc ? { src: d.fotoSrc, crop: d.fotoCrop } : null); d.fotoChanged = false; }
   const wasFirst = W.first;
   W.first = false;
   if ($('#setupDlg').open) $('#setupDlg').close();
@@ -2489,6 +2539,100 @@ function finishWizard() {
   toast(wasFirst ? `Zdravo, ${Me.data.ime}! ${ispita(Object.keys(remaining).length)} čeka planiranje.` : 'Podešavanja su sačuvana.');
 }
 
+
+
+// ================= Isecanje profilne slike =================
+const CROP_OUT = 256, CROP_MAX_SRC = 1024;
+// fajl → umanjen original (JPEG, najviše 1024 px) kao data URL
+async function fileToSource(file) {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = new Image();
+    await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = url; });
+    const k = Math.min(1, CROP_MAX_SRC / Math.max(img.naturalWidth, img.naturalHeight));
+    const c = document.createElement('canvas'); c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    return c.toDataURL('image/jpeg', 0.86);
+  } finally { URL.revokeObjectURL(url); }
+}
+async function editCurrentPhoto() {
+  const d = W.d; if (!d) return;
+  if (d.fotoSrc) { openCropper(d.fotoSrc, d.fotoCrop); return; }
+  const saved = await Me.loadPhoto();
+  if (saved && saved.src) openCropper(saved.src, saved.crop);
+  else if (d.foto) openCropper(d.foto, null); // starija slika bez originala
+}
+const CR = { img: null, src: '', w: 0, h: 0, zoom: 1, cx: 0.5, cy: 0.5, stage: 300, pointers: new Map(), pinch: null };
+const crBase = () => Math.max(CR.stage / CR.w, CR.stage / CR.h); // najmanja razmera koja pokriva okvir
+function crClamp() {
+  const sc = crBase() * CR.zoom, halfW = CR.stage / 2 / sc / CR.w, halfH = CR.stage / 2 / sc / CR.h;
+  CR.cx = Math.min(1 - halfW, Math.max(halfW, CR.cx));
+  CR.cy = Math.min(1 - halfH, Math.max(halfH, CR.cy));
+}
+function crDraw() {
+  crClamp();
+  const sc = crBase() * CR.zoom, el = $('#cropImg');
+  el.style.width = CR.w * sc + 'px'; el.style.height = CR.h * sc + 'px';
+  el.style.transform = `translate(${CR.stage / 2 - CR.cx * CR.w * sc}px, ${CR.stage / 2 - CR.cy * CR.h * sc}px)`;
+  $('#cropZoom').value = CR.zoom;
+  // pregled
+  const pv = $('#cropPrev'); const g = pv.getContext('2d'); g.clearRect(0, 0, pv.width, pv.height);
+  const side = CR.stage / sc; g.drawImage(CR.img, (CR.cx * CR.w) - side / 2, (CR.cy * CR.h) - side / 2, side, side, 0, 0, pv.width, pv.height);
+}
+async function openCropper(src, crop) {
+  const img = new Image();
+  await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = src; }).catch(() => null);
+  if (!img.naturalWidth) { toast('Ovu sliku nije moguće učitati.'); return; }
+  Object.assign(CR, { img, src, w: img.naturalWidth, h: img.naturalHeight, zoom: crop && crop.zoom || 1, cx: crop && crop.cx != null ? crop.cx : 0.5, cy: crop && crop.cy != null ? crop.cy : 0.5 });
+  $('#cropImg').src = src;
+  const dlg = $('#cropDlg'); if (!dlg.open) dlg.showModal();
+  CR.stage = $('#cropStage').clientWidth || 300;
+  crDraw();
+  setTimeout(() => $('#cropZoom').focus(), 30);
+}
+function crZoomTo(z, fx, fy) {
+  // zumiranje oko tačke (fx, fy u pikselima okvira): ta tačka ostaje na mestu
+  const old = crBase() * CR.zoom; z = Math.min(5, Math.max(1, z));
+  if (fx != null) {
+    const sx = CR.cx * CR.w + (fx - CR.stage / 2) / old, sy = CR.cy * CR.h + (fy - CR.stage / 2) / old, nw = crBase() * z;
+    CR.cx = (sx - (fx - CR.stage / 2) / nw) / CR.w; CR.cy = (sy - (fy - CR.stage / 2) / nw) / CR.h;
+  }
+  CR.zoom = z; crDraw();
+}
+function crApply() {
+  const sc = crBase() * CR.zoom, side = CR.stage / sc;
+  const c = document.createElement('canvas'); c.width = c.height = CROP_OUT;
+  const g = c.getContext('2d'); g.imageSmoothingQuality = 'high';
+  g.drawImage(CR.img, CR.cx * CR.w - side / 2, CR.cy * CR.h - side / 2, side, side, 0, 0, CROP_OUT, CROP_OUT);
+  const d = W.d; if (!d) return;
+  d.foto = c.toDataURL('image/jpeg', 0.88); d.fotoSrc = CR.src; d.fotoCrop = { zoom: +CR.zoom.toFixed(3), cx: +CR.cx.toFixed(4), cy: +CR.cy.toFixed(4) }; d.fotoChanged = true;
+  $('#cropDlg').close(); renderWizard(); syncWizButtons();
+}
+(function bindCropper() {
+  const st = $('#cropStage');
+  st.addEventListener('pointerdown', e => { st.setPointerCapture(e.pointerId); CR.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (CR.pointers.size === 2) { const [a, b] = [...CR.pointers.values()]; CR.pinch = { d: Math.hypot(a.x - b.x, a.y - b.y), z: CR.zoom }; } });
+  st.addEventListener('pointermove', e => {
+    const prev = CR.pointers.get(e.pointerId); if (!prev) return;
+    const cur = { x: e.clientX, y: e.clientY }; CR.pointers.set(e.pointerId, cur);
+    if (CR.pointers.size === 2 && CR.pinch) { const [a, b] = [...CR.pointers.values()]; const r = st.getBoundingClientRect(); crZoomTo(CR.pinch.z * Math.hypot(a.x - b.x, a.y - b.y) / CR.pinch.d, (a.x + b.x) / 2 - r.left, (a.y + b.y) / 2 - r.top); return; }
+    const sc = crBase() * CR.zoom; CR.cx -= (cur.x - prev.x) / sc / CR.w; CR.cy -= (cur.y - prev.y) / sc / CR.h; crDraw();
+  });
+  const up = e => { CR.pointers.delete(e.pointerId); if (CR.pointers.size < 2) CR.pinch = null; };
+  st.addEventListener('pointerup', up); st.addEventListener('pointercancel', up);
+  st.addEventListener('wheel', e => { e.preventDefault(); const r = st.getBoundingClientRect(); crZoomTo(CR.zoom * Math.exp(-e.deltaY * 0.0015), e.clientX - r.left, e.clientY - r.top); }, { passive: false });
+  st.addEventListener('keydown', e => {
+    const step = 0.02 / CR.zoom, k = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] }[e.key];
+    if (k) { e.preventDefault(); CR.cx += k[0]; CR.cy += k[1]; crDraw(); }
+    if (e.key === '+' || e.key === '=') crZoomTo(CR.zoom * 1.1); if (e.key === '-') crZoomTo(CR.zoom / 1.1);
+  });
+  $('#cropZoom').addEventListener('input', e => crZoomTo(+e.target.value, CR.stage / 2, CR.stage / 2));
+  $('#cropDlg').addEventListener('click', e => {
+    if (e.target.closest('[data-crop-ok]')) crApply();
+    if (e.target.closest('[data-crop-reset]')) { CR.zoom = 1; CR.cx = CR.cy = 0.5; crDraw(); }
+    if (e.target.closest('[data-crop-x]')) $('#cropDlg').close();
+    const zb = e.target.closest('[data-crop-z]'); if (zb) crZoomTo(CR.zoom * (zb.dataset.cropZ === '+' ? 1.2 : 1 / 1.2), CR.stage / 2, CR.stage / 2);
+  });
+})();
 
 // ================= Podešavanja (stranica) =================
 // Sekcije su registar: nova stavka = jedan red ovde + jedna grana u settingsBody().
@@ -2516,7 +2660,8 @@ function initDraft() {
   W.d = {
     ime: p.ime || '', prezime: p.prezime || '', indeks: p.indeks || '', fakultet: p.fakultet || FAKULTET_DEFAULT, foto: p.foto || '', share: p.share !== false,
     nivo: p.nivo || null, akred: p.akred || null, godina: p.godina || null, modul: p.modul || null,
-    remaining: new Set(Object.keys(p.remaining || {})), remKey: p.nivo ? keyOf(p) : null
+    remaining: new Set(Object.keys(p.remaining || {})), remKey: p.nivo ? keyOf(p) : null,
+    fotoSrc: null, fotoCrop: null, fotoChanged: false
   };
 }
 function enterSettings(sec) {
