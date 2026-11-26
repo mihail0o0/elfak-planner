@@ -816,6 +816,90 @@ body.gate-open { overflow: hidden; }
 .fl-acts button { display: inline-flex; align-items: center; gap: 4px; }
 .fl-acts [data-sort] { padding: 4px; border-radius: 8px; color: var(--ink-2); }
 .fl-acts [data-sort]:hover { color: var(--ink); }
+
+/* ================= Podešavanja ================= */
+.setgrid { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 20px; align-items: start; max-width: 1100px; }
+.setnav { padding: 12px; display: flex; flex-direction: column; gap: 6px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); }
+.setme { display: flex; align-items: center; gap: 12px; padding: 8px 8px 12px; text-decoration: none; color: var(--ink); border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+.setme > span { display: flex; flex-direction: column; min-width: 0; }
+.setme b { font-family: var(--f-head); font-weight: 500; font-size: 17px; }
+.setme > span > span { font-size: 12.5px; color: var(--ink-3); }
+.setgh { font-size: 11.5px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); padding: 10px 10px 4px; }
+.setlink { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: var(--rad-sm); color: var(--ink-2); text-decoration: none; font-weight: 500; }
+.setlink:hover { background: var(--tile); color: var(--ink); }
+.setlink.on { background: var(--brand-soft); color: var(--brand-fg); }
+.setlink .soon { margin-left: auto; font-style: normal; font-size: 11px; font-weight: 600; color: var(--ink-3); background: var(--tile); border-radius: 6px; padding: 1px 6px; }
+.setmain { min-width: 0; display: flex; flex-direction: column; gap: 14px; padding-bottom: 80px; }
+.sethead { display: flex; align-items: flex-start; gap: 10px; }
+.sethead h2 { margin: 0; font-size: 26px; }
+.sethead p { margin: 4px 0 0; color: var(--ink-2); max-width: 60ch; }
+.setback { display: none; flex: none; margin-top: 2px; }
+.setcard { padding: 20px; display: flex; flex-direction: column; gap: 18px; }
+.savebar { position: sticky; bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background: var(--toast-bg); color: var(--toast-fg); border-radius: var(--rad-lg); padding: 10px 10px 10px 16px; box-shadow: var(--shadow-pop); z-index: 5; }
+.savebar span { flex: 1; min-width: 200px; font-size: 14px; }
+.savebar .btn:not(.primary) { --b-bg: transparent; color: var(--toast-fg); border-color: rgb(255 255 255 / .25); box-shadow: none; }
+.themes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.choice.sm { min-height: 0; padding: 14px; align-items: flex-start; gap: 8px; }
+.choice.sm .cb { font-size: 17px; }
+.provic.ok { color: var(--ok); }
+.gradesel select { height: 34px; border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 0 8px; color: var(--ink); font: inherit; font-size: 13.5px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.sopt.done { opacity: .6; cursor: default; }
+.sopt.done .box { background: var(--ok); color: #fff; box-shadow: none; }
+@media (max-width: 760px) {
+  .setgrid { grid-template-columns: minmax(0, 1fr); }
+  .setgrid[data-pane="main"] .setnav { display: none; }
+  .setgrid[data-pane="nav"] .setmain { display: none; }
+  .setnav { position: static; }
+  .setback { display: inline-grid; }
+  .themes { grid-template-columns: minmax(0, 1fr); }
+}
+/* lista: meni „⋯" i dodavanje */
+.mi { position: relative; }
+.mimore { flex: none; border: 0; background: transparent; color: var(--ink-3); width: 30px; display: grid; place-items: center; border-radius: 10px; opacity: .55; }
+.mi:hover .mimore, .mi.menu .mimore, .mimore:focus-visible { opacity: 1; }
+.mimore:hover { color: var(--ink); background: var(--tile-hover); }
+@media (hover: none) { .mimore { opacity: 1; } }
+.mimenu { position: absolute; right: 4px; top: calc(100% - 4px); z-index: 15; background: var(--surface); border-radius: var(--rad-md); box-shadow: var(--shadow-pop); padding: 6px; display: flex; flex-direction: column; min-width: 220px; }
+.mimenu button { display: flex; align-items: center; gap: 10px; border: 0; background: none; color: var(--ink); text-align: left; padding: 9px 10px; border-radius: 10px; font-size: 14px; }
+.mimenu button:hover { background: var(--tile); }
+.mimenu button.danger { color: var(--bad); }
+.mimenu svg { color: var(--ink-3); } .mimenu .danger svg { color: var(--bad); }
+.addbtn { display: flex; align-items: center; gap: 8px; border: 1px dashed var(--line-strong); background: transparent; color: var(--ink-2); border-radius: var(--rad-sm); padding: 9px 12px; font-weight: 500; }
+.addbtn:hover { border-color: var(--brand-line); color: var(--brand-fg); background: var(--brand-soft); }
+.addbox { display: flex; flex-direction: column; gap: 6px; background: var(--tile); border-radius: var(--rad-md); padding: 8px; }
+.addbox .search input { background: var(--surface); height: 40px; }
+.addlist { display: flex; flex-direction: column; gap: 2px; max-height: 300px; overflow: auto; }
+.addrow { display: flex; align-items: center; gap: 8px; justify-content: space-between; text-align: left; border: 0; background: transparent; color: var(--ink); padding: 8px; border-radius: 10px; }
+.addrow:hover { background: var(--surface); }
+.addrow > span { display: flex; flex-direction: column; min-width: 0; }
+.addrow b { font-weight: 500; font-size: 14px; }
+.addrow > span > span { font-size: 12px; color: var(--ink-3); }
+.addrow svg { color: var(--brand-fg); flex: none; }
+.rfoot a.iconbtn[aria-current="page"] { background: var(--brand-soft); color: var(--brand-fg); }
+
+/* meni profila */
+@media (min-width: 861px) { .rfoot { position: relative; } }
+.mebadge { position: absolute; top: -4px; right: -4px; }
+.memenu { position: fixed; left: calc(max(8px, env(safe-area-inset-left, 0px)) + 92px); bottom: calc(env(safe-area-inset-bottom, 0px) + 14px); z-index: 60; width: 290px; background: var(--surface); border-radius: var(--rad-lg); box-shadow: var(--shadow-pop); padding: 8px; display: flex; flex-direction: column; gap: 2px; }
+.memenu[hidden] { display: none; }
+.memenu a, .memenu > button { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: var(--rad-sm); color: var(--ink); text-decoration: none; font-weight: 500; font-size: 14.5px; border: 0; background: none; text-align: left; width: 100%; }
+.memenu a:hover, .memenu > button:hover, .memenu a:focus-visible, .memenu > button:focus-visible { background: var(--tile); }
+.memenu a > svg, .memenu > button > svg { color: var(--ink-3); flex: none; }
+.memenu a > span, .memenu > button > span { flex: 1; }
+.memenu .danger, .memenu .danger svg { color: var(--bad); }
+.memenu .nbadge, .memenu .nonl { position: static; box-shadow: none; }
+.mmhead { flex-wrap: wrap; background: var(--tile); margin-bottom: 4px; padding: 12px !important; }
+.mmhead .mmt { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.mmhead b { font-family: var(--f-head); font-weight: 500; font-size: 17px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mmhead .mmt span { font-size: 12.5px; color: var(--ink-3); font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mmhead .mmt .mmgo { display: inline-flex; align-items: center; gap: 2px; margin-top: 3px; font-size: 12.5px; color: var(--brand-fg); font-weight: 600; }
+.mmhead { flex-wrap: nowrap; }
+.memenu #mmAv { flex: none; display: inline-flex; }
+.mmsep { height: 1px; background: var(--line); margin: 4px 6px; }
+@media (max-width: 860px) {
+  .memenu { left: auto; right: max(12px, env(safe-area-inset-right, 0px)); bottom: auto; top: calc(env(safe-area-inset-top, 0px) + 66px); width: min(300px, calc(100vw - 24px)); }
+}
 </style>
 </head>
 <body>
@@ -828,13 +912,10 @@ body.gate-open { overflow: hidden; }
       <a href="#plan" data-route="plan" class="ritem"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M7.88403 3.86687L5.88403 5.10813C3.98695 6.28551 3.0384 6.87421 2.5192 7.82274C2 8.77128 2 9.91549 2 12.2039V13.725C2 17.6258 2 19.5763 3.17157 20.7881C4.34315 22 6.22876 22 10 22H14C17.7712 22 19.6569 22 20.8284 20.7881C22 19.5763 22 17.6258 22 13.725V12.2039C22 9.91549 22 8.77128 21.4808 7.82274C20.9616 6.87421 20.0131 6.28551 18.116 5.10812L16.116 3.86687C14.1106 2.62229 13.1079 2 12 2C10.8921 2 9.88939 2.62229 7.88403 3.86687Z"/><path d="M9 16C9.85038 16.6303 10.8846 17 12 17C13.1154 17 14.1496 16.6303 15 16"/></g></svg><span>Plan</span></a>
       <a href="#kalendar" data-route="kalendar" class="ritem"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M10 21.75H14C17.7712 21.75 19.6569 21.75 20.8284 20.5784C22 19.4069 22 17.5212 22 13.75V11.75C22 7.97876 22 6.09315 20.8284 4.92157C19.6569 3.75 17.7712 3.75 14 3.75H10C6.22876 3.75 4.34315 3.75 3.17157 4.92157C2 6.09315 2 7.97876 2 11.75V13.75C2 17.5212 2 19.4069 3.17157 20.5784C4.34315 21.75 6.22876 21.75 10 21.75Z"/><path d="M2.03516 8.75H21.965"/><path stroke-linejoin="round" d="M17 12.75H17.0001"/><path stroke-linejoin="round" d="M12 12.75H12.0001"/><path stroke-linejoin="round" d="M7 12.75H7.0001"/><path stroke-linejoin="round" d="M17 16.7734H17.0001"/><path stroke-linejoin="round" d="M12 16.7734H12.0001"/><path stroke-linejoin="round" d="M7 16.7734H7.0001"/><path d="M7 3.78496V2.25"/><path d="M17 3.78496V2.25"/></g></svg><span>Kalendar</span></a>
       <a href="#poruke" data-route="poruke" class="ritem"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M22 12C22 17.5228 17.5228 22 12 22C10.4003 22 8.88837 21.6244 7.54753 20.9565C7.19121 20.7791 6.78393 20.72 6.39939 20.8229L4.17335 21.4185C3.20701 21.677 2.32295 20.793 2.58151 19.8267L3.17712 17.6006C3.28001 17.2161 3.22094 16.8088 3.04346 16.4525C2.37562 15.1116 2 13.5997 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/><path stroke-linejoin="round" d="M8 12H8.009M11.991 12H12M15.991 12H16"/></g></svg><span>Poruke</span><b class="nbadge" id="chatBadge" hidden></b></a>
-      <a href="#prijatelji" data-route="prijatelji" class="ritem"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="9" cy="6" r="4"/><path d="M15 9C16.6569 9 18 7.65685 18 6C18 4.34315 16.6569 3 15 3"/><ellipse cx="9" cy="17" rx="7" ry="4"/><path d="M18 14C19.7542 14.3847 21 15.3589 21 16.5C21 17.5293 19.9863 18.4229 18.5 18.8704"/></g></svg><span>Prijatelji</span><b class="nbadge" id="friendsBadge" hidden></b><i class="nonl" id="onlineCount" hidden></i></a>
       <a href="#admin" data-route="admin" class="ritem" id="adminNav" hidden><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M21 11.9914C21 11.4234 21 10.8996 21 10.4167C21 7.21907 21 5.62028 20.6225 5.08241C20.245 4.54454 18.7417 4.02996 15.7351 3.00079L15.1623 2.80472C13.595 2.26824 12.8114 2 12 2C11.1886 2 10.405 2.26824 8.83772 2.80472L8.26491 3.00079C5.25832 4.02996 3.75503 4.54454 3.37752 5.08241C3 5.62028 3 7.21907 3 10.4167C3 10.8996 3 11.4234 3 11.9914C3 17.6294 7.23896 20.3655 9.89856 21.5273C10.62 21.8424 10.9807 22 12 22C13.0193 22 13.38 21.8424 14.1014 21.5273C16.761 20.3655 21 17.6294 21 11.9914Z"/><circle cx="12" cy="9" r="2"/><path d="M16 15C16 16.1046 16 17 12 17C8 17 8 16.1046 8 15C8 13.8954 9.79086 13 12 13C14.2091 13 16 13.8954 16 15Z"/></g></svg><span>Admin</span></a>
     </div>
     <div class="rfoot">
-      <button class="iconbtn flat" id="themeBtn" aria-label="Tema" title="Tema"></button>
-      <button class="iconbtn flat" id="settingsBtn" aria-label="Podešavanja" title="Podešavanja"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M9.5 14C11.1569 14 12.5 15.3431 12.5 17C12.5 18.6568 11.1569 20 9.5 20C7.84315 20 6.5 18.6568 6.5 17C6.5 15.3431 7.84315 14 9.5 14Z"/><path d="M14.5 3.99998C12.8431 3.99998 11.5 5.34312 11.5 6.99998C11.5 8.65683 12.8431 9.99998 14.5 9.99998C16.1569 9.99998 17.5 8.65683 17.5 6.99998C17.5 5.34312 16.1569 3.99998 14.5 3.99998Z"/><path d="M15 16.9585L22 16.9585"/><path d="M9 6.9585L2 6.9585"/><path d="M2 16.9585L4 16.9585"/><path d="M22 6.9585L20 6.9585"/></g></svg></button>
-      <button class="mebtn" id="meBtn" aria-label="Moj profil" title="Profil"></button>
+      <button class="mebtn" id="meBtn" aria-label="Moj nalog i podešavanja" aria-haspopup="menu" aria-expanded="false" aria-controls="meMenu"></button><b class="nbadge mebadge" id="meBadge" hidden></b>
     </div>
   </nav>
 
@@ -875,8 +956,19 @@ body.gate-open { overflow: hidden; }
 
     <section class="page" id="sec-poruke" hidden><div id="chatFull" class="chatfull"></div></section>
     <section class="page narrow" id="sec-prijatelji" hidden><div class="card pagecard" id="friendsBody"></div></section>
+    <section class="page" id="sec-podesavanja" hidden><div class="setgrid"><nav class="card setnav" id="setNav" aria-label="Sekcije podešavanja"></nav><div class="setmain" id="setMain"></div></div></section>
     <section class="page narrow" id="sec-admin" hidden><div class="card pagecard" id="manageBody"></div></section>
   </div>
+</div>
+
+<div class="memenu" id="meMenu" role="menu" hidden>
+  <a class="mmhead" href="#podesavanja" role="menuitem"><span id="mmAv"></span><span class="mmt"><b id="mmName"></b><span id="mmSub"></span><span class="mmgo">Moj profil <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5L15 12L9 19"/></svg></span></span></a>
+  <a href="#prijatelji" role="menuitem"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="9" cy="6" r="4"/><path d="M15 9C16.6569 9 18 7.65685 18 6C18 4.34315 16.6569 3 15 3"/><ellipse cx="9" cy="17" rx="7" ry="4"/><path d="M18 14C19.7542 14.3847 21 15.3589 21 16.5C21 17.5293 19.9863 18.4229 18.5 18.8704"/></g></svg><span>Prijatelji</span><i class="nonl" id="onlineCount" hidden></i><b class="nbadge" id="friendsBadge" hidden></b></a>
+  <a href="#podesavanja-ispiti" role="menuitem"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="M2 5.5L3.21429 7L7.5 3"/><path stroke-linejoin="round" d="M2 12.5L3.21429 14L7.5 10"/><path stroke-linejoin="round" d="M2 19.5L3.21429 21L7.5 17"/><path d="M22 19L12 19"/><path d="M22 12L12 12"/><path d="M22 5L12 5"/></g></svg><span>Moji ispiti</span></a>
+  <a href="#podesavanja-polozeni" role="menuitem"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="16" r="3"/><path d="M12 19.2599L9.73713 21.4294C9.41306 21.74 9.25102 21.8954 9.1138 21.9491C8.80111 22.0716 8.45425 21.9668 8.28977 21.7001C8.21758 21.5831 8.19509 21.3719 8.1501 20.9497C8.1247 20.7113 8.112 20.5921 8.07345 20.4923C7.98715 20.2688 7.80579 20.0949 7.57266 20.0122C7.46853 19.9752 7.3442 19.963 7.09554 19.9387L7.09553 19.9387C6.65512 19.8956 6.43491 19.874 6.31283 19.8048C6.03463 19.6471 5.92529 19.3146 6.05306 19.0148C6.10913 18.8832 6.27116 18.7279 6.59523 18.4172L6.59523 18.4172L8.07345 17L9.00086 16.0725"/><path d="M12 19.2599L14.2629 21.4293C14.5869 21.74 14.749 21.8954 14.8862 21.9491C15.1989 22.0716 15.5457 21.9668 15.7102 21.7001C15.7824 21.583 15.8049 21.3719 15.8499 20.9497C15.8753 20.7113 15.888 20.5921 15.9265 20.4922C16.0129 20.2687 16.1942 20.0949 16.4273 20.0121C16.5315 19.9752 16.6558 19.963 16.9045 19.9387C17.3449 19.8955 17.5651 19.874 17.6872 19.8048C17.9654 19.6471 18.0747 19.3145 17.9469 19.0147C17.8909 18.8832 17.7288 18.7278 17.4048 18.4172L15.9265 17L15 16.0734"/><path d="M17.3197 17.9957C19.2921 17.9748 20.3915 17.8512 21.1213 17.1213C22 16.2426 22 14.8284 22 12V8C22 5.17157 22 3.75736 21.1213 2.87868C20.2426 2 18.8284 2 16 2H8C5.17157 2 3.75736 2 2.87868 2.87868C2 3.75736 2 5.17157 2 8V12C2 14.8284 2 16.2426 2.87868 17.1213C3.64706 17.8897 4.82497 17.9862 7 17.9983"/><path d="M9 6L15 6"/><path d="M7 9.5H17"/></g></svg><span>Položeni ispiti</span></a>
+  <a href="#podesavanja-izgled" role="menuitem"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12.0005 2C12.9324 2 13.3983 2 13.7658 2.15224C14.2559 2.35523 14.6452 2.74458 14.8482 3.23463C14.9409 3.45833 14.9772 3.71848 14.9914 4.09794C15.0122 4.65566 15.2982 5.17191 15.7816 5.45096C16.2649 5.73002 16.855 5.71959 17.3484 5.4588C17.6841 5.28136 17.9276 5.18269 18.1676 5.15109C18.6935 5.08185 19.2254 5.22436 19.6462 5.54727C19.9618 5.78945 20.1948 6.19297 20.6607 7C21.1267 7.80703 21.3596 8.21055 21.4116 8.60497C21.4808 9.13087 21.3383 9.66273 21.0154 10.0835C20.868 10.2757 20.6608 10.4371 20.3392 10.6392C19.8667 10.9361 19.5626 11.4418 19.5626 11.9999C19.5626 12.558 19.8666 13.0639 20.3392 13.3608C20.6607 13.5628 20.8679 13.7243 21.0153 13.9164C21.3382 14.3372 21.4807 14.8691 21.4115 15.395C21.3595 15.7894 21.1266 16.1929 20.6606 16.9999C20.1947 17.807 19.9617 18.2105 19.6461 18.4527C19.2253 18.7756 18.6934 18.9181 18.1675 18.8488C17.9275 18.8172 17.6841 18.7186 17.3484 18.5412C16.8549 18.2804 16.2648 18.2699 15.7815 18.549C15.2982 18.8281 15.0122 19.3443 14.9914 19.902C14.9772 20.2815 14.9409 20.5417 14.8482 20.7654C14.6452 21.2554 14.2559 21.6448 13.7658 21.8478C13.3983 22 12.9324 22 12.0005 22C11.0686 22 10.6027 22 10.2351 21.8478C9.74505 21.6448 9.35571 21.2554 9.15272 20.7654C9.06006 20.5417 9.0238 20.2815 9.0096 19.9021C8.98874 19.3443 8.70273 18.8281 8.21939 18.549C7.73605 18.27 7.14596 18.2804 6.65253 18.5412C6.31681 18.7186 6.07338 18.8173 5.83333 18.8489C5.30743 18.9181 4.77557 18.7756 4.35475 18.4527C4.03913 18.2106 3.80616 17.807 3.34022 17C2.87428 16.193 2.64131 15.7894 2.58938 15.395C2.52015 14.8691 2.66266 14.3373 2.98557 13.9165C3.13297 13.7244 3.34013 13.5629 3.66167 13.3608C4.13424 13.0639 4.43832 12.5581 4.43835 12C4.43838 11.4419 4.13429 10.936 3.66167 10.639C3.34019 10.437 3.13305 10.2756 2.98566 10.0835C2.66276 9.66266 2.52025 9.1308 2.58948 8.60491C2.64141 8.21048 2.87438 7.80697 3.34032 6.99993C3.80626 6.1929 4.03923 5.78938 4.35485 5.5472C4.77567 5.22429 5.30753 5.08178 5.83342 5.15102C6.07349 5.18262 6.31693 5.2813 6.65268 5.45876C7.14608 5.71954 7.73612 5.72996 8.21943 5.45093C8.70274 5.17189 8.98875 4.65568 9.0096 4.09799C9.02379 3.7185 9.06005 3.45834 9.15272 3.23463C9.35571 2.74458 9.74505 2.35523 10.2351 2.15224C10.6027 2 11.0686 2 12.0005 2Z"/></g></svg><span>Podešavanja</span></a>
+  <div class="mmsep" id="mmSep" hidden></div>
+  <button type="button" role="menuitem" id="mmAuth" hidden></button>
 </div>
 
 <dialog id="setupDlg" aria-labelledby="wizTitle"><div class="wiz" id="wiz"></div></dialog>
@@ -1465,12 +1557,8 @@ function applyTheme() {
   const root = document.documentElement;
   if (theme === 'auto') { if (hostTheme) root.setAttribute('data-theme', hostTheme); else root.removeAttribute('data-theme'); }
   else root.setAttribute('data-theme', theme);
-  const b = $('#themeBtn'); b.innerHTML = THEME_ICONS[theme]; b.title = THEME_LABEL[theme]; b.setAttribute('aria-label', THEME_LABEL[theme] + ' (promeni)');
 }
-$('#themeBtn').addEventListener('click', () => {
-  theme = { auto: 'light', light: 'dark', dark: 'auto' }[theme];
-  lsSet(THEME_KEY, theme); applyTheme(); toast(THEME_LABEL[theme]);
-});
+function setTheme(t) { theme = THEME_ICONS[t] ? t : 'auto'; lsSet(THEME_KEY, theme); applyTheme(); }
 applyTheme();
 
 // ================= Skladište rokova (deljeno) =================
@@ -1740,7 +1828,7 @@ function renderSide() {
     const todo = MY.filter(s => !s.plan), done = MY.filter(s => s.plan);
     const list = (S.tab === 'todo' ? todo : S.tab === 'done' ? done : MY).filter(hit);
     let items = '';
-    if (!MY.length) items = `<div class="muted" style="padding:8px 4px">Nisi označio/la nijedan ispit. <button class="linkbtn" data-open-settings="ispiti">Izaberi ispite</button></div>`;
+    if (!MY.length) items = `<div class="muted" style="padding:8px 4px">Nemaš ispita na listi. Dodaj ih ispod.</div>`;
     else if (!list.length) items = `<div class="muted" style="padding:8px 4px">${S.tab === 'todo' ? (q ? 'Nema rezultata.' : 'Svi ispiti su zakazani.') : S.tab === 'done' ? (q ? 'Nema rezultata.' : 'Još ništa nije zakazano. Klikni na ispit u kartici „Bez termina".') : 'Nema rezultata.'}</div>`;
     else {
       let lastGroup = null; const favs = favSet();
@@ -1753,17 +1841,24 @@ function renderSide() {
           : s.stale ? 'Termin više ne postoji, izaberi ponovo'
           : s.inst.length ? termina(s.inst.length) + ' u rokovima' : 'nema termina u učitanim rokovima';
         const fw = S.showFriends ? friendsWithSubject(s) : [];
-        items += `<div class="mi${S.pick === s.sifra ? ' on' : ''}"><button class="mimain" data-pick="${esc(s.sifra)}"><span class="st ${st}"></span><span class="mt"><span class="mn">${esc(s.predmet)}</span><span class="mm">${meta}</span></span>${fw.length ? avatarStack(fw, 20, 2) : ''}</button>${starBtn(s.sifra)}</div>`;
+        const menu = S.menuFor === s.sifra ? `<div class="mimenu" role="menu">
+            <button role="menuitem" data-pick="${esc(s.sifra)}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M10 21.75H14C17.7712 21.75 19.6569 21.75 20.8284 20.5784C22 19.4069 22 17.5212 22 13.75V11.75C22 7.97876 22 6.09315 20.8284 4.92157C19.6569 3.75 17.7712 3.75 14 3.75H10C6.22876 3.75 4.34315 3.75 3.17157 4.92157C2 6.09315 2 7.97876 2 11.75V13.75C2 17.5212 2 19.4069 3.17157 20.5784C4.34315 21.75 6.22876 21.75 10 21.75Z"/><path d="M2.03516 8.75H21.965"/><path stroke-linejoin="round" d="M17 12.75H17.0001"/><path stroke-linejoin="round" d="M12 12.75H12.0001"/><path stroke-linejoin="round" d="M7 12.75H7.0001"/><path stroke-linejoin="round" d="M17 16.7734H17.0001"/><path stroke-linejoin="round" d="M12 16.7734H12.0001"/><path stroke-linejoin="round" d="M7 16.7734H7.0001"/><path d="M7 3.78496V2.25"/><path d="M17 3.78496V2.25"/></g></svg> ${s.plan ? 'Promeni termin' : 'Izaberi termin'}</button>
+            <button role="menuitem" data-fav="${esc(s.sifra)}">${favSet().has(s.sifra) ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/></svg> Ukloni iz omiljenih' : '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M6.67589 7.62805L6.03954 7.77203C3.57986 8.32856 2.35002 8.60682 2.05742 9.54773C1.76482 10.4886 2.60325 11.4691 4.2801 13.4299L4.71392 13.9372C5.19043 14.4944 5.42868 14.773 5.53586 15.1177C5.64305 15.4624 5.60703 15.8341 5.53498 16.5776L5.4694 17.2544C5.21588 19.8706 5.08912 21.1787 5.85515 21.7602C6.62118 22.3417 7.77268 21.8115 10.0757 20.7512L10.6715 20.4768C11.3259 20.1755 11.6531 20.0248 12 20.0248C12.3469 20.0248 12.6741 20.1755 13.3285 20.4768L13.9243 20.7512C16.2273 21.8115 17.3788 22.3417 18.1449 21.7602C18.9109 21.1787 18.7841 19.8706 18.5306 17.2544L18.465 16.5776C18.393 15.8341 18.357 15.4624 18.4641 15.1177C18.5713 14.773 18.8096 14.4944 19.2861 13.9372L19.7199 13.4299C21.3968 11.4691 22.2352 10.4886 21.9426 9.54773C21.65 8.60682 20.4201 8.32856 17.9605 7.77203L17.3241 7.62805C16.6251 7.4699 16.2757 7.39083 15.9951 7.17781C15.7144 6.96479 15.5345 6.64193 15.1745 5.99623L14.8468 5.40837C13.5802 3.13612 12.9469 2 12 2C11.0531 2 10.4198 3.13613 9.15316 5.40838L8.82547 5.99623C8.46553 6.64194 8.28555 6.96479 8.00494 7.17781C7.72433 7.39083 7.37485 7.4699 6.67589 7.62805Z"/></svg> Dodaj u omiljene'}</button>
+            <button role="menuitem" data-passed="${esc(s.sifra)}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path stroke-linejoin="round" d="M8.5 12.5L10.5 14.5L15.5 9.5"/></g></svg> Položen</button>
+            <button role="menuitem" class="danger" data-remove="${esc(s.sifra)}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M9.1709 4C9.58273 2.83481 10.694 2 12.0002 2C13.3064 2 14.4177 2.83481 14.8295 4"/><path d="M20.5001 6H3.5"/><path d="M18.8332 8.5L18.3732 15.3991C18.1962 18.054 18.1077 19.3815 17.2427 20.1907C16.3777 21 15.0473 21 12.3865 21H11.6132C8.95235 21 7.62195 21 6.75694 20.1907C5.89194 19.3815 5.80344 18.054 5.62644 15.3991L5.1665 8.5"/><path d="M9.5 11L10 16"/><path d="M14.5 11L14 16"/></g></svg> Ukloni sa liste</button></div>` : '';
+        items += `<div class="mi${S.pick === s.sifra ? ' on' : ''}${S.menuFor === s.sifra ? ' menu' : ''}"><button class="mimain" data-pick="${esc(s.sifra)}"><span class="st ${st}"></span><span class="mt"><span class="mn">${esc(s.predmet)}</span><span class="mm">${meta}</span></span>${fw.length ? avatarStack(fw, 20, 2) : ''}</button>${starBtn(s.sifra)}<button type="button" class="mimore" data-mimenu="${esc(s.sifra)}" aria-label="Opcije za ${esc(s.predmet)}" aria-expanded="${S.menuFor === s.sifra}"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></g></svg></button>${menu}</div>`;
       }
     }
     box.innerHTML = `
-      <div class="flabel">Moji ispiti <span class="fl-acts"><button data-sort="${sortDir() === 'asc' ? 'desc' : 'asc'}" title="${sortDir() === 'asc' ? 'Semestri rastuće (1→8)' : 'Semestri opadajuće (8→1)'} · klikni da obrneš" aria-label="Semestri ${sortDir() === 'asc' ? 'rastuće, promeni na opadajuće' : 'opadajuće, promeni na rastuće'}">${sortDir() === 'asc' ? '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M4 16L13 16"/><path d="M6 11H13"/><path d="M8 6L13 6"/><path stroke-linejoin="round" d="M17 4V20L20 16"/></g></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M4 8H13"/><path d="M6 13H13"/><path d="M8 18H13"/><path stroke-linejoin="round" d="M17 20V4L20 8"/></g></svg>'}</button><button data-open-settings="ispiti">uredi listu</button></span></div>
+      <div class="flabel">Moji ispiti <span class="fl-acts"><button data-sort="${sortDir() === 'asc' ? 'desc' : 'asc'}" title="${sortDir() === 'asc' ? 'Semestri rastuće (1→8)' : 'Semestri opadajuće (8→1)'} · klikni da obrneš" aria-label="Semestri ${sortDir() === 'asc' ? 'rastuće, promeni na opadajuće' : 'opadajuće, promeni na rastuće'}">${sortDir() === 'asc' ? '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M4 16L13 16"/><path d="M6 11H13"/><path d="M8 6L13 6"/><path stroke-linejoin="round" d="M17 4V20L20 16"/></g></svg>' : '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M4 8H13"/><path d="M6 13H13"/><path d="M8 18H13"/><path stroke-linejoin="round" d="M17 20V4L20 8"/></g></svg>'}</button></span></div>
       <div class="seg sm" role="group" aria-label="Moji ispiti">
         <button data-tab="todo" aria-pressed="${S.tab === 'todo'}">Bez termina<span class="n">${todo.length}</span></button>
         <button data-tab="done" aria-pressed="${S.tab === 'done'}">Zakazani<span class="n">${done.length}</span></button>
         <button data-tab="all" aria-pressed="${S.tab === 'all'}">Svi<span class="n">${MY.length}</span></button>
       </div>
-      <div class="mylist">${items}</div>`;
+      <div class="mylist">${items}</div>
+      ${S.tab !== 'done' ? (S.adding ? `<div class="addbox"><div class="search">${SEARCH_ICON}<input id="addQ" type="search" placeholder="Pronađi predmet iz svog programa" autocomplete="off" aria-label="Pronađi predmet" value="${esc(S.addQ || '')}"></div><div id="addList" class="addlist"></div><button type="button" class="btn ghost sm" data-add-close>Gotovo</button></div>` : `<button type="button" class="addbtn" data-add-open><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15"/></g></svg> Dodaj ispit</button>`) : ''}`;
+    if (S.adding) { renderAddList(); const aq = $('#addQ'); aq.addEventListener('input', e => { S.addQ = e.target.value; renderAddList(); }); }
   }
 
   let vo = '';
@@ -1780,7 +1875,13 @@ function renderSide() {
 }
 
 $('#filters').addEventListener('click', e => {
-  if (e.target.closest('[data-fav], [data-sort]')) return; // obrađuje globalni rukovalac
+  const mm = e.target.closest('[data-mimenu]'); if (mm) { S.menuFor = S.menuFor === mm.dataset.mimenu ? null : mm.dataset.mimenu; renderSide(); return; }
+  const rm = e.target.closest('[data-remove]'); if (rm) { removeFromList(rm.dataset.remove); return; }
+  if (e.target.closest('[data-add-open]')) { S.adding = true; S.addQ = ''; renderSide(); setTimeout(() => $('#addQ') && $('#addQ').focus(), 20); return; }
+  if (e.target.closest('[data-add-close]')) { S.adding = false; renderSide(); return; }
+  const ad = e.target.closest('[data-addsub]'); if (ad) { addToList(ad.dataset.addsub); setTimeout(() => { const aq = $('#addQ'); if (aq) aq.focus(); }, 20); return; }
+  if (e.target.closest('[data-pick]') && S.menuFor) S.menuFor = null;
+  if (e.target.closest('[data-fav], [data-sort], [data-passed]')) { S.menuFor = null; return; } // obrađuje globalni rukovalac
   const t = e.target.closest('[data-tab]'); if (t) { S.tab = t.dataset.tab; renderSide(); return; }
   const r = e.target.closest('[data-rok]'); if (r) { const v = r.dataset.rok; S.f.rok.has(v) ? S.f.rok.delete(v) : S.f.rok.add(v); refresh(); return; }
   if (e.target.closest('[data-clear-rok]')) { S.f.rok.clear(); refresh(); return; }
@@ -1903,9 +2004,36 @@ function markPassed(sifra) {
   const p = prof(); if (!p || !p.remaining[sifra]) return;
   const rem = p.remaining[sifra], pl = p.plan[sifra];
   delete p.remaining[sifra]; delete p.plan[sifra];
+  p.passed = { ...(p.passed || {}), [sifra]: { n: rem.n, s: rem.s, at: todayIso, ocena: null } };
   if (S.pick === sifra) S.pick = null;
-  Me.save(); derive(); refresh();
-  toast(`${rem.n} je uklonjen sa liste. Čestitamo!`, { label: 'Poništi', fn: () => { p.remaining[sifra] = rem; if (pl) p.plan[sifra] = pl; Me.save(); derive(); refresh(); } });
+  S.menuFor = null; Me.save(); derive(); refresh();
+  toast(`Čestitamo! ${rem.n} je u položenim ispitima.`, { label: 'Poništi', fn: () => { p.remaining[sifra] = rem; if (pl) p.plan[sifra] = pl; delete p.passed[sifra]; Me.save(); derive(); refresh(); } });
+}
+function removeFromList(sifra) {
+  const p = prof(); if (!p || !p.remaining[sifra]) return;
+  const rem = p.remaining[sifra], pl = p.plan[sifra];
+  delete p.remaining[sifra]; delete p.plan[sifra];
+  if (S.pick === sifra) S.pick = null;
+  S.menuFor = null; Me.save(); derive(); refresh();
+  toast(`${rem.n} je uklonjen sa liste.`, { label: 'Poništi', fn: () => { p.remaining[sifra] = rem; if (pl) p.plan[sifra] = pl; Me.save(); derive(); refresh(); } });
+}
+function addToList(sifra) {
+  const p = prof(), c = CAT.get(sifra); if (!p || !c) return;
+  p.remaining = { ...p.remaining, [sifra]: { n: c.predmet, s: c.sem } };
+  if (p.passed && p.passed[sifra]) { p.passed = { ...p.passed }; delete p.passed[sifra]; }
+  Me.save(); derive(); refresh(); toast(`${c.predmet} je dodat na listu.`);
+}
+function addCandidates(q) {
+  const p = prof() || {}, rem = p.remaining || {}, passed = p.passed || {};
+  const words = fold(q || '').split(/\s+/).filter(Boolean);
+  return [...CAT.values()].filter(c => !rem[c.sifra] && !passed[c.sifra] && (!words.length || words.every(w => fold(c.predmet + ' ' + c.sifra).includes(w))))
+    .sort((a, b) => (sortDir() === 'desc' ? b.sem - a.sem : a.sem - b.sem) || a.predmet.localeCompare(b.predmet, 'sr')).slice(0, 12);
+}
+function renderAddList() {
+  const el = $('#addList'); if (!el) return;
+  const list = addCandidates(S.addQ);
+  el.innerHTML = list.length ? list.map(c => `<button type="button" class="addrow" data-addsub="${esc(c.sifra)}"><span><b>${esc(c.predmet)}</b><span>${c.sem}. sem. · ${TIP_NAZIV[c.tip]} · ${c.inst.length ? termina(c.inst.length) : 'bez termina'}</span></span><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M15 12L12 12M12 12L9 12M12 12L12 9M12 12L12 15"/></g></svg></button>`).join('')
+    : `<div class="muted" style="padding:8px">${S.addQ ? 'Nema predmeta za ovu pretragu.' : 'Svi predmeti iz tvog programa su već na listi ili položeni.'}</div>`;
 }
 function openConfirm(sifra, inst) {
   const s = MYMAP.get(sifra); if (!s) return;
@@ -2241,6 +2369,7 @@ function refresh() {
   renderMeBtn();
   renderFriendsUi();
   if (typeof renderChatBadges === 'function') renderChatBadges();
+  if (route === 'podesavanja' && W.mode === 'settings' && !W.dirtyRender) renderSettingsNav();
 }
 
 document.querySelector('.toolbar .seg').addEventListener('click', e => {
@@ -2281,7 +2410,7 @@ document.addEventListener('click', e => {
   const up = t.closest('[data-unplan]'); if (up) { unschedule(up.dataset.unplan); return; }
   const ps = t.closest('[data-passed]'); if (ps) { markPassed(ps.dataset.passed); return; }
   if (t.closest('[data-cancel-pick]')) { cancelPick(); return; }
-  const st = t.closest('[data-open-settings]'); if (st) { openWizard(false, st.dataset.openSettings || null); return; }
+  const st = t.closest('[data-open-settings]'); if (st) { openSettings(st.dataset.openSettings || 'profil'); return; }
   if (t.closest('[data-manage]')) { openManage(); return; }
   const mo = t.closest('[data-month]');
   if (mo) { const [y, m] = mo.dataset.month.split('-').map(Number); S.y = y; S.m = m; S.view = 'mesec'; renderView(); return; }
@@ -2289,13 +2418,14 @@ document.addEventListener('click', e => {
   if (t.closest('[data-open-upload]')) { if (S.isAdmin) openUpload(); return; }
   const close = t.closest('[data-close]'); if (close) close.closest('dialog').close();
 });
+document.addEventListener('click', e => { if (S.menuFor && !e.target.closest('.mi.menu')) { S.menuFor = null; renderSide(); } }, true);
 document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && S.menuFor) { S.menuFor = null; renderSide(); return; }
   if (e.target.matches('input, select, textarea') || document.querySelector('dialog[open]')) return;
   if (e.key === 'Escape' && S.pick) { cancelPick(); return; }
   if (S.view !== 'mesec' && S.view !== 'godina') return;
   if (e.key === 'ArrowLeft') step(-1); else if (e.key === 'ArrowRight') step(1);
 });
-$('#settingsBtn').addEventListener('click', () => openWizard(false, null));
 
 // ================= Čarobnjak (prvi put) i podešavanja (kasnije) =================
 // mode 'onboard': koraci profil → studije → … → gotovo. mode 'settings': tabovi Profil / Studije / Ispiti / Privatnost.
@@ -2350,7 +2480,8 @@ function wizValid(step) {
 // pametni podrazumevani izbor: obavezni i završni predmeti iz tekuće godine
 function defaultRemaining(cat) {
   const g = W.d.godina, set = new Set();
-  for (const s of cat.values()) if (Math.ceil(s.sem / 2) === g && s.tip !== 'I') set.add(s.sifra);
+  const passed = (prof() || {}).passed || {};
+  for (const s of cat.values()) if (Math.ceil(s.sem / 2) === g && s.tip !== 'I' && !passed[s.sifra]) set.add(s.sifra);
   return set;
 }
 function openWizard(first, startAt) {
@@ -2369,7 +2500,7 @@ function openWizard(first, startAt) {
   // ime i slika sa Google/Facebook naloga
   const ap = window.__auth && window.__auth.profile && window.__auth.profile();
   if (ap && !W.d.ime && !W.d.prezime) { W.d.ime = ap.ime; W.d.prezime = ap.prezime; }
-  if (ap && ap.avatar && !W.d.foto) fetch(ap.avatar).then(r => r.ok ? r.blob() : null).then(b => b ? fileToAvatar(b) : null).then(u => { if (u && !W.d.foto) { W.d.foto = u; if ($('#setupDlg').open && (W.mode === 'settings' ? W.tab === 'profil' : wizSteps()[W.step] === 'profil')) renderWizard(); } }).catch(() => {});
+  if (ap && ap.avatar && !W.d.foto) fetch(ap.avatar).then(r => r.ok ? r.blob() : null).then(b => b ? fileToAvatar(b) : null).then(u => { if (u && !W.d.foto) { W.d.foto = u; if ($('#setupDlg').open && wizSteps()[W.step] === 'profil') renderWizard(); } }).catch(() => {});
   renderWizard();
   if (!$('#setupDlg').open) $('#setupDlg').showModal();
 }
@@ -2467,7 +2598,7 @@ function nalogHtml() {
 async function loadIdentities() {
   if (!window.__auth || window.__auth.mode !== 'user' || W.identities) return;
   W.identities = await window.__auth.identities();
-  if ($('#setupDlg').open && W.tab === 'nalog') renderWizard();
+  if (route === 'podesavanja' && W.sec === 'nalog') renderSettings();
 }
 document.addEventListener('click', async e => {
   const b = e.target.closest('[data-auth]'); if (!b || !window.__auth) return;
@@ -2477,6 +2608,7 @@ document.addEventListener('click', async e => {
   else if (a.startsWith('link-')) { try { await window.__auth.link(a.slice(5)); } catch (err) { toast('Povezivanje nije uspelo: ' + window.__auth.message(err)); } }
 });
 function renderWizard() {
+  if (W.mode === 'settings') { renderSettings(); return; }
   const d = W.d;
   let top = '', body = '', foot = '', cur;
   if (W.mode === 'onboard') {
@@ -2546,13 +2678,14 @@ function renderWizList() {
     const list = items.filter(s => s.sem === sem).sort((a, b) => (favs.has(b.sifra) - favs.has(a.sifra)) || ({ O: 0, Z: 1, I: 2 }[a.tip] - { O: 0, Z: 1, I: 2 }[b.tip]) || a.predmet.localeCompare(b.predmet, 'sr'));
     const allOn = list.every(s => d.remaining.has(s.sifra));
     h += `<div class="semgroup"><div class="sh"><div><b>${sem}. semestar</b><span>${Math.ceil(sem / 2)}. godina${Math.ceil(sem / 2) === d.godina ? ' · tekuća' : ''}</span></div><button type="button" class="linkbtn" data-wsem="${sem}" data-on="${allOn ? 0 : 1}">${allOn ? 'Poništi sve' : 'Označi sve'}</button></div><div class="subjgrid">` +
-      list.map(s => `<button type="button" class="sopt" data-wsub="${esc(s.sifra)}" aria-pressed="${d.remaining.has(s.sifra)}"><span class="box"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13L9 17L19 7"/></svg></span><span><span class="sn2">${esc(s.predmet)}</span><span class="sm2"><span>${esc(s.sifra)}</span><span>${TIP_NAZIV[s.tip]}</span><span>${s.inst.length ? termina(s.inst.length) : 'bez termina'}</span></span></span></button>`).join('') + '</div></div>';
+      list.map(s => ((prof() || {}).passed || {})[s.sifra] ? `<div class="sopt done"><span class="box"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13L9 17L19 7"/></svg></span><span><span class="sn2">${esc(s.predmet)}</span><span class="sm2"><span>${esc(s.sifra)}</span><span class="pill ok">položen</span></span></span></div>` : `<button type="button" class="sopt" data-wsub="${esc(s.sifra)}" aria-pressed="${d.remaining.has(s.sifra)}"><span class="box"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13L9 17L19 7"/></svg></span><span><span class="sn2">${esc(s.predmet)}</span><span class="sm2"><span>${esc(s.sifra)}</span><span>${TIP_NAZIV[s.tip]}</span><span>${s.inst.length ? termina(s.inst.length) : 'bez termina'}</span></span></span></button>`).join('') + '</div></div>';
   }
   $('#wizList').innerHTML = h || `<div class="empty">Nema predmeta${words.length ? ' za ovu pretragu' : ' za izabrani profil u učitanim rokovima'}.</div>`;
   const n = [...d.remaining].filter(s => cat.has(s)).length;
   const c = $('#wcount'); if (c) c.textContent = `Izabrano ispita: ${n}`;
 }
 function syncWizButtons() {
+  if (W.mode === 'settings') { syncSaveBar(); return; }
   const nx = $('#wNext'); if (nx) nx.disabled = !wizValid(wizSteps()[W.step]);
   const sv = $('#wSave'); if (sv) sv.disabled = !(wizValid('profil') && wizValid('studije'));
 }
@@ -2568,45 +2701,48 @@ async function fileToAvatar(file) {
     return c.toDataURL('image/jpeg', 0.85);
   } finally { URL.revokeObjectURL(url); }
 }
-$('#wiz').addEventListener('input', e => {
+['#wiz', '#setMain'].forEach(sel => $(sel).addEventListener('input', e => {
   const f = e.target.dataset && e.target.dataset.pf; if (!f) return;
   W.d[f] = e.target.value;
   if (f === 'ime' || f === 'prezime') { const av = $('#wiz .photo .av'); if (av && !W.d.foto) av.outerHTML = avatarHtml({ uid: Me.uid, ime: W.d.ime, prezime: W.d.prezime }, 84); }
   syncWizButtons();
-});
-$('#wiz').addEventListener('change', async e => {
-  if (e.target.id === 'fShare') { W.d.share = e.target.checked; return; }
+}));
+['#wiz', '#setMain'].forEach(sel => $(sel).addEventListener('change', async e => {
+  if (e.target.id === 'fShare') { W.d.share = e.target.checked; const p = prof(); if (p && W.mode === 'settings') { p.share = e.target.checked; Me.save(); toast(p.share ? 'Plan se deli sa prijateljima.' : 'Plan više nije deljen.'); } return; }
+  if (e.target.id === 'setScope') { S.scope = e.target.checked ? 'svi' : 'moji'; saveUi(); refresh(); return; }
+  if (e.target.id === 'setFriendsCal') { S.showFriends = e.target.checked; saveUi(); refresh(); return; }
+  if (e.target.dataset && e.target.dataset.grade) { const p = prof(), k = e.target.dataset.grade; if (p && p.passed && p.passed[k]) { p.passed[k].ocena = +e.target.value || null; Me.save(); renderSettings(); } return; }
   if (e.target.id === 'fFoto' && e.target.files[0]) {
     try { W.d.foto = await fileToAvatar(e.target.files[0]); renderWizard(); }
     catch { toast('Ovu sliku nije moguće učitati. Probaj JPG ili PNG.'); }
   }
-});
-$('#wiz').addEventListener('click', e => {
+}));
+['#wiz', '#setMain'].forEach(sel => $(sel).addEventListener('click', e => {
   const t = e.target;
   const ch = t.closest('[data-choose]'); if (ch) { const f = ch.dataset.choose; choose(f, f === 'godina' || f === 'akred' ? +ch.dataset.v : ch.dataset.v); return; }
   const nv = t.closest('[data-wnav]'); if (nv) { wizGo(+nv.dataset.wnav); return; }
   const ws = t.closest('[data-wstep]'); if (ws) { W.step = +ws.dataset.wstep; renderWizard(); return; }
-  const tb = t.closest('[data-wtab]'); if (tb) { W.tab = tb.dataset.wtab; W.q = ''; renderWizard(); return; }
   if (t.closest('[data-foto-del]')) { W.d.foto = ''; renderWizard(); return; }
   const sub = t.closest('[data-wsub]'); if (sub) { const r = W.d.remaining, k = sub.dataset.wsub; r.has(k) ? r.delete(k) : r.add(k); renderWizList(); return; }
   const sm = t.closest('[data-wsem]'); if (sm) { const cat = wizCatalog(), on = sm.dataset.on === '1'; for (const s of cat.values()) if (s.sem === +sm.dataset.wsem) on ? W.d.remaining.add(s.sifra) : W.d.remaining.delete(s.sifra); renderWizList(); return; }
   const bk = t.closest('[data-wbulk]'); if (bk) { const cat = wizCatalog(); W.d.remaining = bk.dataset.wbulk === 'cur' ? defaultRemaining(cat) : new Set(); renderWizList(); return; }
   if (t.closest('[data-wfinish]')) { finishWizard(); return; }
-});
-$('#wiz').addEventListener('keydown', e => {
+}));
+['#wiz', '#setMain'].forEach(sel => $(sel).addEventListener('keydown', e => {
   if (e.key !== 'Enter' || e.target.id === 'wq' || e.target.closest('button') || e.target.type === 'checkbox') return;
   e.preventDefault();
-  if (W.mode === 'settings') { if (wizValid('profil') && wizValid('studije')) finishWizard(); return; }
+  if (W.mode === 'settings') { if (settingsDirty() && wizValid('profil') && wizValid('studije')) finishWizard(); return; }
   const steps = wizSteps(); W.step === steps.length - 1 ? finishWizard() : wizGo(1);
-});
+}));
 function finishWizard() {
   const d = W.d;
   if (!wizValid('profil') || !wizValid('studije')) return;
   const cat = wizCatalog(), old = prof() || {};
-  const remaining = {}, plan = {};
-  for (const s of d.remaining) { const c = cat.get(s); if (c) remaining[s] = { n: c.predmet, s: c.sem }; }
+  const remaining = {}, plan = {}, passed = old.passed || {};
+  for (const s of d.remaining) { const c = cat.get(s); if (c && !passed[s]) remaining[s] = { n: c.predmet, s: c.sem }; }
   if (old.plan) for (const k of Object.keys(remaining)) if (old.plan[k]) plan[k] = old.plan[k];
   Me.data = {
+    ...old,
     v: 2, ime: d.ime.trim(), prezime: d.prezime.trim(), indeks: d.indeks.trim(), fakultet: d.fakultet.trim(), foto: d.foto || '', share: d.share,
     nivo: d.nivo, akred: d.akred, godina: d.godina, modul: d.modul, remaining, plan,
     friends: old.friends || [], ignored: old.ignored || [], onboarded: true
@@ -2614,13 +2750,135 @@ function finishWizard() {
   Me.save();
   const wasFirst = W.first;
   W.first = false;
-  $('#setupDlg').close();
+  if ($('#setupDlg').open) $('#setupDlg').close();
+  $('#wiz').innerHTML = '';
+  if (!wasFirst) { initDraft(); renderSettings(); }
   S.pick = null; S.scope = 'moji';
   if (wasFirst) { S.view = 'plan'; S.tab = 'todo'; }
   saveUi(); derive(); deriveFriends(); refresh();
   if (wasFirst) initChat();
   toast(wasFirst ? `Zdravo, ${Me.data.ime}! ${ispita(Object.keys(remaining).length)} čeka planiranje.` : 'Podešavanja su sačuvana.');
 }
+
+
+// ================= Podešavanja (stranica) =================
+// Sekcije su registar: nova stavka = jedan red ovde + jedna grana u settingsBody().
+const SECTIONS = [
+  { id: 'profil', group: 'Ti', title: 'Profil', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="6" r="4"/><ellipse cx="12" cy="17" rx="7" ry="4"/></g></svg>', desc: 'Ime, slika, broj indeksa i fakultet. Ovo vide tvoji prijatelji.' },
+  { id: 'nalog', group: 'Ti', title: 'Nalog', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M8 22H16C18.8284 22 20.2426 22 21.1213 21.1213C22 20.2426 22 18.8284 22 16C22 13.1716 22 11.7574 21.1213 10.8787C20.2426 10 18.8284 10 16 10H8C5.17157 10 3.75736 10 2.87868 10.8787C2 11.7574 2 13.1716 2 16C2 18.8284 2 20.2426 2.87868 21.1213C3.75736 22 5.17157 22 8 22Z"/><path d="M12 14V18"/><path d="M6 10V8C6 4.68629 8.68629 2 12 2C15.3137 2 18 4.68629 18 8V10"/></g></svg>', desc: 'Prijava, povezani nalozi i odjava.', show: () => !!window.__auth },
+  { id: 'studije', group: 'Studije', title: 'Studije', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M3.0916 10.3634L9.78281 13.5004C11.2038 14.1665 12.7963 14.1665 14.2173 13.5004L20.9084 10.3634C22.3639 9.68105 22.3639 7.31899 20.9084 6.63664L14.2172 3.49965C12.7962 2.83345 11.2037 2.83345 9.78272 3.49965L3.0916 6.63659C1.63614 7.31895 1.63613 9.68101 3.0916 10.3634Z"/><path d="M2 8.5V14"/><path d="M19 11.5V16.6254C19 17.6334 18.4965 18.5772 17.6147 19.0656C16.1463 19.8787 13.796 21 12 21C10.204 21 7.8537 19.8787 6.38533 19.0656C5.5035 18.5772 5 17.6334 5 16.6254V11.5"/></g></svg>', desc: 'Nivo, akreditacija, godina i modul određuju koje predmete vidiš.' },
+  { id: 'ispiti', group: 'Studije', title: 'Moji ispiti', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="M2 5.5L3.21429 7L7.5 3"/><path stroke-linejoin="round" d="M2 12.5L3.21429 14L7.5 10"/><path stroke-linejoin="round" d="M2 19.5L3.21429 21L7.5 17"/><path d="M22 19L12 19"/><path d="M22 12L12 12"/><path d="M22 5L12 5"/></g></svg>', desc: 'Ispiti koji su ti ostali. Ovde menjaš više ispita odjednom.' },
+  { id: 'polozeni', group: 'Studije', title: 'Položeni ispiti', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="16" r="3"/><path d="M12 19.2599L9.73713 21.4294C9.41306 21.74 9.25102 21.8954 9.1138 21.9491C8.80111 22.0716 8.45425 21.9668 8.28977 21.7001C8.21758 21.5831 8.19509 21.3719 8.1501 20.9497C8.1247 20.7113 8.112 20.5921 8.07345 20.4923C7.98715 20.2688 7.80579 20.0949 7.57266 20.0122C7.46853 19.9752 7.3442 19.963 7.09554 19.9387L7.09553 19.9387C6.65512 19.8956 6.43491 19.874 6.31283 19.8048C6.03463 19.6471 5.92529 19.3146 6.05306 19.0148C6.10913 18.8832 6.27116 18.7279 6.59523 18.4172L6.59523 18.4172L8.07345 17L9.00086 16.0725"/><path d="M12 19.2599L14.2629 21.4293C14.5869 21.74 14.749 21.8954 14.8862 21.9491C15.1989 22.0716 15.5457 21.9668 15.7102 21.7001C15.7824 21.583 15.8049 21.3719 15.8499 20.9497C15.8753 20.7113 15.888 20.5921 15.9265 20.4922C16.0129 20.2687 16.1942 20.0949 16.4273 20.0121C16.5315 19.9752 16.6558 19.963 16.9045 19.9387C17.3449 19.8955 17.5651 19.874 17.6872 19.8048C17.9654 19.6471 18.0747 19.3145 17.9469 19.0147C17.8909 18.8832 17.7288 18.7278 17.4048 18.4172L15.9265 17L15 16.0734"/><path d="M17.3197 17.9957C19.2921 17.9748 20.3915 17.8512 21.1213 17.1213C22 16.2426 22 14.8284 22 12V8C22 5.17157 22 3.75736 21.1213 2.87868C20.2426 2 18.8284 2 16 2H8C5.17157 2 3.75736 2 2.87868 2.87868C2 3.75736 2 5.17157 2 8V12C2 14.8284 2 16.2426 2.87868 17.1213C3.64706 17.8897 4.82497 17.9862 7 17.9983"/><path d="M9 6L15 6"/><path d="M7 9.5H17"/></g></svg>', desc: 'Istorija položenih ispita i ocene.' },
+  { id: 'izgled', group: 'Aplikacija', title: 'Izgled', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><path d="M12 2V4"/><path d="M12 20V22"/><path d="M4 12L2 12"/><path d="M22 12L20 12"/><path d="M19.7773 4.22217L17.5553 6.25375"/><path d="M4.22266 4.22217L6.44467 6.25375"/><path d="M6.44531 17.5557L4.22309 19.7779"/><path d="M19.7773 19.7778L17.5553 17.5555"/></g></svg>', desc: 'Tema aplikacije na ovom uređaju.' },
+  { id: 'plan', group: 'Aplikacija', title: 'Plan i kalendar', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M10 21.75H14C17.7712 21.75 19.6569 21.75 20.8284 20.5784C22 19.4069 22 17.5212 22 13.75V11.75C22 7.97876 22 6.09315 20.8284 4.92157C19.6569 3.75 17.7712 3.75 14 3.75H10C6.22876 3.75 4.34315 3.75 3.17157 4.92157C2 6.09315 2 7.97876 2 11.75V13.75C2 17.5212 2 19.4069 3.17157 20.5784C4.34315 21.75 6.22876 21.75 10 21.75Z"/><path d="M2.03516 8.75H21.965"/><path stroke-linejoin="round" d="M17 12.75H17.0001"/><path stroke-linejoin="round" d="M12 12.75H12.0001"/><path stroke-linejoin="round" d="M7 12.75H7.0001"/><path stroke-linejoin="round" d="M17 16.7734H17.0001"/><path stroke-linejoin="round" d="M12 16.7734H12.0001"/><path stroke-linejoin="round" d="M7 16.7734H7.0001"/><path d="M7 3.78496V2.25"/><path d="M17 3.78496V2.25"/></g></svg>', desc: 'Redosled ispita, početni prikaz i šta se vidi u kalendaru.' },
+  { id: 'obavestenja', group: 'Aplikacija', title: 'Obaveštenja', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M18.7491 9.70957V9.00496C18.7491 5.13623 15.7274 2 12 2C8.27256 2 5.25087 5.13623 5.25087 9.00496V9.70957C5.25087 10.5552 5.00972 11.3818 4.5578 12.0854L3.45036 13.8095C2.43882 15.3843 3.21105 17.5249 4.97036 18.0229C9.57274 19.3257 14.4273 19.3257 19.0296 18.0229C20.789 17.5249 21.5612 15.3843 20.5496 13.8095L19.4422 12.0854C18.9903 11.3818 18.7491 10.5552 18.7491 9.70957Z"/><path d="M7.5 19C8.15503 20.7478 9.92246 22 12 22C14.0775 22 15.845 20.7478 16.5 19"/></g></svg>', desc: 'Podsetnici pred ispit, poruke i zahtevi za prijateljstvo.', soon: true },
+  { id: 'privatnost', group: 'Društveno', title: 'Privatnost', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M12 4C7.81811 4 4.97196 6.49956 3.27489 8.70433C2.42496 9.80853 2 10.3606 2 12C2 13.6394 2.42496 14.1915 3.27489 15.2957C4.97196 17.5004 7.81811 20 12 20C16.1819 20 19.028 17.5004 20.7251 15.2957C21.575 14.1915 22 13.6394 22 12C22 10.3606 21.575 9.80853 20.7251 8.70433C19.028 6.49956 16.1819 4 12 4Z"/><path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z"/></g></svg>', desc: 'Ko vidi tvoj plan.' },
+  { id: 'o', group: 'Ostalo', title: 'O aplikaciji', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 17V11"/><path stroke-linejoin="round" d="M12 8H12.0001"/></g></svg>', desc: '' }
+];
+const visibleSections = () => SECTIONS.filter(x => !x.show || x.show());
+function openSettings(sec) {
+  if (!(prof() && prof().onboarded)) { openWizard(true, null); return; }
+  go('podesavanja' + (sec && sec !== 'profil' ? '-' + sec : ''));
+  if (route === 'podesavanja') enterSettings(sec);
+}
+function initDraft() {
+  const p = prof() || {};
+  W.mode = 'settings'; W.first = false; W.q = '';
+  W.d = {
+    ime: p.ime || '', prezime: p.prezime || '', indeks: p.indeks || '', fakultet: p.fakultet || FAKULTET_DEFAULT, foto: p.foto || '', share: p.share !== false,
+    nivo: p.nivo || null, akred: p.akred || null, godina: p.godina || null, modul: p.modul || null,
+    remaining: new Set(Object.keys(p.remaining || {})), remKey: p.nivo ? keyOf(p) : null
+  };
+}
+function enterSettings(sec) {
+  if (!(prof() && prof().onboarded)) { $('#setMain').innerHTML = `<div class="card pagecard"><div class="empty"><strong>Prvo podesi profil</strong><button class="btn primary" data-open-settings>Podesi profil</button></div></div>`; $('#setNav').innerHTML = ''; return; }
+  if (W.mode !== 'settings' || !W.d || !settingsDirty()) initDraft();
+  W.sec = visibleSections().some(x => x.id === sec) ? sec : (W.sec && visibleSections().some(x => x.id === W.sec) && !sec ? W.sec : 'profil');
+  if (!sec) W.sec = 'profil';
+  renderSettings();
+}
+// šta je promenjeno u nacrtu u odnosu na sačuvan profil
+function settingsDiff() {
+  const p = prof() || {}, d = W.d || {};
+  const prof1 = ['ime', 'prezime', 'indeks', 'fakultet', 'foto'].some(k => (d[k] || '').trim() !== (p[k] || '').trim());
+  const stud = d.nivo !== p.nivo || d.akred != p.akred || d.godina != p.godina || (d.modul || null) !== (p.modul || null);
+  let added = 0, removed = 0;
+  if (d.remaining) {
+    const cat = wizValid('studije') ? wizCatalog() : new Map(), before = new Set(Object.keys(p.remaining || {}));
+    const after = new Set([...d.remaining].filter(x => cat.has(x)));
+    for (const x of after) if (!before.has(x)) added++;
+    for (const x of before) if (!after.has(x)) removed++;
+  }
+  return { prof: prof1, stud, added, removed, any: prof1 || stud || added || removed };
+}
+const settingsDirty = () => !!(W.d && settingsDiff().any);
+function saveBarHtml() {
+  const df = settingsDiff(); if (!df.any) return '';
+  const parts = [df.prof && 'profil', df.stud && 'studije', (df.added || df.removed) && `lista ispita ${df.added ? '+' + df.added : ''}${df.added && df.removed ? ' / ' : ''}${df.removed ? '−' + df.removed : ''}`].filter(Boolean);
+  const ok = wizValid('profil') && wizValid('studije');
+  return `<span><b>Nesačuvane izmene:</b> ${esc(parts.join(', '))}${!wizValid('profil') ? ' · upiši ime i prezime' : !wizValid('studije') ? ' · izaberi sve u Studijama' : ''}</span><button type="button" class="btn sm" data-set-discard>Odbaci</button><button type="button" class="btn primary sm" data-wfinish ${ok ? '' : 'disabled'}>Sačuvaj izmene</button>`;
+}
+function syncSaveBar() { const b = $('#saveBar'); if (b) { const h = saveBarHtml(); b.innerHTML = h; b.hidden = !h; } }
+function renderSettingsNav() {
+  const groups = [];
+  for (const x of visibleSections()) { let g = groups.find(g => g.name === x.group); if (!g) groups.push(g = { name: x.group, items: [] }); g.items.push(x); }
+  const p = prof() || {};
+  $('#setNav').innerHTML = `<a class="setme" href="#podesavanja">${avatarHtml({ uid: Me.uid, ...p, ...(W.d ? { ime: W.d.ime, prezime: W.d.prezime, foto: W.d.foto } : {}) }, 48)}<span><b>${esc(fullName(p))}</b><span>${esc([p.nivo, p.godina && p.godina + '. godina', p.modul].filter(Boolean).join(' · '))}</span></span></a>` +
+    groups.map(g => `<div class="setgroup"><div class="setgh">${esc(g.name)}</div>${g.items.map(x => `<a href="#podesavanja${x.id === 'profil' ? '' : '-' + x.id}" class="setlink${W.sec === x.id ? ' on' : ''}" ${W.sec === x.id ? 'aria-current="page"' : ''}>${x.icon}<span>${esc(x.title)}</span>${x.soon ? '<i class="soon">uskoro</i>' : ''}</a>`).join('')}</div>`).join('');
+  document.querySelector('.setgrid').dataset.pane = location.hash.slice(1).startsWith('podesavanja-') ? 'main' : (window.matchMedia('(max-width: 760px)').matches ? 'nav' : 'main');
+}
+function settingsBody(id) {
+  const p = prof() || {};
+  if (id === 'profil') return profileFormHtml();
+  if (id === 'nalog') { loadIdentities(); return nalogHtml(); }
+  if (id === 'studije') return studijeHtml();
+  if (id === 'ispiti') { wizCatalog(); return wizValid('studije') ? ispitiToolsHtml() : `<div class="empty">Prvo izaberi sve u sekciji „Studije".</div>`; }
+  if (id === 'polozeni') {
+    const list = Object.entries(p.passed || {}).map(([k, v]) => ({ sifra: k, ...v })).sort((a, b) => (b.at || '').localeCompare(a.at || '') || a.n.localeCompare(b.n, 'sr'));
+    if (!list.length) return `<div class="empty"><strong>Još nema položenih ispita</strong>Kad položiš ispit, u listi „Moji ispiti" izaberi „⋯ → Položen". Ovde se čuva istorija i ocene.</div>`;
+    const graded = list.filter(x => x.ocena >= 6), avg = graded.length ? (graded.reduce((a, x) => a + x.ocena, 0) / graded.length) : null;
+    return `<div class="stats" style="grid-template-columns:repeat(3,minmax(0,1fr))"><div class="stat2"><b>${list.length}</b>položenih ispita</div><div class="stat2"><b>${avg ? avg.toFixed(2).replace('.', ',') : '—'}</b>prosečna ocena${graded.length && graded.length < list.length ? ` (${graded.length} sa ocenom)` : ''}</div><div class="stat2"><b>${MY.length}</b>još na listi</div></div>
+      <div class="plist">${list.map(x => `<div class="prow"><span class="provic ok"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path stroke-linejoin="round" d="M8.5 12.5L10.5 14.5L15.5 9.5"/></g></svg></span><div class="pi"><div class="pn">${esc(x.n)}</div><div class="ps">${x.s ? x.s + '. semestar · ' : ''}${x.at ? 'označeno ' + fmtShort(x.at) : ''}</div></div>
+        <label class="gradesel"><span class="sr">Ocena</span><select data-grade="${esc(x.sifra)}" aria-label="Ocena za ${esc(x.n)}"><option value="">ocena</option>${[10, 9, 8, 7, 6].map(g => `<option value="${g}"${x.ocena === g ? ' selected' : ''}>${g}</option>`).join('')}</select></label>
+        <button type="button" class="btn ghost sm" data-unpass="${esc(x.sifra)}">Vrati na listu</button></div>`).join('')}</div>`;
+  }
+  if (id === 'izgled') return `<div class="sgroup"><h3 class="sec">Tema</h3><div class="themes">${[['auto', 'Prati sistem', '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M8 17H16C18.8284 17 20.2426 17 21.1213 16.1213C22 15.2426 22 13.8284 22 11V10C22 6.22876 22 4.34315 20.8284 3.17157C19.6569 2 17.7712 2 14 2H10C6.22876 2 4.34315 2 3.17157 3.17157C2 4.34315 2 6.22876 2 10V11C2 13.8284 2 15.2426 2.87868 16.1213C3.75736 17 5.17157 17 8 17Z"/><path d="M16 22H8"/><path d="M12 17L12 22"/><path d="M22 13H2"/></g></svg>'], ['light', 'Svetla', '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><path d="M12 2V4"/><path d="M12 20V22"/><path d="M4 12L2 12"/><path d="M22 12L20 12"/><path d="M19.7773 4.22217L17.5553 6.25375"/><path d="M4.22266 4.22217L6.44467 6.25375"/><path d="M6.44531 17.5557L4.22309 19.7779"/><path d="M19.7773 19.7778L17.5553 17.5555"/></g></svg>'], ['dark', 'Tamna', '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 22C17.5228 22 22 17.5228 22 12C22 11.5373 21.3065 11.4608 21.0672 11.8568C19.9289 13.7406 17.8615 15 15.5 15C11.9101 15 9 12.0899 9 8.5C9 6.13845 10.2594 4.07105 12.1432 2.93276C12.5392 2.69347 12.4627 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"/></svg>']].map(([k, l, ic]) => `<button type="button" class="choice sm" data-theme-set="${k}" aria-pressed="${theme === k}">${ic}<span class="cb">${l}</span></button>`).join('')}</div><span class="muted" style="font-size:13px">Tema se pamti na ovom uređaju.</span></div>`;
+  if (id === 'plan') return `<div class="sgroup"><h3 class="sec">Redosled ispita</h3><div class="chips"><button type="button" class="chip" data-sort="asc" aria-pressed="${sortDir() === 'asc'}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M4 16L13 16"/><path d="M6 11H13"/><path d="M8 6L13 6"/><path stroke-linejoin="round" d="M17 4V20L20 16"/></g></svg> Semestri rastuće</button><button type="button" class="chip" data-sort="desc" aria-pressed="${sortDir() === 'desc'}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M4 8H13"/><path d="M6 13H13"/><path d="M8 18H13"/><path stroke-linejoin="round" d="M17 20V4L20 8"/></g></svg> Semestri opadajuće</button></div><span class="muted" style="font-size:13px">Omiljeni ispiti su uvek prvi. Važi svuda u aplikaciji.</span></div>
+    <div class="sgroup"><h3 class="sec">Početni prikaz</h3><div class="chips">${[['plan', 'Moj plan'], ['kalendar', 'Kalendar']].map(([k, l]) => `<button type="button" class="chip" data-start="${k}" aria-pressed="${(lsGet('raspored-ispita:start') || 'plan') === k}">${l}</button>`).join('')}</div></div>
+    <div class="sgroup"><h3 class="sec">Kalendar</h3>
+      <label class="switch big" for="setScope"><span><b>Prikaži i ostale ispite</b><br><span class="muted">Pored tvojih, u kalendaru i listi vidiš sve ispite iz rokova.</span></span><input type="checkbox" id="setScope" ${S.scope === 'svi' ? 'checked' : ''}></label>
+      <label class="switch big" for="setFriendsCal"><span><b>Prikaži ispite prijatelja</b><br><span class="muted">Avatari prijatelja na danima kad i oni imaju ispit.</span></span><input type="checkbox" id="setFriendsCal" ${S.showFriends ? 'checked' : ''}></label></div>`;
+  if (id === 'obavestenja') return `<div class="empty"><strong>Uskoro</strong>Ovde će biti podsetnici pred ispit i obaveštenja o porukama i zahtevima za prijateljstvo.</div>`;
+  if (id === 'privatnost') return privatnostHtml();
+  if (id === 'o') return `<div class="sgroup"><h3 class="sec">Planer ispita</h3><p style="margin:0;color:var(--ink-2)">Planiranje ispita, rokovi, prijatelji i poruke na jednom mestu.</p></div>
+    <div class="sgroup"><h3 class="sec">Zahvalnice</h3><p class="muted" style="margin:0;font-size:13.5px">Ikonice: Solar icon set, 480 Design (CC BY 4.0). Fontovi: Chillax (Indian Type Foundry) i Instrument Sans.</p></div>`;
+  return '';
+}
+function renderSettings() {
+  if (W.mode !== 'settings' || !W.d) return;
+  renderSettingsNav();
+  const x = visibleSections().find(x => x.id === W.sec) || SECTIONS[0];
+  $('#setMain').innerHTML = `<div class="sethead"><a class="iconbtn sm setback" href="#podesavanja" data-set-back aria-label="Nazad na podešavanja"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 12H4M10 18L4 12L10 6"/></svg></a><div><h2>${esc(x.title)}</h2>${x.desc ? `<p>${esc(x.desc)}</p>` : ''}</div></div>
+    ${W.note && x.id === 'profil' ? `<div class="banner">${esc(W.note)}</div>` : ''}
+    <div class="card setcard">${settingsBody(x.id)}</div>
+    <div class="savebar" id="saveBar" hidden></div>`;
+  if ($('#wizList')) { renderWizList(); $('#wq').addEventListener('input', e => { W.q = e.target.value; renderWizList(); }); }
+  syncSaveBar();
+}
+$('#setMain').addEventListener('click', e => {
+  const t = e.target;
+  if (t.closest('[data-set-discard]')) { initDraft(); renderSettings(); toast('Izmene su odbačene.'); return; }
+  const th = t.closest('[data-theme-set]'); if (th) { setTheme(th.dataset.themeSet); renderSettings(); return; }
+  const sv = t.closest('[data-start]'); if (sv) { lsSet('raspored-ispita:start', sv.dataset.start); renderSettings(); return; }
+  const up = t.closest('[data-unpass]'); if (up) {
+    const p = prof(), k = up.dataset.unpass, v = p.passed[k]; if (!v) return;
+    p.passed = { ...p.passed }; delete p.passed[k]; p.remaining = { ...p.remaining, [k]: { n: v.n, s: v.s } };
+    Me.save(); derive(); refresh(); initDraft(); renderSettings(); toast(`${v.n} je vraćen na listu ispita.`); return;
+  }
+});
+// posle globalnog [data-sort] osveži i ovu stranicu
+document.addEventListener('click', e => { if (route === 'podesavanja' && e.target.closest('#setMain [data-sort]')) setTimeout(renderSettings, 0); });
+window.addEventListener('beforeunload', e => { if (route === 'podesavanja' && settingsDirty()) { e.preventDefault(); e.returnValue = ''; } });
 
 // ================= Prijatelji =================
 // Javna kartica svakog korisnika: people/<uid> (piše samo on). Prijateljstvo = oboje imaju jedno drugo u `friends`.
@@ -2840,9 +3098,30 @@ $('#friendsBody').addEventListener('click', e => {
   const ig = t.closest('[data-fignore]'); if (ig) { ignoreRequest(ig.dataset.fignore); return; }
   const jn = t.closest('[data-fjoin]'); if (jn) { const ex = examById(jn.dataset.fjoin); if (ex) { go('plan'); schedule(jn.dataset.fsifra, ex); } return; }
 });
-$('#meBtn').addEventListener('click', () => openWizard(!(prof() && prof().onboarded), 'profil'));
+function setMeMenu(open) {
+  const m = $('#meMenu'); m.hidden = !open; $('#meBtn').setAttribute('aria-expanded', open);
+  if (open) { renderMeBtn(); setTimeout(() => { const f = m.querySelector('a, button'); f && f.focus(); }, 10); }
+}
+$('#meBtn').addEventListener('click', e => {
+  e.stopPropagation();
+  if (!(prof() && prof().onboarded)) { openWizard(true, 'profil'); return; }
+  setMeMenu($('#meMenu').hidden);
+});
+$('#meMenu').addEventListener('click', e => { if (e.target.closest('a, button')) setMeMenu(false); });
+document.addEventListener('click', e => { if (!$('#meMenu').hidden && !e.target.closest('#meMenu, #meBtn')) setMeMenu(false); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#meMenu').hidden) { setMeMenu(false); $('#meBtn').focus(); } });
+window.addEventListener('hashchange', () => setMeMenu(false));
 function renderMeBtn() {
   const p = prof();
+  // meni profila
+  const A = window.__auth, hostedUser = A && A.mode === 'user';
+  $('#mmAv').innerHTML = avatarHtml({ uid: Me.uid, ...(p || {}) }, 44);
+  $('#mmName').textContent = p && p.ime ? fullName(p) : 'Gost';
+  const ap = hostedUser && A.profile ? A.profile() : null;
+  $('#mmSub').textContent = (ap && ap.email) || [p && p.indeks && 'indeks ' + p.indeks, p && p.nivo && `${p.nivo} · ${p.godina}. godina`].filter(Boolean).join(' · ');
+  const auth = $('#mmAuth');
+  if (A) { auth.hidden = $('#mmSep').hidden = false; auth.dataset.auth = hostedUser ? 'signout' : 'login'; auth.innerHTML = hostedUser ? '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M9.00195 7C9.01406 4.82497 9.11051 3.64706 9.87889 2.87868C10.7576 2 12.1718 2 15.0002 2L16.0002 2C18.8286 2 20.2429 2 21.1215 2.87868C22.0002 3.75736 22.0002 5.17157 22.0002 8L22.0002 16C22.0002 18.8284 22.0002 20.2426 21.1215 21.1213C20.2429 22 18.8286 22 16.0002 22H15.0002C12.1718 22 10.7576 22 9.87889 21.1213C9.11051 20.3529 9.01406 19.175 9.00195 17"/><path stroke-linejoin="round" d="M15 12L2 12M5.5 15L2 12L5.5 9"/></g></svg><span>Odjavi se</span>' : '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="6" r="4"/><ellipse cx="12" cy="17" rx="7" ry="4"/></g></svg><span>Prijavi se ili napravi nalog</span>'; auth.classList.toggle('danger', !!hostedUser); }
+  const req = FR.incoming.length, mb = $('#meBadge'); mb.textContent = req; mb.hidden = !req;
   $('#meBtn').innerHTML = p && p.ime ? avatarHtml({ uid: Me.uid, ...p }, 34) : `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><circle cx="12" cy="6" r="4"/><ellipse cx="12" cy="17" rx="7" ry="4"/></g></svg>`;
   $('#meBtn').title = p && p.ime ? `${fullName(p)} · profil` : 'Profil';
 }
@@ -3786,11 +4065,14 @@ const ROUTES = {
   kalendar: { title: 'Kalendar', sec: 'planer', sub: () => '' },
   poruke: { title: 'Poruke', sec: 'poruke', sub: () => 'Privatne poruke i grupe su šifrovane' },
   prijatelji: { title: 'Prijatelji', sec: 'prijatelji', sub: () => { const n = FR.friends.length, on = FR.friends.filter(f => C.online.has(f.uid)).length; return `${num(n, 'prijatelj', 'prijatelja', 'prijatelja')}${on ? ` · ${on} online` : ''}`; } },
-  admin: { title: 'Administracija', sec: 'admin', sub: () => 'Ispitni rokovi i termini koje vide svi korisnici' }
+  admin: { title: 'Administracija', sec: 'admin', sub: () => 'Ispitni rokovi i termini koje vide svi korisnici' },
+  podesavanja: { title: 'Podešavanja', sec: 'podesavanja', sub: () => (prof() && prof().ime ? fullName(prof()) : 'Profil, studije i aplikacija') }
 };
-let route = ROUTES[location.hash.slice(1)] ? location.hash.slice(1) : (S.view === 'plan' ? 'plan' : 'kalendar');
+const hashRoute = () => { const h = location.hash.slice(1), b = h.split('-')[0]; return ROUTES[b] ? b : null; };
+const hashSection = () => { const h = location.hash.slice(1); return h.startsWith('podesavanja-') ? h.slice(12) : null; };
+let route = hashRoute() || (lsGet('raspored-ispita:start') === 'kalendar' ? 'kalendar' : 'plan');
 if (route === 'plan') S.view = 'plan'; else if (route === 'kalendar' && S.view === 'plan') S.view = 'mesec';
-function go(r) { if (!ROUTES[r]) r = 'plan'; if (location.hash.slice(1) !== r) location.hash = r; else applyRoute(); }
+function go(r) { const b = r.split('-')[0]; if (!ROUTES[b]) r = 'plan'; if (location.hash.slice(1) !== r) location.hash = r; else applyRoute(); }
 function setRouteUi() {
   const sec = ROUTES[route].sec;
   document.querySelectorAll('.page').forEach(el => { el.hidden = el.id !== 'sec-' + sec; });
@@ -3800,7 +4082,7 @@ function setRouteUi() {
   $('#filtersToggle').hidden = sec !== 'planer';
 }
 function applyRoute() {
-  let r = ROUTES[location.hash.slice(1)] ? location.hash.slice(1) : 'plan';
+  let r = hashRoute() || 'plan';
   if (r === 'admin' && S.loaded && !S.isAdmin) { location.hash = 'plan'; return; }
   const changed = r !== route; route = r;
   if (r === 'plan') S.view = 'plan';
@@ -3810,6 +4092,7 @@ function applyRoute() {
   C.pendingCid = null;
   if (r === 'prijatelji') { if (changed && !F.keep) { F.view = 'list'; if (FR.incoming.length) F.tab = 'requests'; } F.keep = false; renderFriendsUi(); }
   if (r === 'admin') { if (!S.isAdmin) { location.hash = 'plan'; return; } renderManage(); }
+  if (r === 'podesavanja') enterSettings(hashSection());
   saveUi(); refresh();
   if (changed) window.scrollTo(0, 0);
 }
@@ -3846,9 +4129,9 @@ function pickInitialMonth() {
   setRouteUi(); refresh();
   subscribePeople();
   await initChat();
-  if (route === 'poruke') openFull(); else if (route === 'admin') { if (S.isAdmin) renderManage(); else go('plan'); }
+  if (route === 'poruke') openFull(); else if (route === 'admin') { if (S.isAdmin) renderManage(); else go('plan'); } else if (route === 'podesavanja') enterSettings(hashSection());
   if (!Me.loadFailed && (!prof() || !prof().onboarded) && S.exams.length) openWizard(true, null);
-  else if (prof() && prof().onboarded && !prof().ime) { openWizard(false, 'profil'); W.note = 'Novo: dopuni profil imenom, a po želji i brojem indeksa i slikom, da bi te prijatelji pronašli.'; renderWizard(); }
+  else if (prof() && prof().onboarded && !prof().ime) { openSettings('profil'); W.note = 'Novo: dopuni profil imenom, a po želji i brojem indeksa i slikom, da bi te prijatelji pronašli.'; renderSettings(); }
 })();
 window.addEventListener('pagehide', () => { if (Me.dirty) Me.flush(); });
 })();
