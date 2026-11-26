@@ -883,6 +883,7 @@ body.gate-open { overflow: hidden; }
 .mebadge { position: absolute; top: -4px; right: -4px; }
 .memenu { position: fixed; left: calc(max(8px, env(safe-area-inset-left, 0px)) + 92px); bottom: calc(env(safe-area-inset-bottom, 0px) + 14px); z-index: 60; width: 290px; background: var(--surface); border-radius: var(--rad-lg); box-shadow: var(--shadow-pop); padding: 8px; display: flex; flex-direction: column; gap: 2px; }
 .memenu[hidden] { display: none; }
+@media (min-width: 861px) { .memenu::before { content: ""; position: absolute; left: -48px; bottom: 0; width: 48px; height: 64px; } }
 .memenu a, .memenu > button { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: var(--rad-sm); color: var(--ink); text-decoration: none; font-weight: 500; font-size: 14.5px; border: 0; background: none; text-align: left; width: 100%; }
 .memenu a:hover, .memenu > button:hover, .memenu a:focus-visible, .memenu > button:focus-visible { background: var(--tile); }
 .memenu a > svg, .memenu > button > svg { color: var(--ink-3); flex: none; }
@@ -2833,9 +2834,19 @@ function setMeMenu(open) {
 $('#meBtn').addEventListener('click', e => {
   e.stopPropagation();
   if (!(prof() && prof().onboarded)) { openWizard(true, 'profil'); return; }
+  if (hoverMenu() && !$('#meMenu').hidden) { clearTimeout(meHoverTimer); setMeMenu(false); openSettings('profil'); return; }
   setMeMenu($('#meMenu').hidden);
 });
 $('#meMenu').addEventListener('click', e => { if (e.target.closest('a, button')) setMeMenu(false); });
+// na većim ekranima sa mišem meni se otvara na prelaz preko avatara (klik i dalje radi, npr. sa tastature)
+const hoverMenu = () => window.matchMedia('(hover: hover) and (pointer: fine) and (min-width: 861px)').matches;
+let meHoverTimer = 0;
+function meHover(open) {
+  if (!hoverMenu() || !(prof() && prof().onboarded)) return;
+  clearTimeout(meHoverTimer);
+  meHoverTimer = setTimeout(() => { if (open !== !$('#meMenu').hidden) { const m = $('#meMenu'); m.hidden = !open; $('#meBtn').setAttribute('aria-expanded', open); if (open) renderMeBtn(); } }, open ? 80 : 220);
+}
+['#meBtn', '#meMenu'].forEach(sel => { $(sel).addEventListener('mouseenter', () => meHover(true)); $(sel).addEventListener('mouseleave', () => meHover(false)); });
 document.addEventListener('click', e => { if (!$('#meMenu').hidden && !e.target.closest('#meMenu, #meBtn')) setMeMenu(false); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#meMenu').hidden) { setMeMenu(false); $('#meBtn').focus(); } });
 window.addEventListener('hashchange', () => setMeMenu(false));
